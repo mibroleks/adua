@@ -1,0 +1,1463 @@
+/*
+|--------------------------------------------------------------------------
+| ADMISSIONS LANDING
+|--------------------------------------------------------------------------
+| Premium editorial admissions experience.
+|
+| The page consumes semantic theme tokens only.
+| No institution-specific colors belong here.
+|--------------------------------------------------------------------------
+*/
+
+
+/* ============================================================
+   SECTION LANGUAGE
+============================================================ */
+
+.section-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: .5rem;
+
+    color: var(--theme-primary);
+
+    font-size: .68rem;
+    font-weight: 800;
+
+    letter-spacing: .15em;
+    line-height: 1.2;
+
+    text-transform: uppercase;
+}
+
+.section-eyebrow::before {
+    content: "";
+
+    width: .4rem;
+    height: .4rem;
+
+    border-radius: 50%;
+
+    background: var(--theme-accent);
+}
+
+
+/* ============================================================
+   SECTION HEADING
+============================================================ */
+
+.section-heading {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+
+    gap: 3rem;
+    margin-bottom: 3rem;
+}
+
+.section-heading h2 {
+    max-width: 760px;
+
+    margin: .65rem 0 0;
+
+    color: var(--theme-heading);
+
+    font-size: clamp(2rem, 4vw, 3.7rem);
+    font-weight: 750;
+    line-height: 1;
+    letter-spacing: -.055em;
+}
+
+.section-heading p {
+    max-width: 620px;
+
+    margin: 1rem 0 0;
+
+    color: var(--theme-muted);
+
+    line-height: 1.75;
+}
+
+.section-heading.centered {
+    display: block;
+    text-align: center;
+}
+
+.section-heading.centered h2 {
+    margin-inline: auto;
+}
+
+
+/* ============================================================
+   HERO
+============================================================ */
+
+.admissions-hero {
+    position: relative;
+    overflow: hidden;
+
+    padding:
+        clamp(4rem, 8vw, 8rem)
+        0
+        clamp(5rem, 9vw, 9rem);
+
+    background:
+        radial-gradient(
+            circle at 8% 8%,
+            color-mix(
+                in srgb,
+                var(--theme-primary) 14%,
+                transparent
+            ),
+            transparent 32%
+        ),
+
+        radial-gradient(
+            circle at 90% 12%,
+            color-mix(
+                in srgb,
+                var(--theme-accent) 12%,
+                transparent
+            ),
+            transparent 30%
+        ),
+
+        var(--theme-page);
+}
+
+
+/* decorative atmosphere */
+
+.admissions-hero::before {
+    content: "";
+
+    position: absolute;
+
+    width: 520px;
+    height: 520px;
+
+    right: -260px;
+    bottom: -300px;
+
+    border-radius: 50%;
+
+    background:
+        radial-gradient(
+            circle,
+            color-mix(
+                in srgb,
+                var(--theme-primary) 10%,
+                transparent
+            ),
+            transparent 70%
+        );
+
+    pointer-events: none;
+}
+
+
+/* ============================================================
+   HERO GRID
+============================================================ */
+
+.admissions-hero__grid {
+    position: relative;
+    z-index: 1;
+
+    display: grid;
+
+    grid-template-columns:
+        minmax(0, 1.03fr)
+        minmax(400px, .97fr);
+
+    align-items: center;
+
+    gap: clamp(3rem, 7vw, 7rem);
+}
+
+
+/* ============================================================
+   HERO COPY
+============================================================ */
+
+.admissions-hero__content {
+    max-width: 760px;
+}
+
+.admissions-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: .6rem;
+
+    margin-bottom: 1.5rem;
+
+    color: var(--theme-primary);
+
+    font-size: .7rem;
+    font-weight: 800;
+
+    letter-spacing: .14em;
+
+    text-transform: uppercase;
+}
+
+.admissions-eyebrow__dot {
+    width: .5rem;
+    height: .5rem;
+
+    border-radius: 50%;
+
+    background: var(--theme-accent);
+
+    box-shadow:
+        0 0 0 6px
+        color-mix(
+            in srgb,
+            var(--theme-accent) 12%,
+            transparent
+        );
+}
+
+
+.admissions-hero h1 {
+    max-width: 820px;
+
+    margin: 0;
+
+    color: var(--theme-heading);
+
+    font-family:
+        "Manrope",
+        Inter,
+        sans-serif;
+
+    font-size: clamp(3.2rem, 7vw, 7.2rem);
+
+    font-weight: 750;
+
+    line-height: .91;
+
+    letter-spacing: -.075em;
+}
+
+.admissions-hero h1 em {
+    color: var(--theme-primary);
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-weight: 400;
+}
+
+
+/* ============================================================
+   HERO DESCRIPTION
+============================================================ */
+
+.admissions-hero__description {
+    max-width: 620px;
+
+    margin: 2rem 0 0;
+
+    color: var(--theme-body);
+
+    font-size: clamp(1rem, 1.4vw, 1.15rem);
+
+    line-height: 1.8;
+}
+
+
+/* ============================================================
+   HERO ACTIONS
+============================================================ */
+
+.admissions-hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+
+    gap: .75rem;
+
+    margin-top: 2rem;
+}
+
+
+/* ============================================================
+   HERO META
+============================================================ */
+
+.admissions-hero__meta {
+    display: flex;
+
+    gap: 2.75rem;
+
+    margin-top: 3.25rem;
+}
+
+.admissions-hero__meta div {
+    display: flex;
+    flex-direction: column;
+
+    gap: .25rem;
+}
+
+.admissions-hero__meta strong {
+    color: var(--theme-heading);
+
+    font-size: .75rem;
+
+    letter-spacing: .1em;
+}
+
+.admissions-hero__meta span {
+    color: var(--theme-muted);
+
+    font-size: .68rem;
+
+    letter-spacing: .1em;
+
+    text-transform: uppercase;
+}
+
+
+/* ============================================================
+   HERO VISUAL
+============================================================ */
+
+.admissions-hero__visual {
+    position: relative;
+
+    min-height: 600px;
+}
+
+
+/* ============================================================
+   HERO IMAGE / MEDIA FRAME
+============================================================ */
+
+.admissions-hero__image {
+    position: absolute;
+
+    inset: 0 0 2.25rem 2rem;
+
+    overflow: hidden;
+
+    border-radius: 2rem;
+
+    background: var(--theme-surface-dark);
+
+    box-shadow:
+        0 35px 90px
+        color-mix(
+            in srgb,
+            var(--theme-body) 18%,
+            transparent
+        );
+}
+
+
+/* ============================================================
+   MEDIA OVERLAY
+============================================================ */
+
+.admissions-hero__image::after {
+    content: "";
+
+    position: absolute;
+
+    inset: 0;
+
+    z-index: 2;
+
+    background:
+        linear-gradient(
+            180deg,
+            transparent 45%,
+            color-mix(
+                in srgb,
+                var(--theme-surface-dark) 42%,
+                transparent
+            )
+        );
+
+    pointer-events: none;
+}
+
+
+/* ============================================================
+   CAROUSEL FRAME
+============================================================ */
+
+.admissions-hero__slides {
+    position: relative;
+
+    width: 100%;
+    height: 100%;
+
+    overflow: hidden;
+
+    border-radius: inherit;
+}
+
+
+/* ============================================================
+   CAROUSEL SLIDES
+============================================================ */
+
+.admissions-hero__slide {
+    position: absolute;
+
+    inset: 0;
+
+    width: 100%;
+    height: 100%;
+
+    opacity: 0;
+
+    transition:
+        opacity 0.6s ease;
+
+    pointer-events: none;
+}
+
+
+/* Active slide */
+
+.admissions-hero__slide.active {
+    position: absolute;
+
+    inset: 0;
+
+    opacity: 1;
+
+    pointer-events: auto;
+}
+
+
+/* Hidden slides */
+
+.admissions-hero__slide[hidden] {
+    display: none;
+}
+
+
+/* ============================================================
+   HERO MEDIA
+   Images and videos always fill the media card
+============================================================ */
+
+.admissions-hero__media {
+    display: block;
+
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+    object-position: center;
+
+    border-radius: inherit;
+}
+
+
+/* Make video behave exactly like images */
+
+.admissions-hero__media video {
+    display: block;
+
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+    object-position: center;
+}
+
+
+/* ============================================================
+   HERO PLACEHOLDER
+============================================================ */
+
+.admissions-hero__placeholder {
+    display: flex;
+    align-items: flex-end;
+
+    width: 100%;
+    height: 100%;
+
+    padding: 2.5rem 2.5rem 4rem;
+
+    background:
+        radial-gradient(
+            circle at 80% 20%,
+            color-mix(
+                in srgb,
+                var(--theme-accent) 32%,
+                transparent
+            ),
+            transparent 35%
+        ),
+
+        linear-gradient(
+            135deg,
+            var(--theme-hero-start),
+            var(--theme-hero-end)
+        );
+
+    color: var(--theme-inverse);
+}
+
+
+.admissions-hero__placeholder span {
+    max-width: 420px;
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size: clamp(2.3rem, 4vw, 4rem);
+
+    line-height: .95;
+
+    letter-spacing: -.035em;
+}
+
+
+/* ============================================================
+   FLOATING APPLICATION CARD
+   Version: 3.3
+============================================================ */
+
+.admissions-hero__floating {
+    position: absolute;
+
+    right: 1rem;
+    bottom: 1rem;
+
+    z-index: 4;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: .35rem;
+
+    width: min(245px, 55%);
+
+    padding: 1.4rem;
+
+    border:
+        1px solid
+        color-mix(
+            in srgb,
+            var(--theme-inverse) 35%,
+            var(--theme-border)
+        );
+
+    border-radius: 1.2rem;
+
+    background:
+        color-mix(
+            in srgb,
+            var(--theme-surface) 86%,
+            transparent
+        );
+
+    box-shadow:
+        0 24px 65px
+        color-mix(
+            in srgb,
+            var(--theme-body) 18%,
+            transparent
+        );
+
+    backdrop-filter: blur(22px);
+    -webkit-backdrop-filter: blur(22px);
+}
+
+
+/* ============================================================
+   FLOATING CARD TYPOGRAPHY
+============================================================ */
+
+.admissions-hero__floating span {
+    color: var(--theme-primary);
+
+    font-size: .62rem;
+
+    font-weight: 800;
+
+    letter-spacing: .15em;
+}
+
+
+.admissions-hero__floating strong {
+    color: var(--theme-heading);
+
+    font-size: 1.35rem;
+
+    letter-spacing: -.025em;
+}
+
+
+.admissions-hero__floating small {
+    color: var(--theme-muted);
+
+    font-size: .72rem;
+}
+
+
+/* ============================================================
+   CAROUSEL CONTROLS
+   Hidden by default.
+   Visible only when hovering the visual.
+============================================================ */
+
+.carousel-control {
+    position: absolute;
+
+    top: 50%;
+
+    z-index: 5;
+
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    width: 2.5rem;
+    height: 2.5rem;
+
+    padding: 0;
+
+    border:
+        1px solid
+        color-mix(
+            in srgb,
+            var(--theme-inverse) 30%,
+            transparent
+        );
+
+    border-radius: 50%;
+
+    background:
+        color-mix(
+            in srgb,
+            var(--theme-surface-dark) 55%,
+            transparent
+        );
+
+    color: var(--theme-inverse);
+
+    cursor: pointer;
+
+    opacity: 0;
+
+    visibility: hidden;
+
+    pointer-events: none;
+
+    transform: translateY(-50%);
+
+    transition:
+        opacity 180ms ease,
+        visibility 180ms ease,
+        background 180ms ease,
+        transform 180ms ease;
+}
+
+
+/* Show arrows when hovering the media visual */
+
+.admissions-hero__visual:hover .carousel-control {
+    opacity: 1;
+
+    visibility: visible;
+
+    pointer-events: auto;
+}
+
+
+/* Previous */
+
+.carousel-control.prev {
+    left: .75rem;
+}
+
+
+/* Next */
+
+.carousel-control.next {
+    right: .75rem;
+}
+
+
+/* Arrow hover */
+
+.carousel-control:hover {
+    background:
+        color-mix(
+            in srgb,
+            var(--theme-surface-dark) 80%,
+            transparent
+        );
+
+    transform:
+        translateY(-50%)
+        scale(1.06);
+}
+
+
+/* ============================================================
+   CAROUSEL INDICATORS
+============================================================ */
+
+.admissions-hero__indicators {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: .5rem;
+
+    margin-top: .75rem;
+}
+
+
+.admissions-hero__indicators button {
+    width: 8px;
+    height: 8px;
+
+    padding: 0;
+
+    border: none;
+
+    border-radius: 50%;
+
+    background: var(--theme-border);
+
+    cursor: pointer;
+
+    transition:
+        background 180ms ease,
+        transform 180ms ease;
+}
+
+
+.admissions-hero__indicators button.active {
+    background: var(--theme-primary);
+
+    transform: scale(1.2);
+}
+
+
+/* ============================================================
+   RESPONSIVE
+============================================================ */
+
+@media (max-width: 768px) {
+
+    .admissions-hero__floating {
+        position: static;
+
+        width: 100%;
+
+        margin-top: 1rem;
+
+        text-align: center;
+    }
+
+
+    /*
+     * On mobile the visual still keeps its original
+     * 600px minimum-height behavior unless another
+     * hero rule overrides it.
+     */
+    .admissions-hero__visual {
+        min-height: 420px;
+    }
+
+
+    /*
+     * Preserve the original mobile image inset.
+     */
+    .admissions-hero__image {
+        inset: 0 0 1rem 0;
+
+        border-radius: 1.5rem;
+    }
+
+
+    .admissions-hero__slides {
+        border-radius: inherit;
+    }
+
+
+    .admissions-hero__media {
+        border-radius: inherit;
+    }
+
+
+    /*
+     * Keep controls usable on touch devices.
+     * They remain visible because there is no hover.
+     */
+    .carousel-control {
+        opacity: .85;
+
+        visibility: visible;
+
+        pointer-events: auto;
+    }
+}
+
+
+/* ============================================================
+   REDUCED MOTION
+============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .admissions-hero__slide,
+    .carousel-control,
+    .admissions-hero__indicators button {
+        transition: none;
+    }
+}
+
+
+/* ============================================================
+   APPLICATION WINDOW
+============================================================ */
+
+.application-window {
+    position: relative;
+
+    padding:
+        clamp(4rem, 7vw, 6.5rem)
+        0;
+
+    border-top:
+        1px solid var(--theme-border);
+
+    border-bottom:
+        1px solid var(--theme-border);
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--theme-surface),
+            var(--theme-primary-soft)
+        );
+}
+
+.application-window__header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+
+    gap: 2rem;
+
+    margin-bottom: 2rem;
+}
+
+.application-window__header h2 {
+    margin: .55rem 0 0;
+
+    color: var(--theme-heading);
+
+    font-size: clamp(1.9rem, 3vw, 3rem);
+
+    line-height: 1;
+
+    letter-spacing: -.045em;
+}
+
+
+/* ============================================================
+   PROGRAMMES
+============================================================ */
+
+.programmes-section {
+    padding:
+        clamp(5rem, 9vw, 9rem)
+        0;
+
+    background: var(--theme-page);
+}
+
+.programme-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, minmax(0, 1fr));
+
+    gap: 1rem;
+}
+
+.programme-card {
+    min-height: 360px;
+}
+
+.programme-card__actions {
+    display: flex;
+    align-items: center;
+
+    gap: 1rem;
+
+    margin-top: 1.5rem;
+}
+
+.programme-card__details {
+    display: inline-flex;
+    align-items: center;
+
+    gap: .5rem;
+
+    padding: 0;
+
+    border: 0;
+
+    background: transparent;
+
+    color: var(--theme-primary);
+
+    font-size: .78rem;
+    font-weight: 800;
+
+    cursor: pointer;
+
+    transition: gap 180ms ease;
+}
+
+.programme-card__details:hover {
+    gap: .8rem;
+}
+
+.programme-card__apply {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 2.5rem;
+
+    padding-inline: 1rem;
+
+    border-radius: 999px;
+
+    background: var(--theme-primary-soft);
+
+    color: var(--theme-primary);
+
+    font-size: .75rem;
+    font-weight: 800;
+}
+
+.programme-card__apply:hover {
+    background: var(--theme-primary);
+
+    color: var(--theme-inverse);
+}
+
+.programme-empty {
+    grid-column: 1 / -1;
+
+    padding: 4rem;
+
+    text-align: center;
+
+    border:
+        1px dashed var(--theme-border);
+
+    border-radius: 1.5rem;
+
+    color: var(--theme-muted);
+}
+
+
+/* ============================================================
+   PROGRAMME MODAL
+============================================================ */
+
+.programme-modal-meta {
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap: .75rem;
+
+    margin-bottom: 2rem;
+}
+
+.programme-modal-meta > div {
+    padding: 1rem;
+
+    border: 1px solid var(--theme-border);
+
+    border-radius: .9rem;
+
+    background: var(--theme-surface-muted);
+}
+
+.programme-modal-meta span {
+    display: block;
+
+    margin-bottom: .3rem;
+
+    color: var(--theme-muted);
+
+    font-size: .62rem;
+    font-weight: 800;
+
+    letter-spacing: .12em;
+}
+
+.programme-modal-meta strong {
+    color: var(--theme-heading);
+
+    font-size: .9rem;
+}
+
+.programme-modal-description,
+.programme-modal-requirements {
+    padding-top: 1.5rem;
+
+    border-top: 1px solid var(--theme-border);
+}
+
+.programme-modal-description h3,
+.programme-modal-requirements h3 {
+    margin: 0 0 .75rem;
+
+    color: var(--theme-heading);
+
+    font-size: 1rem;
+}
+
+.programme-modal-description div {
+    color: var(--theme-body);
+
+    line-height: 1.8;
+}
+
+.programme-modal-requirements {
+    margin-top: 1.75rem;
+}
+
+.programme-modal-requirements ul {
+    display: grid;
+
+    gap: .7rem;
+
+    margin: 0;
+    padding: 0;
+
+    list-style: none;
+}
+
+.programme-modal-requirements li {
+    display: flex;
+    align-items: flex-start;
+
+    gap: .7rem;
+
+    color: var(--theme-body);
+}
+
+.programme-modal-requirements li span {
+    flex: 0 0 auto;
+
+    color: var(--theme-success);
+
+    font-weight: 800;
+}
+
+
+/* ============================================================
+   INSTITUTIONAL STORY
+============================================================ */
+
+.institution-section {
+    position: relative;
+    overflow: hidden;
+
+    padding:
+        clamp(6rem, 12vw, 11rem)
+        0;
+
+    background:
+        radial-gradient(
+            circle at 90% 20%,
+            color-mix(
+                in srgb,
+                var(--theme-accent) 16%,
+                transparent
+            ),
+            transparent 32%
+        ),
+
+        linear-gradient(
+            135deg,
+            var(--theme-primary-soft),
+            var(--theme-surface)
+        );
+}
+
+.institution-section__grid {
+    display: grid;
+
+    grid-template-columns: .4fr 1fr;
+
+    gap: clamp(3rem, 8vw, 8rem);
+}
+
+.institution-section__label span {
+    color: var(--theme-primary);
+
+    font-size: .68rem;
+    font-weight: 800;
+
+    letter-spacing: .14em;
+}
+
+.institution-section__content {
+    max-width: 850px;
+}
+
+.institution-section__content h2 {
+    margin: .7rem 0 1.5rem;
+
+    color: var(--theme-heading);
+
+    font-size: clamp(2.5rem, 5vw, 5.2rem);
+
+    line-height: .96;
+
+    letter-spacing: -.06em;
+}
+
+.institution-section__content p {
+    max-width: 700px;
+
+    margin-bottom: 1.75rem;
+
+    color: var(--theme-body);
+
+    font-size: 1.05rem;
+
+    line-height: 1.85;
+}
+
+
+/* ============================================================
+   JOURNEY
+============================================================ */
+
+.application-journey {
+    padding:
+        clamp(5rem, 9vw, 9rem)
+        0;
+
+    background: var(--theme-surface);
+}
+
+.journey-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, minmax(0, 1fr));
+
+    border-top:
+        1px solid var(--theme-border);
+
+    border-bottom:
+        1px solid var(--theme-border);
+}
+
+.journey-step {
+    min-height: 260px;
+
+    padding: 2rem;
+
+    border-right:
+        1px solid var(--theme-border);
+
+    transition:
+        background 220ms ease,
+        transform 220ms ease;
+}
+
+.journey-step:last-child {
+    border-right: 0;
+}
+
+.journey-step:hover {
+    background: var(--theme-primary-soft);
+}
+
+.journey-step > span {
+    color: var(--theme-primary);
+
+    font-size: .68rem;
+    font-weight: 800;
+
+    letter-spacing: .12em;
+}
+
+.journey-step h3 {
+    margin: 3.5rem 0 .75rem;
+
+    color: var(--theme-heading);
+
+    font-size: 1.35rem;
+}
+
+.journey-step p {
+    margin: 0;
+
+    color: var(--theme-muted);
+
+    font-size: .85rem;
+
+    line-height: 1.7;
+}
+
+
+/* ============================================================
+   FINAL CTA
+============================================================ */
+
+.final-cta {
+    position: relative;
+    overflow: hidden;
+
+    padding:
+        clamp(5rem, 10vw, 10rem)
+        0;
+
+    text-align: center;
+
+    background:
+        radial-gradient(
+            circle at 20% 20%,
+            color-mix(
+                in srgb,
+                var(--theme-accent) 24%,
+                transparent
+            ),
+            transparent 28%
+        ),
+
+        radial-gradient(
+            circle at 85% 75%,
+            color-mix(
+                in srgb,
+                var(--theme-glow) 20%,
+                transparent
+            ),
+            transparent 32%
+        ),
+
+        linear-gradient(
+            135deg,
+            var(--theme-hero-start),
+            var(--theme-hero-end)
+        );
+
+    color: var(--theme-inverse);
+}
+
+.final-cta::before {
+    content: "";
+
+    position: absolute;
+
+    width: 520px;
+    height: 520px;
+
+    top: -320px;
+    right: -180px;
+
+    border-radius: 50%;
+
+    border:
+        1px solid
+        color-mix(
+            in srgb,
+            var(--theme-inverse) 14%,
+            transparent
+        );
+}
+
+.final-cta::after {
+    content: "";
+
+    position: absolute;
+
+    width: 400px;
+    height: 400px;
+
+    left: -180px;
+    bottom: -280px;
+
+    border-radius: 50%;
+
+    border:
+        1px solid
+        color-mix(
+            in srgb,
+            var(--theme-inverse) 10%,
+            transparent
+        );
+}
+
+.final-cta > .portal-container {
+    position: relative;
+    z-index: 2;
+}
+
+.final-cta .section-eyebrow {
+    color:
+        color-mix(
+            in srgb,
+            var(--theme-inverse) 75%,
+            transparent
+        );
+}
+
+.final-cta h2 {
+    max-width: 900px;
+
+    margin: 1rem auto;
+
+    color: var(--theme-inverse);
+
+    font-size: clamp(2.5rem, 6vw, 5.7rem);
+
+    line-height: .96;
+
+    letter-spacing: -.06em;
+}
+
+.final-cta p {
+    margin: 0 auto 2rem;
+
+    color:
+        color-mix(
+            in srgb,
+            var(--theme-inverse) 72%,
+            transparent
+        );
+}
+
+.final-cta .portal-button--primary {
+    background: var(--theme-inverse);
+
+    color: var(--theme-primary);
+
+    box-shadow:
+        0 15px 45px
+        color-mix(
+            in srgb,
+            var(--theme-body) 22%,
+            transparent
+        );
+}
+
+.final-cta .portal-button--primary:hover {
+    background: var(--theme-accent-soft);
+
+    color: var(--theme-primary-deep);
+}
+
+
+/* ============================================================
+   RESPONSIVE
+============================================================ */
+
+@media (max-width: 1000px) {
+
+    .admissions-hero__grid {
+        grid-template-columns: 1fr;
+    }
+
+    .admissions-hero__visual {
+        min-height: 520px;
+    }
+
+    .programme-grid {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+
+    .journey-grid {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+
+    .journey-step:nth-child(2) {
+        border-right: 0;
+    }
+
+    .journey-step:nth-child(-n + 2) {
+        border-bottom:
+            1px solid var(--theme-border);
+    }
+}
+
+
+@media (max-width: 700px) {
+
+    .section-heading,
+    .application-window__header {
+        display: block;
+    }
+
+    .section-heading > .portal-button,
+    .application-window__header > .portal-button {
+        margin-top: 1.25rem;
+    }
+
+    .programme-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .institution-section__grid {
+        grid-template-columns: 1fr;
+
+        gap: 2rem;
+    }
+
+    .journey-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .journey-step {
+        min-height: auto;
+
+        border-right: 0;
+
+        border-bottom:
+            1px solid var(--theme-border);
+    }
+
+    .journey-step:last-child {
+        border-bottom: 0;
+    }
+
+    .admissions-hero__visual {
+        min-height: 420px;
+    }
+
+    .admissions-hero__image {
+        inset: 0 0 1rem 0;
+    }
+
+    .admissions-hero__floating {
+        right: .5rem;
+    }
+
+    .programme-modal-meta {
+        grid-template-columns: 1fr;
+    }
+}

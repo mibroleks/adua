@@ -1,0 +1,163 @@
+/*
+|--------------------------------------------------------------------------
+| YGRACE THEME TOKENS
+|--------------------------------------------------------------------------
+| File: resources/css/tokens.css
+|
+| Purpose:
+| Canonical semantic design-token layer.
+|
+| ThemeService provides:
+|     --theme-*-value
+|
+| This file exposes:
+|     --theme-*
+|
+| Components must ONLY consume --theme-*.
+|--------------------------------------------------------------------------
+*/
+
+:root {
+
+    /* ============================================================
+       BRAND
+    ============================================================ */
+
+    --theme-primary: var(--theme-primary-value);
+    --theme-primary-soft: var(--theme-primary-soft-value);
+    --theme-primary-deep: var(--theme-primary-deep-value);
+
+    --theme-secondary: var(--theme-secondary-value);
+
+    --theme-accent: var(--theme-accent-value);
+    --theme-accent-soft: var(--theme-accent-soft-value);
+
+
+    /* ============================================================
+       CANVAS
+    ============================================================ */
+
+    --theme-page: var(--theme-page-value);
+    --theme-surface: var(--theme-surface-value);
+    --theme-surface-muted: var(--theme-surface-muted-value);
+    --theme-surface-dark: var(--theme-surface-dark-value);
+
+
+    /* ============================================================
+       CONTENT
+    ============================================================ */
+
+    --theme-heading: var(--theme-heading-value);
+    --theme-body: var(--theme-body-value);
+    --theme-muted: var(--theme-muted-value);
+    --theme-inverse: var(--theme-inverse-value);
+
+
+    /* ============================================================
+       BORDERS
+    ============================================================ */
+
+    --theme-border: var(--theme-border-value);
+    --theme-border-strong: var(--theme-border-strong-value);
+
+
+    /* ============================================================
+       INTERACTION
+    ============================================================ */
+
+    --theme-action: var(--theme-action-value);
+    --theme-action-hover: var(--theme-action-hover-value);
+    --theme-focus: var(--theme-focus-value);
+
+
+    /* ============================================================
+       SEMANTIC
+    ============================================================ */
+
+    --theme-success: var(--theme-success-value);
+    --theme-warning: var(--theme-warning-value);
+    --theme-danger: var(--theme-danger-value);
+    --theme-info: var(--theme-info-value);
+
+
+    /* ============================================================
+       ATMOSPHERE
+    ============================================================ */
+
+    --theme-hero-start: var(--theme-hero-start-value);
+    --theme-hero-end: var(--theme-hero-end-value);
+
+    --theme-gradient-start: var(--theme-gradient-start-value);
+    --theme-gradient-end: var(--theme-gradient-end-value);
+
+    --theme-glow: var(--theme-glow-value);
+
+
+    /* ============================================================
+       GLASS
+    ============================================================ */
+
+    --theme-glass: var(--theme-glass-value);
+    --theme-glass-dark: var(--theme-glass-dark-value);
+    --theme-glass-border: var(--theme-glass-border-value);
+
+
+    /* ============================================================
+       FOOTER
+    ============================================================ */
+
+    --theme-footer-bg: var(--theme-footer-bg-value);
+    --theme-footer-surface: var(--theme-footer-surface-value);
+    --theme-footer-text: var(--theme-footer-text-value);
+    --theme-footer-muted: var(--theme-footer-muted-value);
+    --theme-footer-border: var(--theme-footer-border-value);
+
+
+    /* ============================================================
+       CARD
+    ============================================================ */
+
+    --theme-card-bg: var(--theme-card-bg-value);
+    --theme-card-border: var(--theme-card-border-value);
+    --theme-card-border-hover: var(--theme-card-border-hover-value);
+    --theme-card-shadow: var(--theme-card-shadow-value);
+
+
+    /* ============================================================
+       BUTTON
+    ============================================================ */
+
+    --theme-button-primary-bg: var(--theme-button-primary-bg-value);
+    --theme-button-primary-hover: var(--theme-button-primary-hover-value);
+    --theme-button-primary-text: var(--theme-button-primary-text-value);
+
+    --theme-button-secondary-bg: var(--theme-button-secondary-bg-value);
+    --theme-button-secondary-hover: var(--theme-button-secondary-hover-value);
+    --theme-button-secondary-text: var(--theme-button-secondary-text-value);
+
+
+    /* ============================================================
+       COUNTDOWN
+    ============================================================ */
+
+    --theme-countdown-start: var(--theme-countdown-start-value);
+    --theme-countdown-end: var(--theme-countdown-end-value);
+    --theme-countdown-text: var(--theme-countdown-text-value);
+    --theme-countdown-muted: var(--theme-countdown-muted-value);
+
+
+    /* ============================================================
+       MODAL
+    ============================================================ */
+
+    --theme-modal-bg: var(--theme-modal-bg-value);
+    --theme-modal-overlay: var(--theme-modal-overlay-value);
+    --theme-modal-border: var(--theme-modal-border-value);
+
+
+    /* ============================================================
+       TYPOGRAPHY
+    ============================================================ */
+
+    --theme-font-family: var(--theme-font-family-value);
+}

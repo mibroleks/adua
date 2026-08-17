@@ -1,0 +1,410 @@
+/*
+|--------------------------------------------------------------------------
+| APPLICATION PORTAL — INSTITUTIONAL HEADER
+|--------------------------------------------------------------------------
+| File: resources/css/components/header.css
+| Company: Ygrace Tech
+| Author: Ibrahim Olalekan
+|
+| Purpose:
+| Premium university admissions header.
+|
+| Design principles:
+| - Serious institutional character
+| - Theme-engine driven
+| - No hard-coded university colors
+| - Works with arbitrary theme presets
+| - Responsive
+| - Accessible
+| - Minimal visual noise
+|--------------------------------------------------------------------------
+*/
+
+/* ==========================================================================
+   HEADER SHELL
+========================================================================== */
+.portal-header {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    width: 100%;
+    color: var(--theme-body);
+    isolation: isolate;
+}
+
+/* ==========================================================================
+   ANNOUNCEMENT BAR
+========================================================================== */
+.portal-header__announcement {
+    position: relative;
+    min-height: 2.5rem;
+    display: flex;
+    align-items: center;
+    background: linear-gradient(
+        135deg,
+        var(--theme-gradient-start),
+        var(--theme-gradient-end)
+    );
+    color: var(--theme-inverse);
+    overflow: hidden;
+}
+
+.portal-header__announcement::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        color-mix(in srgb, var(--theme-accent) 10%, transparent),
+        transparent
+    );
+    pointer-events: none;
+}
+
+.portal-header__announcement-inner {
+    position: relative;
+    width: min(calc(100% - (var(--portal-gutter) * 2)), var(--portal-max-width));
+    min-height: 2.5rem;
+    margin-inline: auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.portal-header__announcement-message {
+    margin: 0;
+    font-size: 0.75rem;
+    line-height: 1.25rem;
+    font-weight: 650;
+    letter-spacing: 0.015em;
+    color: var(--theme-inverse);
+}
+
+.portal-header__announcement-action {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    flex-shrink: 0;
+    font-size: 0.75rem;
+    line-height: 1;
+    font-weight: 750;
+    color: var(--theme-inverse);
+    text-decoration: none;
+    transition: opacity var(--portal-transition), transform var(--portal-transition);
+}
+.portal-header__announcement-action::after {
+    content: "→";
+    font-size: 0.85rem;
+    transition: transform var(--portal-transition);
+}
+.portal-header__announcement-action:hover {
+    opacity: 0.86;
+    transform: translateX(1px);
+}
+.portal-header__announcement-action:hover::after {
+    transform: translateX(3px);
+}
+
+/* ==========================================================================
+   PRIMARY NAVIGATION
+========================================================================== */
+.portal-header__nav {
+    position: relative;
+    background: color-mix(in srgb, var(--theme-surface) 88%, transparent);
+    border-bottom: 1px solid var(--theme-border);
+    backdrop-filter: blur(22px) saturate(130%);
+    -webkit-backdrop-filter: blur(22px) saturate(130%);
+    transition: background var(--portal-transition),
+                box-shadow var(--portal-transition),
+                border-color var(--portal-transition);
+}
+
+.portal-header__nav::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -1px;
+    height: 1px;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        color-mix(in srgb, var(--theme-primary) 18%, transparent),
+        transparent
+    );
+    pointer-events: none;
+}
+
+.portal-header__nav-inner {
+    width: min(calc(100% - (var(--portal-gutter) * 2)), var(--portal-max-width));
+    min-height: 5rem;
+    margin-inline: auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+}
+
+/* ==========================================================================
+   UNIVERSITY BRAND
+========================================================================== */
+.portal-header__brand {
+    display: inline-flex;
+    align-items: center;
+    min-width: 0;
+    gap: 0.9rem;
+    color: var(--theme-heading);
+    text-decoration: none;
+    transition: opacity var(--portal-transition);
+}
+.portal-header__brand:hover { opacity: 0.9; }
+
+.portal-header__brand-mark {
+    display: grid;
+    place-items: center;
+    flex: 0 0 auto;
+    min-width: 3rem;
+    min-height: 3rem;
+}
+
+.portal-header__logo {
+    display: block;
+    width: auto;
+    height: 3rem;
+    max-width: 12rem;
+    object-fit: contain;
+    transition: transform var(--portal-transition);
+}
+.portal-header__brand:hover .portal-header__logo { transform: scale(1.025); }
+
+.portal-header__identity {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+}
+.portal-header__institution {
+    margin: 0;
+    max-width: 24rem;
+    overflow: hidden;
+    color: var(--theme-heading);
+    font-family: "Manrope", Inter, ui-sans-serif, system-ui, sans-serif;
+    font-size: 0.95rem;
+    line-height: 1.2;
+    font-weight: 800;
+    letter-spacing: -0.018em;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.portal-header__department {
+    margin: 0;
+    color: var(--theme-muted);
+    font-size: 0.625rem;
+    line-height: 1.2;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+}
+
+/* ==========================================================================
+   DESKTOP NAVIGATION
+========================================================================== */
+.portal-header__navigation {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    margin-left: auto;
+}
+
+.portal-header__link {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
+    padding-inline: 0.85rem;
+    color: var(--theme-body);
+    font-size: 0.8125rem;
+    font-weight: 650;
+    text-decoration: none;
+    border-radius: 0.65rem;
+    transition: color var(--portal-transition), background var(--portal-transition);
+}
+.portal-header__link::after {
+    content: "";
+    position: absolute;
+    left: 0.85rem;
+    right: 0.85rem;
+    bottom: 0.35rem;
+    height: 2px;
+    border-radius: 999px;
+    background: var(--theme-primary);
+    transform: scaleX(0);
+    transform-origin: center;
+    transition: transform var(--portal-transition);
+}
+.portal-header__link:hover {
+    color: var(--theme-heading);
+    background: color-mix(in srgb, var(--theme-primary-soft) 55%, transparent);
+}
+.portal-header__link:hover::after { transform: scaleX(1); }
+
+.portal-header__link[aria-current="page"] {
+    color: var(--theme-primary);
+    background: color-mix(in srgb, var(--theme-primary-soft) 65%, transparent);
+}
+.portal-header__link[aria-current="page"]::after { transform: scaleX(1); }
+
+/* ==========================================================================
+   APPLICATION CTA
+========================================================================== */
+.portal-header__cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 2.85rem;
+    margin-left: 0.65rem;
+    padding-inline: 1.15rem;
+    border: 1px solid transparent;
+    border-radius: 999px;
+    background: linear-gradient(135deg, var(--theme-gradient-start), var(--theme-gradient-end));
+    color: var(--theme-inverse);
+    font-size: 0.75rem;
+    font-weight: 750;
+    letter-spacing: 0.005em;
+    text-decoration: none;
+    box-shadow: 0 8px 24px color-mix(in srgb, var(--theme-primary) 15%, transparent);
+    transition: transform var(--portal-transition), box-shadow var(--portal-transition), filter var(--portal-transition);
+}
+.portal-header__cta:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 13px 32px color-mix(in srgb, var(--theme-primary) 23%, transparent);
+    filter: saturate(1.06);
+}
+.portal-header__cta:active { transform: translateY(0); }
+
+/* ==========================================================================
+   MOBILE TOGGLE
+========================================================================== */
+.portal-header__mobile-toggle {
+    display: none;
+    width: 2.75rem;
+    height: 2.75rem;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--theme-border);
+    border-radius: 0.75rem;
+    background: color-mix(in srgb, var(--theme-surface) 90%, transparent);
+    color: var(--theme-heading);
+    cursor: pointer;
+}
+
+.portal-header__mobile-toggle:hover {
+    border-color: var(--theme-border-strong);
+    background: var(--theme-primary-soft);
+}
+
+.portal-header__mobile-toggle:active {
+    transform: scale(0.96);
+}
+
+/* ==========================================================================
+   FOCUS STATES
+========================================================================== */
+.portal-header a:focus-visible,
+.portal-header button:focus-visible {
+    outline: 3px solid color-mix(in srgb, var(--theme-focus) 45%, transparent);
+    outline-offset: 3px;
+}
+
+/* ==========================================================================
+   RESPONSIVE
+========================================================================== */
+@media (max-width: 900px) {
+    .portal-header__navigation {
+        display: none;
+    }
+    .portal-header__mobile-toggle {
+        display: inline-flex;
+    }
+    .portal-header__nav-inner {
+        min-height: 4.5rem;
+    }
+    .portal-header__logo {
+        height: 2.75rem;
+    }
+}
+
+@media (max-width: 640px) {
+    .portal-header__announcement-inner {
+        min-height: 2.35rem;
+    }
+    .portal-header__announcement-message {
+        font-size: 0.6875rem;
+    }
+    .portal-header__announcement-action {
+        font-size: 0.6875rem;
+    }
+    .portal-header__nav-inner {
+        width: min(calc(100% - 2rem), var(--portal-max-width));
+        min-height: 4.25rem;
+        gap: 1rem;
+    }
+    .portal-header__brand {
+        gap: 0.7rem;
+    }
+    .portal-header__logo {
+        height: 2.5rem;
+        max-width: 9rem;
+    }
+    .portal-header__institution {
+        max-width: 12rem;
+        font-size: 0.82rem;
+    }
+    .portal-header__department {
+        font-size: 0.55rem;
+    }
+}
+
+@media (max-width: 420px) {
+    .portal-header__identity {
+        display: none;
+    }
+    .portal-header__brand-mark {
+        min-width: auto;
+    }
+}
+
+/* ==========================================================================
+   REDUCED MOTION
+========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+    .portal-header *,
+    .portal-header *::before,
+    .portal-header *::after {
+        transition-duration: 0.001ms !important;
+        animation-duration: 0.001ms !important;
+    }
+}
+
+/* ==========================================================================
+   PRINT
+========================================================================== */
+@media print {
+    .portal-header {
+        position: static;
+    }
+    .portal-header__announcement,
+    .portal-header__navigation,
+    .portal-header__cta,
+    .portal-header__mobile-toggle {
+        display: none !important;
+    }
+    .portal-header__nav {
+        background: transparent !important;
+        border-bottom: 1px solid #000;
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+    }
+}

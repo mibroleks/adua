@@ -1,0 +1,66 @@
+/* 
+Component: Print Stylesheet
+File Path: resources/css/print.css
+Company: Ygrace Tech
+Author: Ibrahim Olalekan
+
+Purpose:
+Provides professional print layout for admission letters and other official documents.
+Ensures branding, typography, and spacing are optimized for paper output.
+
+Status: ✅ Production Ready
+Version: 1.0
+*/
+
+/* Reset margins and background for print */
+@media print {
+    body {
+        margin: 0;
+        padding: 0;
+        background: #fff !important;
+        color: #000 !important;
+        font-family: "Times New Roman", Georgia, serif;
+        line-height: 1.5;
+    }
+
+    /* Hide navigation, buttons, and interactive elements */
+    header, footer, nav, .portal-button, .btn-primary, .btn-secondary, .btn-success, .btn-danger {
+        display: none !important;
+    }
+
+    /* Admission letter container */
+    .portal-card, .print-container {
+        box-shadow: none !important;
+        border: none !important;
+        background: #fff !important;
+        padding: 2rem;
+        max-width: 100%;
+    }
+
+    /* Typography */
+    h1, h2, h3 {
+        color: #000 !important;
+        font-weight: bold;
+    }
+
+    p {
+        font-size: 14pt;
+        margin-bottom: 1rem;
+    }
+
+    /* Branding logo */
+    img {
+        max-height: 80px;
+    }
+
+    /* Signature block */
+    .signature {
+        margin-top: 3rem;
+        font-size: 12pt;
+    }
+
+    /* Page break handling */
+    .page-break {
+        page-break-before: always;
+    }
+}

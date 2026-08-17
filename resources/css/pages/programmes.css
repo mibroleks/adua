@@ -1,0 +1,605 @@
+/*
+|--------------------------------------------------------------------------
+| YGRACE PORTAL — PROGRAMMES CATALOGUE
+|--------------------------------------------------------------------------
+| Full programme catalogue.
+|
+| Visual language:
+| - Admissions landing page
+| - Editorial
+| - Institutional
+| - Spacious
+| - Theme-token driven
+|--------------------------------------------------------------------------
+*/
+
+
+/* ============================================================
+   PAGE HERO
+============================================================ */
+
+.programmes-page-hero {
+    position: relative;
+    overflow: hidden;
+
+    padding:
+        clamp(5rem, 10vw, 10rem)
+        0
+        clamp(5rem, 8vw, 8rem);
+
+    background:
+        radial-gradient(
+            circle at 8% 15%,
+            color-mix(
+                in srgb,
+                var(--theme-primary) 12%,
+                transparent
+            ),
+            transparent 30%
+        ),
+
+        radial-gradient(
+            circle at 90% 10%,
+            color-mix(
+                in srgb,
+                var(--theme-accent) 10%,
+                transparent
+            ),
+            transparent 28%
+        ),
+
+        var(--theme-page);
+}
+
+
+/* ============================================================
+   HERO CONTENT
+============================================================ */
+
+.programmes-page-hero__content {
+    max-width: 900px;
+}
+
+.programmes-page-hero .section-eyebrow {
+    margin-bottom: 1.5rem;
+}
+
+.programmes-page-hero h1 {
+    max-width: 900px;
+
+    margin: 0;
+
+    color: var(--theme-heading);
+
+    font-family:
+        "Manrope",
+        Inter,
+        sans-serif;
+
+    font-size:
+        clamp(3rem, 7vw, 6.8rem);
+
+    font-weight: 750;
+
+    line-height: .92;
+
+    letter-spacing: -.075em;
+}
+
+.programmes-page-hero h1 em {
+    display: block;
+
+    color: var(--theme-primary);
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-weight: 400;
+}
+
+.programmes-page-hero p {
+    max-width: 650px;
+
+    margin: 2rem 0 0;
+
+    color: var(--theme-body);
+
+    font-size:
+        clamp(1rem, 1.4vw, 1.15rem);
+
+    line-height: 1.8;
+}
+
+
+/* ============================================================
+   CATALOGUE
+============================================================ */
+
+.programmes-catalogue {
+    padding:
+        clamp(5rem, 9vw, 9rem)
+        0;
+
+    background:
+        var(--theme-surface);
+}
+
+
+/* ============================================================
+   PROGRAMME GRID
+============================================================ */
+
+.programme-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, minmax(0, 1fr));
+
+    gap: 1rem;
+}
+
+
+/* ============================================================
+   PROGRAMME CARD
+============================================================ */
+
+.programme-card {
+    min-height: 370px;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.programme-card__meta {
+    display: flex;
+    flex-wrap: wrap;
+
+    gap: .5rem;
+
+    margin-top: 1.5rem;
+}
+
+.programme-card__meta span {
+    display: inline-flex;
+    align-items: center;
+
+    min-height: 2rem;
+
+    padding-inline: .75rem;
+
+    border:
+        1px solid
+        var(--theme-border);
+
+    border-radius: 999px;
+
+    background:
+        var(--theme-surface-muted);
+
+    color:
+        var(--theme-muted);
+
+    font-size: .68rem;
+
+    font-weight: 800;
+
+    letter-spacing: .04em;
+}
+
+
+/* ============================================================
+   CARD ACTIONS
+============================================================ */
+
+.programme-card__actions {
+    display: flex;
+
+    align-items: center;
+
+    gap: 1rem;
+
+    margin-top: auto;
+    padding-top: 2rem;
+}
+
+.programme-card__details {
+    display: inline-flex;
+    align-items: center;
+
+    gap: .5rem;
+
+    padding: 0;
+
+    border: 0;
+
+    background: transparent;
+
+    color:
+        var(--theme-primary);
+
+    font-size: .78rem;
+
+    font-weight: 800;
+
+    cursor: pointer;
+
+    transition:
+        gap 180ms ease;
+}
+
+.programme-card__details:hover {
+    gap: .8rem;
+}
+
+.programme-card__apply {
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    min-height: 2.5rem;
+
+    padding-inline: 1rem;
+
+    border-radius: 999px;
+
+    background:
+        var(--theme-primary-soft);
+
+    color:
+        var(--theme-primary);
+
+    font-size: .75rem;
+
+    font-weight: 800;
+
+    text-decoration: none;
+
+    transition:
+        background 180ms ease,
+        color 180ms ease;
+}
+
+.programme-card__apply:hover {
+    background:
+        var(--theme-primary);
+
+    color:
+        var(--theme-inverse);
+}
+
+
+/* ============================================================
+   MODAL CONTENT
+============================================================ */
+
+.programme-modal-content {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 0;
+}
+
+
+/* ============================================================
+   MODAL META GRID
+============================================================ */
+
+.programme-modal-meta {
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap: .75rem;
+
+    margin-bottom: 2rem;
+}
+
+.programme-modal-meta > div {
+    min-width: 0;
+
+    padding: 1rem;
+
+    border:
+        1px solid
+        var(--theme-border);
+
+    border-radius: .9rem;
+
+    background:
+        var(--theme-surface-muted);
+}
+
+.programme-modal-meta span {
+    display: block;
+
+    margin-bottom: .35rem;
+
+    color:
+        var(--theme-muted);
+
+    font-size: .62rem;
+
+    font-weight: 800;
+
+    letter-spacing: .12em;
+
+    line-height: 1.2;
+}
+
+.programme-modal-meta strong {
+    display: block;
+
+    color:
+        var(--theme-heading);
+
+    font-size: .9rem;
+
+    font-weight: 800;
+
+    line-height: 1.4;
+}
+
+
+/* ============================================================
+   MODAL DESCRIPTION
+============================================================ */
+
+.programme-modal-description {
+    padding-top: 1.5rem;
+
+    border-top:
+        1px solid
+        var(--theme-border);
+}
+
+.programme-modal-description h3 {
+    margin: 0 0 .75rem;
+
+    color:
+        var(--theme-heading);
+
+    font-size: 1rem;
+
+    font-weight: 800;
+}
+
+.programme-modal-description div {
+    color:
+        var(--theme-body);
+
+    font-size: .9rem;
+
+    line-height: 1.8;
+}
+
+
+/* ============================================================
+   MODAL ADMISSIONS
+============================================================ */
+
+.programme-modal-admissions {
+    margin-top: 2rem;
+
+    padding-top: 1.5rem;
+
+    border-top:
+        1px solid
+        var(--theme-border);
+}
+
+.programme-modal-admissions > h3 {
+    margin: 0 0 1rem;
+
+    color:
+        var(--theme-heading);
+
+    font-size: 1rem;
+
+    font-weight: 800;
+}
+
+
+/* ============================================================
+   APPLICATION FEE
+============================================================ */
+
+.programme-modal-admissions__fee {
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 1rem;
+
+    padding: 1rem 1.1rem;
+
+    border:
+        1px solid
+        var(--theme-border);
+
+    border-radius: .9rem;
+
+    background:
+        var(--theme-primary-soft);
+}
+
+.programme-modal-admissions__fee span {
+    color:
+        var(--theme-primary);
+
+    font-size: .62rem;
+
+    font-weight: 800;
+
+    letter-spacing: .12em;
+}
+
+.programme-modal-admissions__fee strong {
+    color:
+        var(--theme-heading);
+
+    font-size: 1rem;
+
+    font-weight: 800;
+}
+
+
+/* ============================================================
+   REQUIREMENTS
+============================================================ */
+
+.programme-modal-requirements {
+    margin-top: 1.5rem;
+}
+
+.programme-modal-requirements h4 {
+    margin: 0 0 .8rem;
+
+    color:
+        var(--theme-heading);
+
+    font-size: .85rem;
+
+    font-weight: 800;
+}
+
+.programme-modal-requirements ul {
+    display: grid;
+
+    gap: .7rem;
+
+    margin: 0;
+
+    padding: 0;
+
+    list-style: none;
+}
+
+.programme-modal-requirements li {
+    display: flex;
+
+    align-items: flex-start;
+
+    gap: .7rem;
+
+    color:
+        var(--theme-body);
+
+    font-size: .85rem;
+
+    line-height: 1.65;
+}
+
+.programme-modal-requirements li span {
+    flex: 0 0 auto;
+
+    color:
+        var(--theme-success);
+
+    font-weight: 800;
+}
+
+
+/* ============================================================
+   EMPTY STATE
+============================================================ */
+
+.programme-empty {
+    grid-column: 1 / -1;
+
+    padding:
+        clamp(3rem, 7vw, 6rem);
+
+    text-align: center;
+
+    border:
+        1px dashed
+        var(--theme-border);
+
+    border-radius: 1.5rem;
+
+    background:
+        var(--theme-surface-muted);
+}
+
+.programme-empty h3 {
+    margin: .8rem 0 .5rem;
+
+    color:
+        var(--theme-heading);
+
+    font-size: 1.5rem;
+
+    letter-spacing: -.03em;
+}
+
+.programme-empty p {
+    margin: 0 0 1.5rem;
+
+    color:
+        var(--theme-muted);
+}
+
+
+/* ============================================================
+   PAGINATION
+============================================================ */
+
+.programmes-pagination {
+    display: flex;
+
+    justify-content: center;
+
+    margin-top: 3.5rem;
+}
+
+
+/* ============================================================
+   RESPONSIVE
+============================================================ */
+
+@media (max-width: 1000px) {
+
+    .programme-grid {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+
+}
+
+
+@media (max-width: 700px) {
+
+    .programmes-page-hero h1 {
+        font-size:
+            clamp(2.8rem, 14vw, 4.5rem);
+    }
+
+    .programme-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .programme-modal-meta {
+        grid-template-columns: 1fr;
+    }
+
+    .programme-card {
+        min-height: 330px;
+    }
+
+}
+
+
+@media (prefers-reduced-motion: reduce) {
+
+    .programme-card__details,
+    .programme-card__apply {
+        transition: none;
+    }
+
+}

@@ -1,0 +1,281 @@
+/*
+|--------------------------------------------------------------------------
+| APPLICATION PORTAL — INSTITUTIONAL FOOTER
+|--------------------------------------------------------------------------
+| File: resources/css/components/footer.css
+| Company: Ygrace Tech
+| Author: Ibrahim Olalekan
+|
+| Purpose:
+| Premium university admissions footer.
+|
+| Design:
+| Editorial / institutional / restrained
+|
+| Theme:
+| Fully driven by --theme-* variables.
+|--------------------------------------------------------------------------
+*/
+
+/* ==========================================================================
+   FOOTER SHELL
+========================================================================== */
+.portal-footer {
+    position: relative;
+    margin-top: 5rem;
+    background: var(--theme-footer-bg);
+    color: var(--theme-footer-text);
+    border-top: 1px solid var(--theme-footer-border);
+    overflow: hidden;
+}
+
+/* Subtle institutional color field */
+.portal-footer::before {
+    content: "";
+    position: absolute;
+    width: 34rem;
+    height: 34rem;
+    top: -18rem;
+    right: -10rem;
+    border-radius: 50%;
+    background: radial-gradient(
+        circle,
+        color-mix(in srgb, var(--theme-primary) 9%, transparent),
+        transparent 70%
+    );
+    pointer-events: none;
+}
+
+/* ==========================================================================
+   MAIN FOOTER AREA
+========================================================================== */
+.portal-footer__main {
+    position: relative;
+    width: min(calc(100% - (var(--portal-gutter) * 2)), var(--portal-max-width));
+    margin-inline: auto;
+    padding-block: clamp(4rem, 7vw, 6.5rem);
+}
+
+/* ==========================================================================
+   FOOTER GRID
+========================================================================== */
+.portal-footer__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 2fr) minmax(8rem, 1fr) minmax(12rem, 1.2fr);
+    gap: clamp(2.5rem, 6vw, 6rem);
+}
+
+/* ==========================================================================
+   BRAND AREA
+========================================================================== */
+.portal-footer__brand { min-width: 0; }
+
+.portal-footer__brand-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.9rem;
+    color: var(--theme-heading);
+    text-decoration: none;
+    transition: opacity var(--portal-transition);
+}
+.portal-footer__brand-link:hover { opacity: 0.9; }
+
+.portal-footer__logo {
+    display: block;
+    width: auto;
+    height: 3.25rem;
+    max-width: 14rem;
+    object-fit: contain;
+}
+
+.portal-footer__identity {
+    display: flex;
+    flex-direction: column;
+    gap: 0.18rem;
+}
+
+.portal-footer__institution {
+    margin: 0;
+    color: var(--theme-heading);
+    font-family: "Manrope", Inter, ui-sans-serif, system-ui, sans-serif;
+    font-size: 0.95rem;
+    line-height: 1.2;
+    font-weight: 800;
+    letter-spacing: -0.018em;
+}
+
+.portal-footer__department {
+    color: var(--theme-muted);
+    font-size: 0.625rem;
+    line-height: 1.2;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+}
+
+.portal-footer__description {
+    max-width: 34rem;
+    margin: 1.5rem 0 0;
+    color: var(--theme-muted);
+    font-size: 0.875rem;
+    line-height: 1.8;
+}
+
+/* ==========================================================================
+   FOOTER COLUMNS
+========================================================================== */
+.portal-footer__column { min-width: 0; }
+
+.portal-footer__heading {
+    margin: 0;
+    color: var(--theme-heading);
+    font-size: 0.7rem;
+    line-height: 1.2;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+.portal-footer__links {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    margin-top: 1.25rem;
+}
+
+.portal-footer__link {
+    width: fit-content;
+    color: var(--theme-footer-muted);
+    font-size: 0.8125rem;
+    line-height: 1.5;
+    text-decoration: none;
+    transition: color var(--portal-transition), transform var(--portal-transition);
+}
+.portal-footer__link:hover {
+    color: var(--theme-primary);
+    transform: translateX(2px);
+}
+
+/* ==========================================================================
+   CONTACT AREA
+========================================================================== */
+.portal-footer__contact {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    margin-top: 1.25rem;
+}
+
+.portal-footer__contact-item {
+    margin: 0;
+    color: var(--theme-footer-muted);
+    font-size: 0.8125rem;
+    line-height: 1.65;
+    overflow-wrap: anywhere;
+}
+
+.portal-footer__contact-link {
+    color: var(--theme-footer-muted);
+    text-decoration: none;
+    transition: color var(--portal-transition);
+}
+.portal-footer__contact-link:hover { color: var(--theme-primary); }
+
+/* ==========================================================================
+   LOWER FOOTER
+========================================================================== */
+.portal-footer__bottom {
+    position: relative;
+    width: min(calc(100% - (var(--portal-gutter) * 2)), var(--portal-max-width));
+    margin-inline: auto;
+    padding-block: 1.35rem;
+    border-top: 1px solid var(--theme-footer-border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.portal-footer__copyright,
+.portal-footer__credit {
+    margin: 0;
+    color: var(--theme-footer-muted);
+    font-size: 0.6875rem;
+    line-height: 1.5;
+}
+
+.portal-footer__credit { text-align: right; }
+.portal-footer__credit strong {
+    color: var(--theme-body);
+    font-weight: 650;
+}
+
+/* ==========================================================================
+   FOOTER DIVIDER DETAIL
+========================================================================== */
+.portal-footer__rule {
+    width: 2.5rem;
+    height: 2px;
+    margin-top: 1.25rem;
+    border-radius: 999px;
+    background: linear-gradient(90deg, var(--theme-gradient-start), var(--theme-gradient-end));
+}
+
+/* ==========================================================================
+   FOCUS
+========================================================================== */
+.portal-footer a:focus-visible {
+    outline: 3px solid color-mix(in srgb, var(--theme-focus) 45%, transparent);
+    outline-offset: 3px;
+    border-radius: 0.25rem;
+}
+
+/* ==========================================================================
+   RESPONSIVE
+========================================================================== */
+@media (max-width: 900px) {
+    .portal-footer__grid {
+        grid-template-columns: minmax(0, 1.5fr) minmax(9rem, 1fr);
+        gap: 3rem;
+    }
+    .portal-footer__brand { grid-column: 1 / -1; }
+}
+
+@media (max-width: 640px) {
+    .portal-footer { margin-top: 3.5rem; }
+    .portal-footer__main { padding-block: 3.5rem; }
+    .portal-footer__grid { grid-template-columns: 1fr; gap: 2.75rem; }
+    .portal-footer__bottom {
+        flex-direction: column;
+        align-items: flex-start;
+        padding-block: 1.25rem;
+    }
+    .portal-footer__credit { text-align: left; }
+    .portal-footer__logo { height: 2.75rem; }
+}
+
+/* ==========================================================================
+   REDUCED MOTION
+========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+    .portal-footer *,
+    .portal-footer *::before,
+    .portal-footer *::after {
+        transition-duration: 0.001ms !important;
+        animation-duration: 0.001ms !important;
+    }
+}
+
+/* ==========================================================================
+   PRINT
+========================================================================== */
+@media print {
+    .portal-footer {
+        margin-top: 2rem;
+        background: white !important;
+        border-top: 1px solid #000;
+    }
+    .portal-footer::before { display: none; }
+    .portal-footer__link,
+    .portal-footer__contact-link { color: #000 !important; }
+}

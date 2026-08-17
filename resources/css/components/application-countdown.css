@@ -1,0 +1,754 @@
+/*
+|--------------------------------------------------------------------------
+| APPLICATION COUNTDOWN
+|--------------------------------------------------------------------------
+| File:
+| resources/css/components/application-countdown.css
+|
+| Purpose:
+| Premium admissions countdown component.
+|
+| Design principles:
+| - Fully theme-token driven
+| - Works with any institutional palette
+| - No hard-coded brand colors
+| - No dependency on light/dark mode
+| - Editorial / university-grade visual hierarchy
+| - Responsive
+| - Accessible
+| - Reduced-motion aware
+|--------------------------------------------------------------------------
+*/
+
+.application-countdown {
+    --countdown-radius: 1.75rem;
+    --countdown-unit-radius: 1.15rem;
+    --countdown-gap: clamp(0.65rem, 2vw, 1rem);
+
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+
+    width: 100%;
+
+    border: 1px solid
+        color-mix(
+            in srgb,
+            var(--theme-primary) 18%,
+            var(--theme-border)
+        );
+
+    border-radius: var(--countdown-radius);
+
+    background:
+        radial-gradient(
+            circle at 8% 0%,
+            color-mix(
+                in srgb,
+                var(--theme-primary) 10%,
+                transparent
+            ),
+            transparent 34%
+        ),
+        radial-gradient(
+            circle at 100% 100%,
+            color-mix(
+                in srgb,
+                var(--theme-accent) 9%,
+                transparent
+            ),
+            transparent 34%
+        ),
+        var(--theme-surface);
+
+    box-shadow:
+        0 1px 2px color-mix(
+            in srgb,
+            var(--theme-body) 4%,
+            transparent
+        ),
+        0 24px 70px color-mix(
+            in srgb,
+            var(--theme-primary) 9%,
+            transparent
+        );
+
+    color: var(--theme-body);
+
+    transition:
+        border-color var(--portal-transition),
+        box-shadow var(--portal-transition),
+        transform var(--portal-transition);
+}
+
+
+/* ------------------------------------------------------------
+   Ambient decoration
+------------------------------------------------------------ */
+
+.application-countdown::before {
+    content: "";
+
+    position: absolute;
+    z-index: -1;
+
+    width: 18rem;
+    height: 18rem;
+
+    top: -10rem;
+    right: -7rem;
+
+    border-radius: 999px;
+
+    background:
+        radial-gradient(
+            circle,
+            color-mix(
+                in srgb,
+                var(--theme-primary) 13%,
+                transparent
+            ) 0%,
+            transparent 70%
+        );
+
+    pointer-events: none;
+}
+
+.application-countdown::after {
+    content: "";
+
+    position: absolute;
+    z-index: -1;
+
+    width: 13rem;
+    height: 13rem;
+
+    bottom: -8rem;
+    left: -5rem;
+
+    border-radius: 999px;
+
+    background:
+        radial-gradient(
+            circle,
+            color-mix(
+                in srgb,
+                var(--theme-accent) 11%,
+                transparent
+            ) 0%,
+            transparent 70%
+        );
+
+    pointer-events: none;
+}
+
+
+/* ------------------------------------------------------------
+   Inner shell
+------------------------------------------------------------ */
+
+.application-countdown__inner {
+    position: relative;
+
+    padding:
+        clamp(1.5rem, 4vw, 3rem);
+}
+
+
+/* ------------------------------------------------------------
+   Header
+------------------------------------------------------------ */
+
+.application-countdown__header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1.5rem;
+
+    margin-bottom: clamp(1.5rem, 4vw, 2.5rem);
+}
+
+.application-countdown__eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    margin-bottom: 0.7rem;
+
+    color: var(--theme-primary);
+
+    font-size: 0.7rem;
+    line-height: 1;
+    font-weight: 800;
+
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+}
+
+.application-countdown__eyebrow::before {
+    content: "";
+
+    width: 0.45rem;
+    height: 0.45rem;
+
+    border-radius: 999px;
+
+    background: var(--theme-primary);
+
+    box-shadow:
+        0 0 0 4px color-mix(
+            in srgb,
+            var(--theme-primary) 10%,
+            transparent
+        );
+}
+
+.application-countdown__title {
+    margin: 0;
+
+    color: var(--theme-heading);
+
+    font-family:
+        "Manrope",
+        Inter,
+        ui-sans-serif,
+        system-ui,
+        sans-serif;
+
+    font-size: clamp(1.35rem, 3vw, 2rem);
+    line-height: 1.1;
+
+    font-weight: 800;
+
+    letter-spacing: -0.035em;
+}
+
+.application-countdown__description {
+    max-width: 38rem;
+
+    margin: 0.6rem 0 0;
+
+    color: var(--theme-muted);
+
+    font-size: 0.9rem;
+    line-height: 1.7;
+}
+
+
+/* ------------------------------------------------------------
+   Status badge
+------------------------------------------------------------ */
+
+.application-countdown__status {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    flex-shrink: 0;
+
+    padding: 0.55rem 0.75rem;
+
+    border: 1px solid
+        color-mix(
+            in srgb,
+            var(--theme-success) 22%,
+            var(--theme-border)
+        );
+
+    border-radius: 999px;
+
+    background:
+        color-mix(
+            in srgb,
+            var(--theme-success) 7%,
+            var(--theme-surface)
+        );
+
+    color: var(--theme-success);
+
+    font-size: 0.7rem;
+    font-weight: 800;
+
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.application-countdown__status-dot {
+    width: 0.45rem;
+    height: 0.45rem;
+
+    border-radius: 999px;
+
+    background: currentColor;
+
+    box-shadow:
+        0 0 0 4px
+        color-mix(
+            in srgb,
+            currentColor 10%,
+            transparent
+        );
+
+    animation: countdown-status-pulse 2.4s ease-in-out infinite;
+}
+
+
+/* ------------------------------------------------------------
+   Countdown grid
+------------------------------------------------------------ */
+
+.application-countdown__grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, minmax(0, 1fr));
+
+    gap: var(--countdown-gap);
+}
+
+
+/* ------------------------------------------------------------
+   Individual time unit
+------------------------------------------------------------ */
+
+.application-countdown__unit {
+    position: relative;
+
+    min-width: 0;
+
+    padding:
+        clamp(1rem, 3vw, 1.5rem)
+        clamp(0.65rem, 2vw, 1rem);
+
+    border: 1px solid
+        color-mix(
+            in srgb,
+            var(--theme-border-strong) 55%,
+            var(--theme-border)
+        );
+
+    border-radius: var(--countdown-unit-radius);
+
+    background:
+        linear-gradient(
+            180deg,
+            color-mix(
+                in srgb,
+                var(--theme-surface) 96%,
+                var(--theme-primary-soft)
+            ),
+            var(--theme-surface)
+        );
+
+    text-align: center;
+
+    box-shadow:
+        inset 0 1px 0
+        color-mix(
+            in srgb,
+            var(--theme-inverse) 35%,
+            transparent
+        );
+
+    transition:
+        transform var(--portal-transition),
+        border-color var(--portal-transition),
+        box-shadow var(--portal-transition);
+}
+
+.application-countdown__unit:hover {
+    transform: translateY(-3px);
+
+    border-color:
+        color-mix(
+            in srgb,
+            var(--theme-primary) 28%,
+            var(--theme-border)
+        );
+
+    box-shadow:
+        0 12px 30px
+        color-mix(
+            in srgb,
+            var(--theme-primary) 8%,
+            transparent
+        );
+}
+
+
+/* ------------------------------------------------------------
+   Number
+------------------------------------------------------------ */
+
+.application-countdown__number {
+    display: block;
+
+    color: var(--theme-heading);
+
+    font-family:
+        "Manrope",
+        Inter,
+        ui-sans-serif,
+        system-ui,
+        sans-serif;
+
+    font-size: clamp(1.75rem, 5vw, 3.25rem);
+
+    line-height: 0.95;
+
+    font-weight: 800;
+
+    font-variant-numeric: tabular-nums;
+
+    letter-spacing: -0.055em;
+}
+
+
+/* ------------------------------------------------------------
+   Unit label
+------------------------------------------------------------ */
+
+.application-countdown__label {
+    display: block;
+
+    margin-top: 0.7rem;
+
+    color: var(--theme-muted);
+
+    font-size: 0.65rem;
+    line-height: 1;
+
+    font-weight: 750;
+
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+
+/* ------------------------------------------------------------
+   Separator
+------------------------------------------------------------ */
+
+.application-countdown__separator {
+    position: absolute;
+
+    top: 50%;
+    right: calc(var(--countdown-gap) / -2);
+
+    width: 0.25rem;
+    height: 0.25rem;
+
+    transform: translate(50%, -50%);
+
+    border-radius: 999px;
+
+    background: var(--theme-primary);
+
+    opacity: 0.5;
+}
+
+
+/* ------------------------------------------------------------
+   Deadline information
+------------------------------------------------------------ */
+
+.application-countdown__deadline {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 1rem;
+
+    margin-top: 1.5rem;
+    padding-top: 1.25rem;
+
+    border-top: 1px solid var(--theme-border);
+}
+
+.application-countdown__deadline-label {
+    color: var(--theme-muted);
+
+    font-size: 0.72rem;
+    font-weight: 700;
+
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+.application-countdown__deadline-date {
+    color: var(--theme-heading);
+
+    font-size: 0.8rem;
+    font-weight: 700;
+
+    text-align: right;
+}
+
+
+/* ------------------------------------------------------------
+   Closed state
+------------------------------------------------------------ */
+
+.application-countdown--closed {
+    border-color:
+        color-mix(
+            in srgb,
+            var(--theme-danger) 18%,
+            var(--theme-border)
+        );
+}
+
+.application-countdown--closed .application-countdown__eyebrow {
+    color: var(--theme-danger);
+}
+
+.application-countdown--closed .application-countdown__eyebrow::before {
+    background: var(--theme-danger);
+}
+
+.application-countdown__closed-message {
+    display: grid;
+
+    gap: 0.65rem;
+
+    max-width: 38rem;
+}
+
+.application-countdown__closed-title {
+    margin: 0;
+
+    color: var(--theme-heading);
+
+    font-size: clamp(1.35rem, 3vw, 2rem);
+    font-weight: 800;
+
+    letter-spacing: -0.035em;
+}
+
+.application-countdown__closed-description {
+    margin: 0;
+
+    color: var(--theme-muted);
+
+    font-size: 0.9rem;
+    line-height: 1.7;
+}
+
+
+/* ------------------------------------------------------------
+   Closed status
+------------------------------------------------------------ */
+
+.application-countdown__status--closed {
+    border-color:
+        color-mix(
+            in srgb,
+            var(--theme-danger) 22%,
+            var(--theme-border)
+        );
+
+    background:
+        color-mix(
+            in srgb,
+            var(--theme-danger) 7%,
+            var(--theme-surface)
+        );
+
+    color: var(--theme-danger);
+}
+
+
+/* ------------------------------------------------------------
+   CTA
+------------------------------------------------------------ */
+
+.application-countdown__cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 3rem;
+
+    margin-top: 1.5rem;
+    padding: 0.75rem 1.25rem;
+
+    border: 1px solid transparent;
+    border-radius: 999px;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--theme-gradient-start),
+            var(--theme-gradient-end)
+        );
+
+    color: var(--theme-inverse);
+
+    font-size: 0.85rem;
+    font-weight: 800;
+
+    box-shadow:
+        0 10px 30px
+        color-mix(
+            in srgb,
+            var(--theme-primary) 17%,
+            transparent
+        );
+
+    transition:
+        transform var(--portal-transition),
+        box-shadow var(--portal-transition),
+        filter var(--portal-transition);
+}
+
+.application-countdown__cta:hover {
+    color: var(--theme-inverse);
+
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 16px 40px
+        color-mix(
+            in srgb,
+            var(--theme-primary) 24%,
+            transparent
+        );
+
+    filter: saturate(1.08);
+}
+
+
+/* ------------------------------------------------------------
+   Loading / live update state
+------------------------------------------------------------ */
+
+.application-countdown__number[data-countdown-changing="true"] {
+    animation: countdown-number-update 280ms ease both;
+}
+
+
+/* ------------------------------------------------------------
+   Animations
+------------------------------------------------------------ */
+
+@keyframes countdown-status-pulse {
+    0%,
+    100% {
+        opacity: 0.55;
+        transform: scale(0.9);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes countdown-number-update {
+    from {
+        opacity: 0.45;
+        transform: translateY(3px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+/* ------------------------------------------------------------
+   Responsive
+------------------------------------------------------------ */
+
+@media (max-width: 700px) {
+    .application-countdown__header {
+        flex-direction: column;
+    }
+
+    .application-countdown__status {
+        align-self: flex-start;
+    }
+}
+
+@media (max-width: 520px) {
+    .application-countdown__inner {
+        padding: 1.25rem;
+    }
+
+    .application-countdown__grid {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+
+        gap: 0.65rem;
+    }
+
+    .application-countdown__unit {
+        padding: 1.15rem 0.75rem;
+    }
+
+    .application-countdown__separator {
+        display: none;
+    }
+
+    .application-countdown__deadline {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .application-countdown__deadline-date {
+        text-align: left;
+    }
+}
+
+
+/* ------------------------------------------------------------
+   Reduced motion
+------------------------------------------------------------ */
+
+@media (prefers-reduced-motion: reduce) {
+    .application-countdown,
+    .application-countdown__unit,
+    .application-countdown__cta {
+        transition: none;
+    }
+
+    .application-countdown__status-dot,
+    .application-countdown__number[data-countdown-changing="true"] {
+        animation: none;
+    }
+}
+
+
+/* ------------------------------------------------------------
+   Print
+------------------------------------------------------------ */
+
+@media print {
+    .application-countdown {
+        background: white !important;
+        border: 1px solid #000 !important;
+        box-shadow: none !important;
+        color: black !important;
+    }
+
+    .application-countdown__number,
+    .application-countdown__title,
+    .application-countdown__closed-title {
+        color: black !important;
+    }
+
+    .application-countdown__label,
+    .application-countdown__description,
+    .application-countdown__deadline-label,
+    .application-countdown__deadline-date {
+        color: #333 !important;
+    }
+
+    .application-countdown__cta {
+        background: white !important;
+        color: black !important;
+        border: 1px solid #000 !important;
+        box-shadow: none !important;
+    }
+}

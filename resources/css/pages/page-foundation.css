@@ -1,0 +1,127 @@
+/*
+|--------------------------------------------------------------------------
+| YGRACE PORTAL — PAGE FOUNDATION
+|--------------------------------------------------------------------------
+| Purpose:
+| Shared editorial patterns for all institutional pages.
+| Ensures consistent typography, spacing, and CTA hierarchy.
+|
+| Scope:
+| Imported by all page stylesheets (auth, application, dashboard, status, etc.)
+| Provides reusable building blocks: eyebrows, headings, CTAs, grids.
+|--------------------------------------------------------------------------
+*/
+
+/* ==========================================================================
+   SECTION EYEBROW
+========================================================================== */
+.section-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: .5rem;
+
+    color: var(--theme-primary);
+
+    font-size: .68rem;
+    font-weight: 800;
+
+    letter-spacing: .15em;
+    line-height: 1.2;
+
+    text-transform: uppercase;
+}
+
+.section-eyebrow::before {
+    content: "";
+    width: .4rem;
+    height: .4rem;
+    border-radius: 50%;
+    background: var(--theme-accent);
+}
+
+/* ==========================================================================
+   SECTION HEADING
+========================================================================== */
+.section-heading {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 3rem;
+    margin-bottom: 3rem;
+}
+
+.section-heading h2 {
+    max-width: 760px;
+    margin: .65rem 0 0;
+    color: var(--theme-heading);
+    font-size: clamp(2rem, 4vw, 3.7rem);
+    font-weight: 750;
+    line-height: 1;
+    letter-spacing: -.055em;
+}
+
+.section-heading p {
+    max-width: 620px;
+    margin: 1rem 0 0;
+    color: var(--theme-muted);
+    line-height: 1.75;
+}
+
+.section-heading.centered {
+    display: block;
+    text-align: center;
+}
+
+.section-heading.centered h2 {
+    margin-inline: auto;
+}
+
+/* ==========================================================================
+   FINAL CTA
+========================================================================== */
+.final-cta {
+    text-align: center;
+    padding: clamp(5rem, 10vw, 10rem) 0;
+    background: linear-gradient(
+        135deg,
+        var(--theme-hero-start),
+        var(--theme-hero-end)
+    );
+    color: var(--theme-inverse);
+}
+
+.final-cta h2 {
+    max-width: 900px;
+    margin: 1rem auto;
+    color: var(--theme-inverse);
+    font-size: clamp(2.5rem, 6vw, 5.7rem);
+    line-height: .96;
+    letter-spacing: -.06em;
+}
+
+.final-cta p {
+    margin: 0 auto 2rem;
+    color: color-mix(in srgb, var(--theme-inverse) 72%, transparent);
+}
+
+/* ==========================================================================
+   RESPONSIVE GRID HELPERS
+========================================================================== */
+.foundation-grid-2 {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 2rem;
+}
+
+.foundation-grid-3 {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 2rem;
+}
+
+@media (max-width: 700px) {
+    .foundation-grid-2,
+    .foundation-grid-3 {
+        grid-template-columns: 1fr;
+    }
+}

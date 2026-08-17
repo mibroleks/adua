@@ -1,0 +1,425 @@
+/*
+|--------------------------------------------------------------------------
+| Component: Application Theme CSS (Preset-Driven)
+|--------------------------------------------------------------------------
+| File Path: resources/css/app.css
+| Company: Ygrace Tech
+| Author: Ibrahim Olalekan
+|
+| Purpose:
+| Provides the structural CSS foundation for the student portal.
+| Dynamic branding values are supplied by /theme.css via ThemeService.
+| Uses semantic tokens (--theme-*) instead of raw variables.
+|
+| Status: ✅ Production Ready
+| Version: 3.0 (premium buttons + editorial hierarchy + countdown)
+|--------------------------------------------------------------------------
+*/
+
+@import "tailwindcss";
+@import "./tokens.css"; /* bridge between PHP tokens and CSS */
+@import "./components/application-countdown.css";
+@import "./components/header.css";
+@import "./components/footer.css";
+@import "./components/portal-card.css";
+@import "./components/portal-button.css";
+@import "./components/portal-modal.css";
+@import "./pages/admissions-landing.css";
+@import "./pages/page-foundation.css";
+@import "./pages/programmes.css";
+@import "./auth.css"; 
+@import "./pages/admissions.css";
+
+/* ============================================================
+   GLOBAL FOUNDATION
+============================================================ */
+:root {
+    color-scheme: light;
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+
+    --portal-max-width: 1440px;
+    --portal-gutter: clamp(1.25rem, 4vw, 4rem);
+    --portal-transition: 220ms cubic-bezier(.2,.8,.2,1);
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: var(--theme-font-family), Inter, ui-sans-serif, system-ui, sans-serif;
+    background:
+        radial-gradient(circle at 10% 0%, color-mix(in srgb, var(--theme-primary) 8%, transparent), transparent 32%),
+        radial-gradient(circle at 90% 10%, color-mix(in srgb, var(--theme-accent) 7%, transparent), transparent 28%),
+        var(--theme-page);
+    color: var(--theme-body);
+}
+
+/* TYPOGRAPHY */
+h1, h2, h3, h4, h5, h6 {
+    font-family: "Manrope", Inter, ui-sans-serif, sans-serif;
+    color: var(--theme-heading);
+    letter-spacing: -0.025em;
+}
+::selection { background: var(--theme-primary); color: var(--theme-inverse); }
+
+/* LINKS */
+a {
+    color: var(--theme-link, var(--theme-primary));
+    transition: color 180ms ease, opacity 180ms ease;
+    text-decoration: none;
+}
+a:hover { color: var(--theme-action-hover); }
+
+/* ============================================================
+   PREMIUM BUTTONS
+============================================================ */
+.btn-base {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-height: 3rem;
+    padding: 0.75rem 1.25rem;
+    border-radius: 999px;
+    font-weight: 700;
+    transition: transform 180ms ease, box-shadow 180ms ease, filter 180ms ease;
+}
+
+/* Primary (gradient) */
+.btn-primary {
+    composes: btn-base;
+    border: 1px solid transparent;
+    background: linear-gradient(135deg, var(--theme-gradient-start), var(--theme-gradient-end));
+    color: var(--theme-inverse);
+    box-shadow: 0 10px 30px color-mix(in srgb, var(--theme-primary) 18%, transparent);
+}
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 16px 40px color-mix(in srgb, var(--theme-primary) 25%, transparent);
+    filter: saturate(1.08);
+}
+
+/* Secondary */
+.btn-secondary {
+    composes: btn-base;
+    border: 1px solid var(--theme-border-strong);
+    background: var(--theme-surface);
+    color: var(--theme-heading);
+    font-weight: 650;
+}
+.btn-secondary:hover {
+    transform: translateY(-2px);
+    border-color: var(--theme-primary);
+    background: var(--theme-primary-soft);
+}
+
+/* Danger */
+.btn-danger {
+    composes: btn-base;
+    background: var(--theme-danger);
+    color: var(--theme-inverse);
+    box-shadow: 0 8px 24px color-mix(in srgb, var(--theme-danger) 20%, transparent);
+}
+.btn-danger:hover { transform: translateY(-2px); filter: brightness(0.95); }
+
+/* Success */
+.btn-success {
+    composes: btn-base;
+    background: var(--theme-success);
+    color: var(--theme-inverse);
+    box-shadow: 0 8px 24px color-mix(in srgb, var(--theme-success) 20%, transparent);
+}
+.btn-success:hover { transform: translateY(-2px); filter: brightness(0.95); }
+
+/* Warning */
+.btn-warning {
+    composes: btn-base;
+    background: var(--theme-warning);
+    color: var(--theme-body);
+    box-shadow: 0 8px 24px color-mix(in srgb, var(--theme-warning) 20%, transparent);
+}
+.btn-warning:hover { transform: translateY(-2px); filter: brightness(0.95); }
+
+/* Info */
+.btn-info {
+    composes: btn-base;
+    background: var(--theme-info);
+    color: var(--theme-inverse);
+    box-shadow: 0 8px 24px color-mix(in srgb, var(--theme-info) 20%, transparent);
+}
+.btn-info:hover { transform: translateY(-2px); filter: brightness(0.95); }
+
+/* ============================================================
+   FORM CONTROL
+============================================================ */
+.form-input,
+.form-select,
+.form-textarea {
+    width: 100%;
+    border: 1px solid var(--theme-border);
+    border-radius: 0.875rem;
+    background: linear-gradient(180deg, var(--theme-surface), color-mix(in srgb, var(--theme-surface) 94%, var(--theme-primary-soft)));
+    color: var(--theme-body);
+    padding: 0.875rem 1rem;
+    outline: none;
+    transition: border-color 180ms ease, box-shadow 180ms ease, background 180ms ease, transform 180ms ease;
+}
+.form-input:hover,
+.form-select:hover,
+.form-textarea:hover { border-color: var(--theme-border-strong); }
+.form-input:focus,
+.form-select:focus,
+.form-textarea:focus {
+    border-color: var(--theme-focus);
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--theme-focus) 13%, transparent),
+                0 10px 30px color-mix(in srgb, var(--theme-primary) 6%, transparent);
+}
+
+/* ============================================================
+   SURFACES & GRADIENTS
+============================================================ */
+.portal-container {
+    width: min(calc(100% - (var(--portal-gutter) * 2)), var(--portal-max-width));
+    margin-inline: auto;
+}
+.theme-surface { background: var(--theme-surface); }
+.theme-surface-muted { background: var(--theme-surface-muted); }
+.theme-background { background: var(--theme-page); }
+.theme-primary { color: var(--theme-primary); }
+.theme-secondary { color: var(--theme-secondary); }
+.theme-accent { color: var(--theme-accent); }
+.theme-text { color: var(--theme-body); }
+.theme-heading { color: var(--theme-heading); }
+.theme-muted { color: var(--theme-muted); }
+.theme-gradient { background: linear-gradient(135deg, var(--theme-gradient-start), var(--theme-gradient-end)); }
+.theme-hero {
+    background:
+        radial-gradient(circle at 15% 20%, color-mix(in srgb, var(--theme-accent) 22%, transparent), transparent 32%),
+        radial-gradient(circle at 85% 10%, color-mix(in srgb, var(--theme-primary) 30%, transparent), transparent 35%),
+        linear-gradient(135deg, var(--theme-hero-start), var(--theme-hero-end));
+}
+.theme-glass {
+    background: var(--theme-glass);
+    border: 1px solid var(--theme-glass-border);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+}
+
+/* ============================================================
+   CARDS & BADGES
+============================================================ */
+.portal-card {
+    border: 1px solid var(--theme-border);
+    border-radius: 1.25rem;
+    background: var(--theme-card-bg);
+    box-shadow: var(--theme-card-shadow);
+    transition: transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease;
+}
+.portal-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--theme-card-border-hover);
+    box-shadow: 0 18px 55px rgba(0,0,0,0.09);
+}
+
+
+.portal-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.4rem 0.7rem;
+    border-radius: 999px;
+    background: var(--theme-primary-soft);
+    color: var(--theme-primary);
+    font-size: 0.75rem;
+    font-weight: 750;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+/*
+|--------------------------------------------------------------------------
+| MOTION
+|--------------------------------------------------------------------------
+*/
+@keyframes portal-fade-up {
+    from { opacity: 0; transform: translateY(18px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes portal-fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes portal-float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+}
+
+@keyframes portal-pulse {
+    0%, 100% { opacity: 0.5; transform: scale(1); }
+    50% { opacity: 0.8; transform: scale(1.05); }
+}
+
+.animate-portal-fade-up { animation: portal-fade-up 700ms cubic-bezier(.2,.8,.2,1) both; }
+.animate-portal-fade-in { animation: portal-fade-in 500ms ease both; }
+.animate-portal-float { animation: portal-float 5s ease-in-out infinite; }
+.animate-portal-pulse { animation: portal-pulse 4s ease-in-out infinite; }
+
+/*
+|--------------------------------------------------------------------------
+| REDUCED MOTION
+|--------------------------------------------------------------------------
+*/
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        scroll-behavior: auto !important;
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.001ms !important;
+    }
+}
+
+/*
+|--------------------------------------------------------------------------
+| PRINT
+|--------------------------------------------------------------------------
+*/
+@media print {
+    .no-print { display: none !important; }
+
+    body {
+        background: white !important;
+        color: black !important;
+    }
+
+    a {
+        text-decoration: underline !important;
+        color: black !important;
+    }
+
+    .btn-primary,
+    .btn-secondary,
+    .btn-danger,
+    .btn-success,
+    .btn-warning,
+    .btn-info,
+    .portal-card,
+    .portal-badge {
+        box-shadow: none !important;
+        background: white !important;
+        color: black !important;
+        border: 1px solid #000 !important;
+    }
+}
+
+/*
+|--------------------------------------------------------------------------
+| MODAL HANDLING
+|--------------------------------------------------------------------------
+*/
+body.portal-modal-open {
+    overflow: hidden;
+}
+/*
+|--------------------------------------------------------------------------
+| Theme Utility Classes
+| File: resources/css/app.css
+| Purpose:
+| Map semantic utility classes to canonical theme tokens.
+| Components can use .theme-heading, .theme-muted, etc.
+| without referencing raw hex codes.
+|--------------------------------------------------------------------------
+*/
+
+/* Text colors */
+.theme-heading {
+    color: var(--theme-heading);
+}
+
+.theme-body {
+    color: var(--theme-body);
+}
+
+.theme-muted {
+    color: var(--theme-muted);
+}
+
+.theme-inverse {
+    color: var(--theme-inverse);
+}
+
+.theme-primary {
+    color: var(--theme-primary);
+}
+
+.theme-accent {
+    color: var(--theme-accent);
+}
+
+.theme-success {
+    color: var(--theme-success);
+}
+
+.theme-warning {
+    color: var(--theme-warning);
+}
+
+.theme-danger {
+    color: var(--theme-danger);
+}
+
+.theme-info {
+    color: var(--theme-info);
+}
+
+/* Background colors */
+.bg-theme-primary {
+    background-color: var(--theme-primary);
+    color: var(--theme-inverse);
+}
+
+.bg-theme-surface {
+    background-color: var(--theme-surface);
+}
+
+.bg-theme-surface-muted {
+    background-color: var(--theme-surface-muted);
+}
+
+.bg-theme-page {
+    background-color: var(--theme-page);
+}
+
+/* Borders */
+.border-theme {
+    border-color: var(--theme-border);
+}
+
+.border-theme-strong {
+    border-color: var(--theme-border-strong);
+}
+
+/* Buttons */
+.portal-btn--primary {
+    background-color: var(--theme-button-primary-bg);
+    color: var(--theme-button-primary-text);
+}
+
+.portal-btn--primary:hover {
+    background-color: var(--theme-button-primary-hover);
+}
+
+.portal-btn--secondary {
+    background-color: var(--theme-button-secondary-bg);
+    color: var(--theme-button-secondary-text);
+}
+
+.portal-btn--secondary:hover {
+    background-color: var(--theme-button-secondary-hover);
+}

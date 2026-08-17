@@ -1,0 +1,329 @@
+/*
+|--------------------------------------------------------------------------
+| YGRACE PORTAL — PREMIUM BUTTON SYSTEM
+|--------------------------------------------------------------------------
+*/
+
+.portal-btn {
+    --btn-height: 3rem;
+    --btn-padding-x: 1.25rem;
+
+    position: relative;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-height: var(--btn-height);
+
+    padding:
+        .7rem
+        var(--btn-padding-x);
+
+    gap: .55rem;
+
+    border: 1px solid transparent;
+    border-radius: .8rem;
+
+    font-family:
+        var(--theme-font-family),
+        Inter,
+        ui-sans-serif,
+        system-ui,
+        sans-serif;
+
+    font-size: .82rem;
+    font-weight: 750;
+
+    line-height: 1;
+
+    text-decoration: none;
+
+    cursor: pointer;
+
+    overflow: hidden;
+
+    isolation: isolate;
+
+    transition:
+        transform 180ms cubic-bezier(.2,.8,.2,1),
+        box-shadow 180ms ease,
+        border-color 180ms ease,
+        background 180ms ease,
+        color 180ms ease;
+}
+
+
+/* Shine layer */
+
+.portal-btn::before {
+    content: "";
+
+    position: absolute;
+    inset: 0;
+
+    background:
+        linear-gradient(
+            110deg,
+            transparent 20%,
+            color-mix(
+                in srgb,
+                var(--theme-inverse) 14%,
+                transparent
+            ) 50%,
+            transparent 80%
+        );
+
+    transform: translateX(-120%);
+
+    transition: transform 500ms ease;
+
+    pointer-events: none;
+}
+
+.portal-btn:hover::before {
+    transform: translateX(120%);
+}
+
+
+/* Content */
+
+.portal-btn > * {
+    position: relative;
+    z-index: 1;
+}
+
+
+/* -----------------------------------------------------------------------
+   PRIMARY
+------------------------------------------------------------------------ */
+
+.portal-btn--primary {
+    color: var(--theme-inverse);
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--theme-gradient-start),
+            var(--theme-gradient-end)
+        );
+
+    border-color:
+        color-mix(
+            in srgb,
+            var(--theme-primary) 45%,
+            transparent
+        );
+
+    box-shadow:
+        0 8px 24px
+        color-mix(
+            in srgb,
+            var(--theme-primary) 16%,
+            transparent
+        );
+}
+
+.portal-btn--primary:hover {
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 14px 34px
+        color-mix(
+            in srgb,
+            var(--theme-primary) 24%,
+            transparent
+        );
+}
+
+
+/* -----------------------------------------------------------------------
+   SECONDARY
+------------------------------------------------------------------------ */
+
+.portal-btn--secondary {
+    color: var(--theme-heading);
+
+    background: var(--theme-surface);
+
+    border-color: var(--theme-border-strong);
+
+    box-shadow:
+        0 2px 8px
+        color-mix(
+            in srgb,
+            var(--theme-body) 4%,
+            transparent
+        );
+}
+
+.portal-btn--secondary:hover {
+    transform: translateY(-2px);
+
+    color: var(--theme-primary);
+
+    border-color: var(--theme-primary);
+
+    background: var(--theme-primary-soft);
+}
+
+
+/* -----------------------------------------------------------------------
+   GHOST
+------------------------------------------------------------------------ */
+
+.portal-btn--ghost {
+    color: var(--theme-body);
+
+    background: transparent;
+
+    border-color: transparent;
+}
+
+.portal-btn--ghost:hover {
+    color: var(--theme-primary);
+
+    background:
+        color-mix(
+            in srgb,
+            var(--theme-primary) 7%,
+            transparent
+        );
+}
+
+
+/* -----------------------------------------------------------------------
+   DANGER
+------------------------------------------------------------------------ */
+
+.portal-btn--danger {
+    color: var(--theme-inverse);
+
+    background: var(--theme-danger);
+
+    box-shadow:
+        0 8px 24px
+        color-mix(
+            in srgb,
+            var(--theme-danger) 18%,
+            transparent
+        );
+}
+
+
+/* -----------------------------------------------------------------------
+   SUCCESS
+------------------------------------------------------------------------ */
+
+.portal-btn--success {
+    color: var(--theme-inverse);
+
+    background: var(--theme-success);
+
+    box-shadow:
+        0 8px 24px
+        color-mix(
+            in srgb,
+            var(--theme-success) 18%,
+            transparent
+        );
+}
+
+
+/* -----------------------------------------------------------------------
+   ICON BUTTON
+------------------------------------------------------------------------ */
+
+.portal-btn--icon {
+    width: 2.75rem;
+    height: 2.75rem;
+
+    min-height: 2.75rem;
+
+    padding: 0;
+
+    border-radius: .75rem;
+}
+
+
+/* -----------------------------------------------------------------------
+   LARGE
+------------------------------------------------------------------------ */
+
+.portal-btn--large {
+    min-height: 3.35rem;
+
+    padding-inline: 1.5rem;
+
+    font-size: .88rem;
+}
+
+
+/* -----------------------------------------------------------------------
+   SMALL
+------------------------------------------------------------------------ */
+
+.portal-btn--small {
+    min-height: 2.5rem;
+
+    padding-inline: .9rem;
+
+    border-radius: .7rem;
+
+    font-size: .75rem;
+}
+
+
+/* -----------------------------------------------------------------------
+   DISABLED
+------------------------------------------------------------------------ */
+
+.portal-btn:disabled,
+.portal-btn[aria-disabled="true"] {
+    opacity: .55;
+
+    cursor: not-allowed;
+
+    transform: none !important;
+
+    box-shadow: none !important;
+}
+
+
+/* -----------------------------------------------------------------------
+   FOCUS
+------------------------------------------------------------------------ */
+
+.portal-btn:focus-visible {
+    outline: none;
+
+    box-shadow:
+        0 0 0 4px
+        color-mix(
+            in srgb,
+            var(--theme-focus) 18%,
+            transparent
+        ),
+        0 8px 24px
+        color-mix(
+            in srgb,
+            var(--theme-primary) 10%,
+            transparent
+        );
+}
+
+
+/* -----------------------------------------------------------------------
+   REDUCED MOTION
+------------------------------------------------------------------------ */
+
+@media (prefers-reduced-motion: reduce) {
+    .portal-btn,
+    .portal-btn::before {
+        transition: none !important;
+    }
+
+    .portal-btn:hover {
+        transform: none;
+    }
+}

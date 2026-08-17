@@ -1,0 +1,494 @@
+/*
+|--------------------------------------------------------------------------
+| YGRACE PORTAL — UNIVERSAL MODAL / OVERLAY SYSTEM
+|--------------------------------------------------------------------------
+*/
+
+.portal-modal {
+    position: fixed;
+    inset: 0;
+
+    z-index: 1000;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: clamp(1rem, 3vw, 2rem);
+
+    visibility: hidden;
+    opacity: 0;
+
+    pointer-events: none;
+
+    transition:
+        opacity 220ms ease,
+        visibility 220ms ease;
+}
+
+
+/* -----------------------------------------------------------------------
+   OPEN STATE
+------------------------------------------------------------------------ */
+
+.portal-modal.is-open {
+    visibility: visible;
+    opacity: 1;
+
+    pointer-events: auto;
+}
+
+
+/* -----------------------------------------------------------------------
+   BACKDROP
+------------------------------------------------------------------------ */
+
+.portal-modal__backdrop {
+    position: absolute;
+    inset: 0;
+
+    background:
+        color-mix(
+            in srgb,
+            var(--theme-overlay, #000) 48%,
+            transparent
+        );
+
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+
+    opacity: 0;
+
+    transition: opacity 250ms ease;
+}
+
+.portal-modal.is-open .portal-modal__backdrop {
+    opacity: 1;
+}
+
+
+/* -----------------------------------------------------------------------
+   DIALOG
+------------------------------------------------------------------------ */
+
+.portal-modal__dialog {
+    position: relative;
+
+    width: min(100%, 760px);
+
+    max-height: min(
+        88vh,
+        900px
+    );
+
+    overflow: hidden;
+
+    display: flex;
+    flex-direction: column;
+
+    border:
+        1px solid
+        var(--theme-border);
+
+    border-radius:
+        clamp(1rem, 2vw, 1.5rem);
+
+    background:
+        var(--theme-surface);
+
+    color:
+        var(--theme-body);
+
+    box-shadow:
+        0 30px 90px
+        color-mix(
+            in srgb,
+            var(--theme-body) 20%,
+            transparent
+        ),
+        0 8px 30px
+        color-mix(
+            in srgb,
+            var(--theme-primary) 8%,
+            transparent
+        );
+
+    transform:
+        translateY(20px)
+        scale(.97);
+
+    opacity: 0;
+
+    transition:
+        transform 300ms cubic-bezier(.2,.8,.2,1),
+        opacity 220ms ease;
+}
+
+.portal-modal.is-open .portal-modal__dialog {
+    transform:
+        translateY(0)
+        scale(1);
+
+    opacity: 1;
+}
+
+
+/* -----------------------------------------------------------------------
+   LARGE MODAL
+------------------------------------------------------------------------ */
+
+.portal-modal--large .portal-modal__dialog {
+    width: min(100%, 1000px);
+}
+
+
+/* -----------------------------------------------------------------------
+   FULLSCREEN
+------------------------------------------------------------------------ */
+
+.portal-modal--fullscreen {
+    padding: 0;
+}
+
+.portal-modal--fullscreen .portal-modal__dialog {
+    width: 100%;
+    height: 100%;
+    max-height: 100%;
+
+    border-radius: 0;
+}
+
+
+/* -----------------------------------------------------------------------
+   HEADER
+------------------------------------------------------------------------ */
+
+.portal-modal__header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+
+    gap: 1.5rem;
+
+    padding:
+        clamp(1.25rem, 3vw, 2rem);
+
+    border-bottom:
+        1px solid
+        var(--theme-border);
+
+    background:
+        linear-gradient(
+            180deg,
+            var(--theme-surface),
+            color-mix(
+                in srgb,
+                var(--theme-primary-soft) 18%,
+                var(--theme-surface)
+            )
+        );
+}
+
+
+/* -----------------------------------------------------------------------
+   TITLE
+------------------------------------------------------------------------ */
+
+.portal-modal__title {
+    margin: 0;
+
+    color: var(--theme-heading);
+
+    font-family:
+        "Manrope",
+        Inter,
+        ui-sans-serif,
+        sans-serif;
+
+    font-size:
+        clamp(1.2rem, 2vw, 1.65rem);
+
+    font-weight: 800;
+
+    line-height: 1.25;
+
+    letter-spacing: -.03em;
+}
+
+
+/* -----------------------------------------------------------------------
+   EYEBROW
+------------------------------------------------------------------------ */
+
+.portal-modal__eyebrow {
+    margin-bottom: .45rem;
+
+    color: var(--theme-primary);
+
+    font-size: .68rem;
+    font-weight: 800;
+
+    letter-spacing: .12em;
+    text-transform: uppercase;
+}
+
+
+/* -----------------------------------------------------------------------
+   CLOSE BUTTON
+------------------------------------------------------------------------ */
+
+.portal-modal__close {
+    flex: 0 0 auto;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 2.5rem;
+    height: 2.5rem;
+
+    border:
+        1px solid
+        var(--theme-border);
+
+    border-radius: .75rem;
+
+    background:
+        var(--theme-surface);
+
+    color:
+        var(--theme-muted);
+
+    cursor: pointer;
+
+    transition:
+        background 180ms ease,
+        color 180ms ease,
+        border-color 180ms ease,
+        transform 180ms ease;
+}
+
+.portal-modal__close:hover {
+    color: var(--theme-heading);
+
+    border-color:
+        var(--theme-border-strong);
+
+    background:
+        var(--theme-surface-muted);
+
+    transform: rotate(4deg);
+}
+
+
+/* -----------------------------------------------------------------------
+   BODY
+------------------------------------------------------------------------ */
+
+.portal-modal__body {
+    flex: 1;
+
+    min-height: 0;
+
+    overflow-y: auto;
+
+    padding:
+        clamp(1.25rem, 3vw, 2rem);
+
+    scrollbar-width: thin;
+
+    scrollbar-color:
+        var(--theme-border-strong)
+        transparent;
+}
+
+
+/* -----------------------------------------------------------------------
+   FOOTER
+------------------------------------------------------------------------ */
+
+.portal-modal__footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+
+    gap: .75rem;
+
+    padding:
+        1rem
+        clamp(1.25rem, 3vw, 2rem);
+
+    border-top:
+        1px solid
+        var(--theme-border);
+
+    background:
+        var(--theme-surface-muted);
+}
+
+
+/* -----------------------------------------------------------------------
+   CONTENT ELEMENTS
+------------------------------------------------------------------------ */
+
+.portal-modal__section {
+    margin-bottom: 1.75rem;
+}
+
+.portal-modal__section:last-child {
+    margin-bottom: 0;
+}
+
+.portal-modal__section-title {
+    margin: 0 0 .65rem;
+
+    color: var(--theme-heading);
+
+    font-size: .9rem;
+    font-weight: 800;
+}
+
+.portal-modal__text {
+    color: var(--theme-body);
+
+    font-size: .9rem;
+
+    line-height: 1.8;
+}
+
+
+/* -----------------------------------------------------------------------
+   REQUIREMENTS
+------------------------------------------------------------------------ */
+
+.portal-modal__requirements {
+    display: grid;
+
+    gap: .65rem;
+
+    margin: 0;
+
+    padding: 0;
+
+    list-style: none;
+}
+
+.portal-modal__requirements li {
+    position: relative;
+
+    padding-left: 1.5rem;
+
+    color: var(--theme-body);
+
+    font-size: .86rem;
+
+    line-height: 1.65;
+}
+
+.portal-modal__requirements li::before {
+    content: "";
+
+    position: absolute;
+
+    left: 0;
+    top: .65em;
+
+    width: 6px;
+    height: 6px;
+
+    border-radius: 50%;
+
+    background:
+        var(--theme-primary);
+}
+
+
+/* -----------------------------------------------------------------------
+   MEDIA / IMAGE LIGHTBOX
+------------------------------------------------------------------------ */
+
+.portal-modal--media .portal-modal__dialog {
+    width: min(100%, 1100px);
+
+    background: #000;
+
+    border-color:
+        color-mix(
+            in srgb,
+            #fff 12%,
+            transparent
+        );
+}
+
+.portal-modal--media .portal-modal__body {
+    padding: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #000;
+}
+
+.portal-modal--media img {
+    display: block;
+
+    width: 100%;
+    max-height: 82vh;
+
+    object-fit: contain;
+}
+
+
+/* -----------------------------------------------------------------------
+   MOBILE
+------------------------------------------------------------------------ */
+
+@media (max-width: 640px) {
+
+    .portal-modal {
+        align-items: flex-end;
+
+        padding: 0;
+    }
+
+    .portal-modal__dialog {
+        width: 100%;
+        max-height: 92vh;
+
+        border-radius:
+            1.25rem
+            1.25rem
+            0
+            0;
+
+        transform:
+            translateY(30px);
+    }
+
+    .portal-modal.is-open .portal-modal__dialog {
+        transform:
+            translateY(0);
+    }
+
+    .portal-modal__footer {
+        flex-direction: column;
+
+        align-items: stretch;
+    }
+}
+
+
+/* -----------------------------------------------------------------------
+   REDUCED MOTION
+------------------------------------------------------------------------ */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .portal-modal,
+    .portal-modal *,
+    .portal-modal__dialog,
+    .portal-modal__backdrop {
+        transition: none !important;
+    }
+}
