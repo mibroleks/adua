@@ -1,4 +1,6 @@
-*
-!private/
-!public/
-!.gitignore
+/vendor
+/node_modules
+/.env
+.phpunit.result.cache
+Homestead.yaml
+Homestead.json
