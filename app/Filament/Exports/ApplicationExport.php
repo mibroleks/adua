@@ -15,7 +15,7 @@ Status: ✅ Production Ready
 Version: 1.0
 */
 
-namespace App\Exports;
+namespace App\Filament\Exports;
 
 use App\Models\Application;
 use App\Services\ApplicationDossierService;
