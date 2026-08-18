@@ -3,8 +3,8 @@ FROM php:8.3-fpm
 
 # Install system dependencies and required PHP extensions
 RUN apt-get update && apt-get install -y \
-    git unzip zip libicu-dev libzip-dev libpng-dev \
-    && docker-php-ext-install intl zip gd pdo pdo_mysql pdo_pgsql
+    git unzip zip libicu-dev libzip-dev libpng-dev libpq-dev \
+    && docker-php-ext-install intl zip gd pdo pdo_pgsql
 
 # Set working directory
 WORKDIR /app
@@ -24,12 +24,8 @@ RUN php artisan config:clear && \
     php artisan route:clear && \
     php artisan view:clear
 
-# Run migrations and seeders automatically
-RUN php artisan migrate --force && \
-    php artisan db:seed --force
-
 # Expose port
 EXPOSE 10000
 
-# Start Laravel server (JSON format CMD)
-CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=10000"]
+# Run migrations and seeders automatically at startup
+CMD ["sh", "-c", "php artisan migrate --force && php artisan db:seed --force && php artisan serve --host=0.0.0.0 --port=10000"]
