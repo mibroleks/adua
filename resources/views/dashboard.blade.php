@@ -262,7 +262,7 @@ Version: 4.0
                                 <div class="dashboard-document__content">
 
                                     <strong>
-                                        {{ $doc->type->name }}
+                                        {{ $doc->documentType->name }}
                                     </strong>
 
                                     @if($doc->rejection_reason)
