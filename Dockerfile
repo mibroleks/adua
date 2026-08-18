@@ -38,8 +38,8 @@ RUN chown -R www-data:www-data \
     /app/storage \
     /app/bootstrap/cache
 
-# Expose Render port
-EXPOSE 10000
+# Expose Render port (use dynamic PORT)
+EXPOSE ${PORT}
 
 # Start Laravel with migrations and storage symlink
-CMD ["sh", "-c", "php artisan migrate --force && php artisan storage:link && php artisan serve --host=0.0.0.0 --port=${PORT:-10000}"]
+CMD ["sh", "-c", "php artisan migrate --force && php artisan storage:link && php artisan serve --host=0.0.0.0 --port=$PORT"]
