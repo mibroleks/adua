@@ -24,14 +24,8 @@ RUN npm install && npm run build
 # Fix permissions for storage and cache
 RUN chown -R www-data:www-data /app/storage /app/bootstrap/cache
 
-# Clear Laravel caches to avoid stale configs
-RUN php artisan config:clear && \
-    php artisan route:clear && \
-    php artisan view:clear && \
-    php artisan cache:clear
-
 # Expose port
 EXPOSE 10000
 
-# Run migrations and seeders automatically at startup
-CMD ["sh", "-c", "php artisan migrate --force && php artisan db:seed --force && php artisan serve --host=0.0.0.0 --port=10000"]
+# Run cache clearing, migrations, seeders, and start server at runtime
+CMD ["sh", "-c", "php artisan config:clear && php artisan route:clear && php artisan view:clear && php artisan cache:clear && php artisan migrate --force && php artisan db:seed --force && php artisan serve --host=0.0.0.0 --port=10000"]
