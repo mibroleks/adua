@@ -16,7 +16,7 @@ Architecture:
 - Officers cannot self-register; only admins create them via Filament.
 
 Status: ✅ Production Ready
-Version: 1.0 (role-based authentication foundation)
+Version: 2.0 (role-based authentication + Filament panel access)
 */
 
 namespace App\Models;
@@ -25,7 +25,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-class User extends Authenticatable
+// Filament imports
+use Filament\Models\Contracts\FilamentUser;
+use Filament\Panel;
+
+class User extends Authenticatable implements FilamentUser
 {
     use HasFactory, Notifiable;
 
@@ -75,5 +79,16 @@ class User extends Authenticatable
     public function decisions()
     {
         return $this->hasMany(AdmissionDecision::class, 'officer_id');
+    }
+
+    /**
+     * Filament panel access control
+     */
+    public function canAccessPanel(Panel $panel): bool
+    {
+        return match ($panel->getId()) {
+            'officer' => $this->isOfficer(),
+            default => false,
+        };
     }
 }
