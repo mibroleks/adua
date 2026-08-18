@@ -41,8 +41,8 @@ return new class extends Migration
                 ->constrained()
                 ->restrictOnDelete(); // prevent accidental cascade deletes
 
-            // Snapshot of programme fee at submission
-            $table->unsignedBigInteger('application_fee')->nullable();
+            // Snapshot of programme fee at submission (decimal for naira with 2dp)
+            $table->decimal('application_fee', 10, 2)->nullable();
 
             // Application status (DRAFT, SUBMITTED, UNDER_REVIEW, APPROVED, REJECTED)
             $table->string('application_status')->default('DRAFT');
