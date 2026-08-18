@@ -30,7 +30,7 @@ class DashboardController extends Controller
         $application = Application::with([
                 'programme.department.faculty', // full academic hierarchy
                 'payment',
-                'documents.type',
+                'documents.documentType',
                 'decision.officer',
                 'statusHistories.officer',      // audit trail
             ])
