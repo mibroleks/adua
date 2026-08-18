@@ -16,4 +16,5 @@ class ListAdmissionDecisions extends ListRecords
             CreateAction::make(),
         ];
     }
+    
 }
