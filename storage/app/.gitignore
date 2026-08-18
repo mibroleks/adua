@@ -1,6 +1,7 @@
 /vendor
 /node_modules
 /.env
+/.env.example
 .phpunit.result.cache
 Homestead.yaml
 Homestead.json

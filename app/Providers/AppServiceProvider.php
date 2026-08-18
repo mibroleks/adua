@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\URL;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -19,6 +20,18 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        /*
+        |--------------------------------------------------------------------------
+        | Force HTTPS in production
+        |--------------------------------------------------------------------------
+        |
+        | Render terminates SSL before forwarding requests to Laravel.
+        | This ensures generated URLs remain HTTPS in production.
+        |
+        */
+
+        if (app()->environment('production')) {
+            URL::forceScheme('https');
+        }
     }
 }
