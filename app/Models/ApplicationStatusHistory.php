@@ -8,11 +8,11 @@
  *
  * Purpose:
  * Tracks every status change for an application.
- * Stores old/new status, officer who made the change, and timestamp.
+ * Stores old/new status, officer who made the change, remarks, and timestamp.
  * Provides relationships to the application and officer for audit trail rendering.
  *
  * Status: ✅ Production Ready
- * Version: 1.1
+ * Version: 1.2 (added remarks field)
  */
 
 namespace App\Models;
@@ -31,6 +31,7 @@ class ApplicationStatusHistory extends Model
         'new_status',
         'changed_by',
         'changed_at',
+        'remarks',   // ✅ Added remarks for audit explanations
     ];
 
     /**

@@ -17,36 +17,38 @@ Version: 1.0 (semantic theme tokens integration)
     'events' => [], // array of ['label' => 'Submitted', 'date' => Carbon instance, 'status' => 'completed|active|upcoming']
 ])
 
-<div class="space-y-6">
+<div class="portal-timeline">
+
     @foreach($events as $event)
+
         @php
             $status = $event['status'] ?? 'upcoming';
-            $classes = match($status) {
-                'completed' => 'border-[var(--theme-success)] bg-[var(--theme-success-soft)] text-[var(--theme-success)]',
-                'active'    => 'border-[var(--theme-primary)] bg-[var(--theme-primary-soft)] text-[var(--theme-primary)]',
-                default     => 'border-[var(--theme-border)] bg-[var(--theme-surface)] text-[var(--theme-muted)]',
-            };
         @endphp
 
-        <div class="flex items-start gap-4">
+        <div class="portal-timeline__event">
+
             {{-- Timeline marker --}}
-            <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border-2 {{ $classes }}">
-                <span class="text-xs font-bold">
-                    {{ strtoupper(substr($status, 0, 1)) }}
-                </span>
+            <div class="portal-timeline__marker portal-timeline__marker--{{ $status }}">
+                {{ strtoupper(substr($status, 0, 1)) }}
             </div>
 
             {{-- Timeline content --}}
-            <div class="flex-1">
-                <p class="text-sm font-semibold theme-heading">
+            <div class="portal-timeline__content">
+
+                <p class="portal-timeline__label">
                     {{ $event['label'] }}
                 </p>
+
                 @if(!empty($event['date']))
-                    <p class="text-xs theme-muted">
+                    <p class="portal-timeline__date">
                         {{ $event['date']->toDayDateTimeString() }}
                     </p>
                 @endif
+
             </div>
+
         </div>
+
     @endforeach
+
 </div>

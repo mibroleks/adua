@@ -8,46 +8,52 @@
  *
  * Purpose:
  * Handles officer admission decisions on applications.
- * Validates input, records decision, updates application status with audit trail.
+ * Validates input, records decision, updates application status with audit trail
+ * via AdmissionService.
  *
  * Status: ✅ Production Ready
- * Version: 1.4
+ * Version: 2.0 (workflow delegated to AdmissionService, normalized field `decision`)
  */
 
 namespace App\Http\Controllers;
 
 use App\Models\Application;
-use App\Models\AdmissionDecision;
 use Illuminate\Http\Request;
+use App\Services\AdmissionService;
 
 class AdmissionDecisionController extends Controller
 {
+    protected AdmissionService $admissionService;
+
+    public function __construct(AdmissionService $admissionService)
+    {
+        $this->admissionService = $admissionService;
+    }
+
     /**
      * Store a new admission decision for an application.
+     *
+     * Route name: application.decision.store
      */
     public function store(Request $request, Application $application)
     {
         $this->authorize('decide', $application);
 
         $validated = $request->validate([
-            'status'  => 'required|in:APPROVED,REJECTED',
-            'remarks' => 'nullable|string|max:1000',
+            'decision' => 'required|in:APPROVED,REJECTED',
+            'remarks'  => 'nullable|string|max:1000',
         ]);
 
-        // Create decision record
-        AdmissionDecision::create([
-            'application_id' => $application->id,
-            'officer_id'     => auth()->id(),
-            'status'         => $validated['status'],
-            'remarks'        => $validated['remarks'] ?? null,
-            'decided_at'     => now(),
-        ]);
-
-        // Update application status with audit trail
-        $application->setStatus($validated['status'], auth()->id());
+        // Delegate workflow to AdmissionService
+        $this->admissionService->recordDecision(
+            $application,
+            auth()->user(),
+            $validated['decision'],
+            $validated['remarks'] ?? null
+        );
 
         return redirect()
             ->route('application.status', $application)
-            ->with('success', "Application {$validated['status']} successfully.");
+            ->with('success', "Application {$validated['decision']} successfully.");
     }
 }

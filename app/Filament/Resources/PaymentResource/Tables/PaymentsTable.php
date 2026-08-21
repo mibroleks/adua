@@ -13,7 +13,7 @@ so officers can only view them (no manual create/edit/delete).
 Supports filters by status, type, gateway, and date.
 
 Status: ✅ Production Ready
-Version: 1.7 (Filament v3 compatible)
+Version: 1.9 (ensured amount display uses accessor consistently)
 */
 
 namespace App\Filament\Resources\PaymentResource\Tables;
@@ -48,7 +48,8 @@ class PaymentsTable
                     ->label('Type')
                     ->sortable(),
 
-                Tables\Columns\TextColumn::make('amount')
+                // ✅ Use accessor to display amount in naira
+                Tables\Columns\TextColumn::make('amountInNaira')
                     ->money('NGN', true)
                     ->label('Amount')
                     ->sortable(),

@@ -1,0 +1,282 @@
+/*
+|--------------------------------------------------------------------------
+| PORTAL TOP BAR
+|--------------------------------------------------------------------------
+| File: resources/css/components/portal-topbar.css
+|
+| Company: Ygrace Tech
+| Author: Ibrahim Olalekan
+|
+| Purpose:
+| Authenticated applicant/student portal top bar.
+|
+| Responsibilities:
+| - Institutional identity
+| - Notifications
+| - User account menu
+| - Responsive behaviour
+| - Accessibility
+|
+| Status: ✅ Production Ready
+| Version: 2.2 (stronger gradient background)
+|--------------------------------------------------------------------------
+*/
+
+.portal-topbar {
+    position: sticky;
+    top: 0;
+    z-index: 900;
+    width: 100%;
+
+    /* Stronger gradient for visibility */
+    background: linear-gradient(
+        135deg,
+        color-mix(in srgb, var(--theme-surface) 85%, var(--theme-primary-soft) 15%),
+        color-mix(in srgb, var(--theme-surface) 70%, var(--theme-primary) 30%)
+    );
+
+    border-bottom: 1px solid var(--theme-border);
+
+    backdrop-filter: blur(18px) saturate(125%);
+    -webkit-backdrop-filter: blur(18px) saturate(125%);
+
+    /* Subtle shadow for depth */
+    box-shadow: 0 2px 6px color-mix(in srgb, var(--theme-heading) 6%, transparent);
+}
+
+.portal-topbar__inner {
+    width: min(calc(100% - (var(--portal-gutter) * 2)), var(--portal-max-width));
+    min-height: 4.5rem;
+    margin-inline: auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+}
+
+/* BRAND */
+.portal-topbar__brand {
+    display: inline-flex;
+    align-items: center;
+    min-width: 0;
+    gap: 0.8rem;
+    color: var(--theme-heading);
+    text-decoration: none;
+    transition: opacity var(--portal-transition), transform var(--portal-transition);
+}
+.portal-topbar__brand:hover { opacity: 0.9; }
+
+.portal-topbar__brand-mark {
+    display: grid;
+    place-items: center;
+    flex: 0 0 auto;
+}
+
+.portal-topbar__logo {
+    display: block;
+    width: auto;
+    height: 2.75rem;
+    max-width: 10rem;
+    object-fit: contain;
+    transition: transform var(--portal-transition);
+}
+.portal-topbar__brand:hover .portal-topbar__logo { transform: scale(1.02); }
+
+/* INSTITUTION IDENTITY */
+.portal-topbar__identity {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+}
+.portal-topbar__institution {
+    max-width: 22rem;
+    overflow: hidden;
+    color: var(--theme-heading);
+    font-family: "Manrope", var(--theme-font-family), system-ui, sans-serif;
+    font-size: 0.9rem;
+    line-height: 1.2;
+    font-weight: 800;
+    letter-spacing: -0.015em;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.portal-topbar__department {
+    color: var(--theme-muted);
+    font-size: 0.6rem;
+    line-height: 1.2;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+}
+
+/* ACTIONS */
+.portal-topbar__actions {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    flex-shrink: 0;
+}
+
+/* ACTION BUTTON */
+.portal-topbar__action {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.65rem;
+    height: 2.65rem;
+    padding: 0;
+    border: 1px solid var(--theme-border);
+    border-radius: 0.75rem;
+    background: var(--theme-surface);
+    color: var(--theme-body);
+    cursor: pointer;
+    transition: background var(--portal-transition), border-color var(--portal-transition), color var(--portal-transition), transform var(--portal-transition);
+}
+.portal-topbar__action:hover {
+    background: var(--theme-primary-soft);
+    border-color: var(--theme-border-strong);
+    color: var(--theme-primary);
+}
+.portal-topbar__action:active { transform: scale(0.96); }
+
+/* NOTIFICATION BADGE */
+.portal-topbar__badge {
+    position: absolute;
+    top: -0.3rem;
+    right: -0.3rem;
+    min-width: 1.15rem;
+    height: 1.15rem;
+    padding-inline: 0.25rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid var(--theme-surface);
+    border-radius: 999px;
+    background: var(--theme-notification-badge-bg);
+    color: var(--theme-notification-badge-text);
+    font-size: 0.6rem;
+    line-height: 1;
+    font-weight: 800;
+}
+
+/* USER */
+.portal-topbar__user { position: relative; }
+
+.portal-topbar__user-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    min-height: 2.65rem;
+    max-width: 13rem;
+    padding-inline: 0.85rem;
+    border: 1px solid var(--theme-border);
+    border-radius: 999px;
+    background: var(--theme-surface);
+    color: var(--theme-heading);
+    font-family: inherit;
+    font-size: 0.75rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background var(--portal-transition), border-color var(--portal-transition), color var(--portal-transition);
+}
+.portal-topbar__user-toggle::after {
+    content: "⌄";
+    color: var(--theme-muted);
+    font-size: 0.8rem;
+    transition: transform var(--portal-transition);
+}
+.portal-topbar__user-toggle[aria-expanded="true"]::after { transform: rotate(180deg); }
+.portal-topbar__user-toggle:hover {
+    background: var(--theme-user-menu-hover);
+    border-color: var(--theme-border-strong);
+}
+
+/* USER MENU */
+.portal-topbar__user-menu {
+    position: absolute;
+    top: calc(100% + 0.65rem);
+    right: 0;
+    width: 13rem;
+    padding: 0.4rem;
+    border: 1px solid var(--theme-user-menu-border);
+    border-radius: 0.85rem;
+    background: var(--theme-user-menu-bg);
+    box-shadow: 0 18px 45px color-mix(in srgb, var(--theme-heading) 12%, transparent);
+    overflow: hidden;
+}
+.portal-topbar__user-menu[hidden] { display: none; }
+
+.portal-topbar__user-link {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    min-height: 2.5rem;
+    padding-inline: 0.75rem;
+    border: 0;
+    border-radius: 0.55rem;
+    background: transparent;
+    color: var(--theme-body);
+    font-family: inherit;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-decoration: none;
+    text-align: left;
+    cursor: pointer;
+    transition: background var(--portal-transition), color var(--portal-transition);
+}
+.portal-topbar__user-link:hover {
+    background: var(--theme-user-menu-hover);
+    color: var(--theme-heading);
+}
+.portal-topbar__user-menu form { margin: 0; }
+
+/* HEADER SCROLL STATE */
+.portal-topbar.is-scrolled {
+    box-shadow: 0 8px 30px color-mix(in srgb, var(--theme-heading) 7%, transparent);
+}
+
+/* ACCESSIBILITY */
+.portal-topbar a:focus-visible,
+.portal-topbar button:focus-visible {
+    outline: 3px solid color-mix(in srgb, var(--theme-focus) 45%, transparent);
+    outline-offset: 3px;
+}
+
+/* RESPONSIVE */
+@media (max-width: 640px) {
+    .portal-topbar__inner {
+        width: min(calc(100% - 2rem), var(--portal-max-width));
+        min-height: 4.25rem;
+    }
+    .portal-topbar__logo { height: 2.5rem; }
+    .portal-topbar__institution { max-width: 12rem; font-size: 0.8rem; }
+    .portal-topbar__user-toggle {
+        width: 2.65rem;
+        max-width: 2.65rem;
+        padding: 0;
+        justify-content: center;
+        font-size: 0;
+    }
+    .portal-topbar__user-toggle::after { font-size: 0.85rem; }
+    .portal-topbar__user-menu { width: 12rem; }
+}
+
+
+
+
+@media (max-width: 420px) {
+    .portal-topbar__identity {
+        display: none;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .portal-topbar *,
+    .portal-topbar *::before,
+    .portal-topbar *::after {
+        transition-duration: 0.001ms !important;
+        animation-duration: 0.001ms !important;
+    }
+}

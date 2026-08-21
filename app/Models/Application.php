@@ -17,8 +17,8 @@
  * - Admission decision
  * - Status history
  *
- * Status: ✅ Production Ready
- * Version: 2.3 (applicationFeePayment latestOfMany fix)
+ * Status: 🚦 Integration / Hardening
+ * Version: 2.6 (application_fee stored in kobo as integer + display helpers)
  */
 
 namespace App\Models;
@@ -35,14 +35,14 @@ class Application extends Model
         'application_number',
         'user_id',
         'programme_id',
-        'application_fee',
+        'application_fee',     // stored in kobo
         'application_status',
         'payment_status',
         'submitted_at',
     ];
 
     protected $casts = [
-        'application_fee' => 'decimal:2',
+        'application_fee' => 'integer',   // stored in kobo
         'submitted_at'    => 'datetime',
     ];
 
@@ -51,15 +51,16 @@ class Application extends Model
     | Status Constants
     |--------------------------------------------------------------------------
     */
-    public const STATUS_DRAFT        = 'DRAFT';
-    public const STATUS_SUBMITTED    = 'SUBMITTED';
-    public const STATUS_UNDER_REVIEW = 'UNDER_REVIEW';
-    public const STATUS_APPROVED     = 'APPROVED';
-    public const STATUS_REJECTED     = 'REJECTED';
+    public const STATUS_DRAFT                = 'DRAFT';
+    public const STATUS_SUBMITTED            = 'SUBMITTED';
+    public const STATUS_UNDER_REVIEW         = 'UNDER_REVIEW';
+    public const STATUS_APPROVED             = 'APPROVED';
+    public const STATUS_REJECTED             = 'REJECTED';
+    public const STATUS_CORRECTION_REQUIRED  = 'CORRECTION_REQUIRED';
 
-    public const PAYMENT_PENDING     = 'PENDING';
-    public const PAYMENT_SUCCESS     = 'SUCCESS';
-    public const PAYMENT_FAILED      = 'FAILED';
+    public const PAYMENT_PENDING             = 'PENDING';
+    public const PAYMENT_SUCCESS             = 'SUCCESS';
+    public const PAYMENT_FAILED              = 'FAILED';
 
     public const APPLICATION_STATUSES = [
         self::STATUS_DRAFT,
@@ -67,6 +68,7 @@ class Application extends Model
         self::STATUS_UNDER_REVIEW,
         self::STATUS_APPROVED,
         self::STATUS_REJECTED,
+        self::STATUS_CORRECTION_REQUIRED,
     ];
 
     public const PAYMENT_STATUSES = [
@@ -105,19 +107,16 @@ class Application extends Model
         return $this->hasMany(ApplicationStatusHistory::class);
     }
 
-    // Allow multiple payments
     public function payments(): HasMany
     {
         return $this->hasMany(Payment::class);
     }
 
-    // Latest payment helper (for Blade usage)
     public function payment(): HasOne
     {
         return $this->hasOne(Payment::class)->latestOfMany();
     }
 
-    // Latest application-fee payment helper
     public function applicationFeePayment(): HasOne
     {
         return $this->hasOne(Payment::class)
@@ -178,7 +177,7 @@ class Application extends Model
         $this->loadMissing('programme');
 
         if ($this->programme) {
-            $this->application_fee = $this->programme->application_fee;
+            $this->application_fee = $this->programme->application_fee; // already in kobo
             $this->save();
         }
     }
@@ -193,16 +192,44 @@ class Application extends Model
         return $this->user?->name ?? 'Unknown Applicant';
     }
 
+    public function getApplicationFeeInNairaAttribute(): float
+    {
+        return $this->application_fee / 100;
+    }
+
     public function getFormattedApplicationFeeAttribute(): string
     {
         return $this->application_fee === null
             ? '—'
-            : '₦' . number_format((float) $this->application_fee, 2);
+            : '₦' . number_format($this->application_fee / 100, 2);
     }
 
     public function getFormattedSubmittedAtAttribute(): string
     {
         return $this->submitted_at?->format('d M Y, H:i') ?? '—';
+    }
+
+    public function statusLabel(): string
+    {
+        return match ($this->application_status) {
+            self::STATUS_DRAFT               => 'Draft',
+            self::STATUS_SUBMITTED           => 'Submitted',
+            self::STATUS_UNDER_REVIEW        => 'Under Review',
+            self::STATUS_APPROVED            => 'Approved',
+            self::STATUS_REJECTED            => 'Rejected',
+            self::STATUS_CORRECTION_REQUIRED => 'Correction Required',
+            default                          => ucfirst(strtolower($this->application_status ?? 'Unknown')),
+        };
+    }
+
+    public function paymentLabel(): string
+    {
+        return match ($this->payment_status) {
+            self::PAYMENT_PENDING => 'Payment Pending',
+            self::PAYMENT_SUCCESS => 'Payment Complete',
+            self::PAYMENT_FAILED  => 'Payment Failed',
+            default               => ucfirst(strtolower($this->payment_status ?? 'Unpaid')),
+        };
     }
 
     /*

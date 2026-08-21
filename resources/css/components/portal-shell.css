@@ -1,0 +1,354 @@
+/*
+|--------------------------------------------------------------------------
+| APPLICATION PORTAL — SHELL
+|--------------------------------------------------------------------------
+| File:
+| resources/css/components/portal-shell.css
+|--------------------------------------------------------------------------
+*/
+
+.portal-body {
+    min-height: 100vh;
+
+    margin: 0;
+
+    background:
+        linear-gradient(
+            180deg,
+            var(--theme-page),
+            color-mix(
+                in srgb,
+                var(--theme-page) 92%,
+                var(--theme-primary-soft)
+            )
+        );
+
+    color: var(--theme-body);
+
+    font-family:
+        var(--theme-font-family),
+        system-ui,
+        sans-serif;
+}
+
+
+/* ==========================================================================
+   SHELL
+========================================================================== */
+
+.portal-shell {
+    display: flex;
+    align-items: stretch;
+
+    min-height: calc(100vh - 4.5rem);
+}
+
+.portal-main {
+    flex: 1;
+
+    min-width: 0;
+
+    background: transparent;
+}
+
+
+/* ==========================================================================
+   PAGE CONTENT
+========================================================================== */
+
+.admission-page {
+    position: relative;
+
+    width: 100%;
+
+    padding-block:
+        clamp(2rem, 4vw, 4rem)
+        clamp(3rem, 6vw, 5.5rem);
+}
+
+.admission-shell {
+    width: min(
+        calc(100% - (var(--portal-gutter) * 2)),
+        var(--portal-max-width)
+    );
+
+    margin-inline: auto;
+}
+
+.admission-shell--wide {
+    max-width: 74rem;
+}
+
+
+/* ==========================================================================
+   PAGE HEADER
+========================================================================== */
+
+.admission-page-header {
+    margin-bottom: clamp(1.75rem, 4vw, 2.75rem);
+}
+
+.admission-eyebrow {
+    display: inline-flex;
+    align-items: center;
+
+    gap: 0.5rem;
+
+    color: var(--theme-primary);
+
+    font-size: 0.62rem;
+    line-height: 1.2;
+    font-weight: 800;
+
+    letter-spacing: 0.14em;
+
+    text-transform: uppercase;
+}
+
+.admission-eyebrow__dot {
+    width: 0.42rem;
+    height: 0.42rem;
+
+    border-radius: 50%;
+
+    background: var(--theme-primary);
+
+    box-shadow:
+        0 0 0 0.3rem
+        color-mix(
+            in srgb,
+            var(--theme-primary) 10%,
+            transparent
+        );
+}
+
+.admission-page-title {
+    max-width: 52rem;
+
+    margin: 0.65rem 0 0;
+
+    color: var(--theme-heading);
+
+    font-family:
+        "Manrope",
+        var(--theme-font-family),
+        system-ui,
+        sans-serif;
+
+    font-size: clamp(1.85rem, 4vw, 3rem);
+    line-height: 1.05;
+
+    font-weight: 850;
+
+    letter-spacing: -0.045em;
+}
+
+.admission-page-description {
+    max-width: 44rem;
+
+    margin: 0.85rem 0 0;
+
+    color: var(--theme-muted);
+
+    font-size: 0.88rem;
+    line-height: 1.75;
+}
+
+
+/* ==========================================================================
+   GENERIC PANEL
+========================================================================== */
+
+.admission-panel {
+    border: 1px solid var(--theme-border);
+    border-radius: 1rem;
+
+    background: var(--theme-surface);
+
+    box-shadow:
+        0 12px 35px color-mix(
+            in srgb,
+            var(--theme-heading) 4%,
+            transparent
+        );
+}
+
+.admission-panel + .admission-panel {
+    margin-top: 1.25rem;
+}
+
+.admission-panel__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 1rem;
+
+    padding: 1.2rem 1.35rem;
+
+    border-bottom: 1px solid var(--theme-border);
+}
+
+.admission-panel__title {
+    margin: 0;
+
+    color: var(--theme-heading);
+
+    font-family:
+        "Manrope",
+        var(--theme-font-family),
+        system-ui,
+        sans-serif;
+
+    font-size: 0.95rem;
+    font-weight: 800;
+}
+
+
+/* ==========================================================================
+   EMPTY STATE
+========================================================================== */
+
+.admission-empty-state {
+    padding: clamp(2.5rem, 6vw, 4.5rem);
+
+    border: 1px dashed var(--theme-border-strong);
+    border-radius: 1.15rem;
+
+    background:
+        color-mix(
+            in srgb,
+            var(--theme-surface) 75%,
+            var(--theme-page)
+        );
+
+    text-align: left;
+}
+
+.admission-empty-state__icon {
+    display: grid;
+    place-items: center;
+
+    width: 3.5rem;
+    height: 3.5rem;
+
+    margin-bottom: 1.1rem;
+
+    border-radius: 1rem;
+
+    background: var(--theme-primary-soft);
+
+    color: var(--theme-primary);
+
+    font-size: 1rem;
+    font-weight: 800;
+}
+
+.admission-empty-state h2 {
+    margin: 0;
+
+    color: var(--theme-heading);
+
+    font-family:
+        "Manrope",
+        var(--theme-font-family),
+        system-ui,
+        sans-serif;
+
+    font-size: 1.15rem;
+    font-weight: 800;
+}
+
+.admission-empty-state p {
+    max-width: 36rem;
+
+    margin: 0.5rem 0 1.25rem;
+
+    color: var(--theme-muted);
+
+    font-size: 0.8rem;
+    line-height: 1.7;
+}
+
+
+/* ==========================================================================
+   INLINE EMPTY
+========================================================================== */
+
+.admission-inline-empty {
+    padding: 1.15rem;
+
+    color: var(--theme-muted);
+
+    font-size: 0.75rem;
+
+    background: var(--theme-page);
+}
+
+
+/* ==========================================================================
+   LINKS
+========================================================================== */
+
+.admission-link {
+    color: var(--theme-primary);
+
+    font-size: 0.72rem;
+    font-weight: 750;
+
+    text-decoration: none;
+}
+
+.admission-link:hover {
+    text-decoration: underline;
+}
+
+
+/* ==========================================================================
+   FILE INPUT
+========================================================================== */
+
+.admission-file-input {
+    display: block;
+
+    max-width: 100%;
+
+    color: var(--theme-body);
+
+    font-size: 0.7rem;
+}
+
+
+/* ==========================================================================
+   RESPONSIVE
+========================================================================== */
+
+@media (max-width: 900px) {
+
+    .admission-shell {
+        width: min(
+            calc(100% - 2rem),
+            var(--portal-max-width)
+        );
+    }
+}
+
+@media (max-width: 640px) {
+
+    .admission-page {
+        padding-block: 2rem 3.5rem;
+    }
+
+    .admission-page-title {
+        font-size: 2rem;
+    }
+
+    .admission-page-description {
+        font-size: 0.8rem;
+    }
+
+    .admission-panel__header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+}

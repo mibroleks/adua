@@ -148,7 +148,7 @@
 <div class="section">
     <div class="section-title">Admission Decision</div>
     <table>
-        <tr><th>Decision</th><td>{{ $application->decision->status }}</td></tr>
+        <tr><th>Decision</th><td>{{ $application->decision->decision }}</td></tr>
         <tr><th>Remarks</th><td>{{ $application->decision->remarks ?? '—' }}</td></tr>
         <tr><th>Officer</th><td>{{ $application->decision->officer?->name ?? '—' }}</td></tr>
         <tr><th>Decided At</th><td>{{ $application->decision->decided_at?->format('d M Y, H:i') ?? '—' }}</td></tr>

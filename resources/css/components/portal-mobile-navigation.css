@@ -1,0 +1,68 @@
+/* Base drawer styles */
+.portal-mobile-nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 80%; /* drawer width */
+    max-width: 20rem;
+    height: 100vh;
+    background: var(--theme-surface, #fff);
+    box-shadow: 2px 0 8px rgba(0,0,0,0.15);
+    transform: translateX(-100%);
+    transition: transform 0.3s ease-in-out;
+    z-index: 1000;
+    overflow-y: auto;
+}
+
+/* When menu is open (JS removes hidden) */
+body.mobile-menu-open .portal-mobile-nav {
+    transform: translateX(0);
+}
+
+/* Inner container */
+.portal-mobile-nav__inner {
+    padding: 1rem;
+}
+
+/* Close button */
+.portal-mobile-nav__close {
+    display: block;
+    margin-left: auto;
+    font-size: 1.5rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+/* Navigation list */
+.portal-mobile-nav__list {
+    list-style: none;
+    margin: 1rem 0 0;
+    padding: 0;
+}
+
+.portal-mobile-nav__link {
+    display: block;
+    padding: 0.75rem 1rem;
+    font-weight: 500;
+    color: var(--theme-text, #333);
+    text-decoration: none;
+    border-radius: 0.25rem;
+    transition: background 0.2s;
+}
+
+.portal-mobile-nav__link:hover {
+    background: var(--theme-hover, #f5f5f5);
+}
+
+.portal-mobile-nav__link--active {
+    background: var(--theme-primary, #73152A);
+    color: #fff;
+}
+
+/* Hide on desktop */
+@media (min-width: 901px) {
+    .portal-mobile-nav {
+        display: none !important;
+    }
+}

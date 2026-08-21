@@ -1,16 +1,17 @@
 {{-- 
-Component: Application Layout (Preset-Driven)
+Component: Application Layout (Public Shell)
 File Path: resources/views/layouts/app.blade.php
 Company: Ygrace Tech
 Author: Ibrahim Olalekan
 
 Purpose:
-Main layout for the student portal.
+Main layout for the public admissions pages.
 Loads dynamic branding (colors, logo, institution name, favicon) from settings via ThemeService.
 Ensures officers can change branding without touching code.
+Portal navigation is excluded here (moved to layouts/portal.blade.php).
 
 Status: ✅ Production Ready
-Version: 3.2 (semantic tokens, accessibility skip link, premium shell)
+Version: 3.3 (split public vs portal shells)
 --}}
 
 @php
@@ -23,7 +24,7 @@ Version: 3.2 (semantic tokens, accessibility skip link, premium shell)
 <!DOCTYPE html>
 <html
     lang="{{ str_replace('_', '-', app()->getLocale()) }}"
-    data-portal="admissions"
+    data-portal="admissions-public"
 >
 <head>
     <meta charset="UTF-8">
@@ -64,7 +65,7 @@ Version: 3.2 (semantic tokens, accessibility skip link, premium shell)
         Skip to content
     </a>
 
-    {{-- Premium Navigation --}}
+    {{-- Public Navigation --}}
     @include('layouts.header')
 
     {{-- Main Content --}}

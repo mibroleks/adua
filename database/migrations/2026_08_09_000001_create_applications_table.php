@@ -12,6 +12,9 @@ It stores stable core information only.
 Dynamic fields and documents are linked separately.
 Programme fee is snapshotted at submission.
 Application status and payment status are tracked independently.
+
+Status: ✅ Production Ready
+Version: 1.2 (application_fee stored in kobo as unsignedBigInteger)
 */
 
 use Illuminate\Database\Migrations\Migration;
@@ -20,9 +23,6 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('applications', function (Blueprint $table) {
@@ -41,10 +41,10 @@ return new class extends Migration
                 ->constrained()
                 ->restrictOnDelete(); // prevent accidental cascade deletes
 
-            // Snapshot of programme fee at submission (decimal for naira with 2dp)
-            $table->decimal('application_fee', 10, 2)->nullable();
+            // Snapshot of programme fee at submission (stored in minor units, kobo for NGN)
+            $table->unsignedBigInteger('application_fee')->nullable();
 
-            // Application status (DRAFT, SUBMITTED, UNDER_REVIEW, APPROVED, REJECTED)
+            // Application status (DRAFT, SUBMITTED, UNDER_REVIEW, APPROVED, REJECTED, CORRECTION_REQUIRED)
             $table->string('application_status')->default('DRAFT');
 
             // Payment status (PENDING, SUCCESS, FAILED)
@@ -58,9 +58,6 @@ return new class extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('applications');

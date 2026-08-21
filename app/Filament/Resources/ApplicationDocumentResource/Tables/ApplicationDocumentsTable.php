@@ -8,25 +8,25 @@ Author: Ibrahim Olalekan
 
 Purpose:
 Defines the table schema for listing application documents in Filament.
-Shows applicant, programme, document type, status, upload details, and a direct download link.
-Supports filters and bulk actions for officer review.
+Shows applicant, programme, document type, status, upload details, and a secure preview/download link.
+Supports filters and bulk actions for officer review, including preview, verification, and rejection.
 
-Status: ✅ Production Ready
-Version: 1.2
+Status: ✅ Filament v5 Compatible
+Version: 1.9 (preview passes extension + mime, reject uses rejection_reason)
 */
 
 namespace App\Filament\Resources\ApplicationDocumentResource\Tables;
 
+use App\Models\ApplicationDocument;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\BadgeColumn;
 use Filament\Tables\Filters\SelectFilter;
-use Filament\Actions\ViewAction;
-use Filament\Actions\EditAction;
-use Filament\Actions\BulkActionGroup;
-use Filament\Actions\DeleteBulkAction;
-use Illuminate\Support\Facades\Storage;
+use Filament\Actions\BulkActionGroup;     // ✅ global namespace in v5
+use Filament\Actions\DeleteBulkAction;    // ✅ global namespace in v5
+use Filament\Actions\Action;              // ✅ global namespace in v5
+use Filament\Forms;
 
 class ApplicationDocumentsTable
 {
@@ -47,7 +47,7 @@ class ApplicationDocumentsTable
                     ->label('Programme')
                     ->sortable(),
 
-                TextColumn::make('type.name')
+                TextColumn::make('documentType.name')
                     ->label('Document Type')
                     ->sortable(),
 
@@ -64,13 +64,10 @@ class ApplicationDocumentsTable
                     ->dateTime('d M Y, H:i')
                     ->sortable(),
 
-                // Direct download link
+                // Secure download link via authorized route
                 TextColumn::make('download')
                     ->label('Download')
-                    ->url(fn ($record) => $record->path 
-                        ? Storage::disk($record->disk)->url($record->path) 
-                        : null
-                    )
+                    ->url(fn ($record) => route('application.documents.view', [$record->application_id, $record->id]))
                     ->openUrlInNewTab()
                     ->visible(fn ($record) => !empty($record->path))
                     ->formatStateUsing(fn () => 'Open File'),
@@ -87,8 +84,40 @@ class ApplicationDocumentsTable
                     ->label('Programme'),
             ])
             ->recordActions([
-                ViewAction::make(),
-                EditAction::make(),
+                // Secure preview modal
+                Action::make('preview')
+                    ->label('Preview')
+                    ->icon('heroicon-o-eye')
+                    ->modalHeading(fn (ApplicationDocument $record) =>
+                        'Preview: ' . ($record->documentType?->name ?? $record->original_name)
+                    )
+                    ->modalWidth('7xl')
+                    ->modalContent(fn (ApplicationDocument $record) => view('admin.documents.preview', [
+                        'url' => route('application.documents.view', [$record->application_id, $record->id]),
+                        'extension' => strtolower(pathinfo($record->original_name, PATHINFO_EXTENSION)), // ✅ pass extension
+                        'mime' => $record->mime_type, // ✅ also pass mime
+                    ])),
+
+                // Verify action
+                Action::make('verify')
+                    ->label('Verify')
+                    ->color('success')
+                    ->requiresConfirmation()
+                    ->action(fn (ApplicationDocument $record) => app(\App\Services\AdmissionService::class)
+                        ->verifyDocument($record, auth()->id())),
+
+                // Reject action with reason
+                Action::make('reject')
+                    ->label('Reject')
+                    ->color('danger')
+                    ->requiresConfirmation()
+                    ->form([
+                        Forms\Components\Textarea::make('reason')
+                            ->label('Reason')
+                            ->required(),
+                    ])
+                    ->action(fn (ApplicationDocument $record, array $data) => app(\App\Services\AdmissionService::class)
+                        ->rejectDocument($record, auth()->id(), $data['reason'])),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

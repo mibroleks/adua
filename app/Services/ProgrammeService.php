@@ -21,6 +21,13 @@ use Illuminate\Database\Eloquent\Collection;
 
 class ProgrammeService
 {
+    protected EffectiveFeeResolver $feeResolver;
+
+    public function __construct(EffectiveFeeResolver $feeResolver)
+    {
+        $this->feeResolver = $feeResolver;
+    }
+
     /**
      * Get all active programmes.
      */
@@ -69,10 +76,29 @@ class ProgrammeService
 
     /**
      * Get programme fee snapshot by programme ID.
+     * Uses EffectiveFeeResolver to ensure programme override > global default.
      */
     public function getProgrammeFee(int $programmeId): ?int
     {
         $programme = Programme::find($programmeId);
-        return $programme?->application_fee;
+        return $programme ? $this->feeResolver->resolve($programme) : null;
+    }
+
+    /**
+     * Get programme fee in naira.
+     */
+    public function getProgrammeFeeInNaira(int $programmeId): ?float
+    {
+        $programme = Programme::find($programmeId);
+        return $programme ? $this->feeResolver->resolveInNaira($programme) : null;
+    }
+
+    /**
+     * Get programme fee formatted for display.
+     */
+    public function getProgrammeFeeFormatted(int $programmeId): string
+    {
+        $programme = Programme::find($programmeId);
+        return $programme ? $this->feeResolver->resolveFormatted($programme) : '—';
     }
 }

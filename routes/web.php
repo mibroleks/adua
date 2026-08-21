@@ -2,11 +2,18 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ApplicationController;
+use App\Http\Controllers\ApplicationStatusController;
+use App\Http\Controllers\ApplicationDossierController;
+use App\Http\Controllers\ApplicationDocumentController;
+use App\Http\Controllers\ApplicationDecisionController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\AdmissionLetterController;
 use App\Http\Controllers\ThemeController;
 use App\Http\Controllers\ProgrammeController;
+use App\Http\Controllers\Auth\LogoutController;
+use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\ApplicationListController;
 use App\Models\Programme;
 
 /**
@@ -25,9 +32,14 @@ use App\Models\Programme;
  * - Admission letter download
  * - Dynamic theme CSS endpoint
  * - Application dossier (view, print, PDF, export)
+ * - Secure logout
+ * - User profile page
+ * - Applications list + single dossier + legacy alias
+ * - Dedicated views: documents, decision, payment, progress
+ * - Support & Notifications
  *
- * Status: ✅ Production Ready
- * Version: 2.1 (added webhook route + dossier routes)
+ * Status: 🚦 Integration / Hardening
+ * Version: 3.8 (added notification read routes)
  */
 
 // Root route (public landing page)
@@ -37,77 +49,124 @@ Route::get('/', function () {
 })->name('landing');
 
 // Public programmes catalogue
-Route::get('/programmes', [ProgrammeController::class, 'index'])
-    ->name('programmes.index');
-
-Route::get('/programmes/{programme}', [ProgrammeController::class, 'show'])
-    ->name('programmes.show');
+Route::get('/programmes', [ProgrammeController::class, 'index'])->name('programmes.index');
+Route::get('/programmes/{programme}', [ProgrammeController::class, 'show'])->name('programmes.show');
 
 // Dynamic theme CSS (public)
-Route::get('/theme.css', [ThemeController::class, 'css'])
-    ->name('theme.css');
+Route::get('/theme.css', [ThemeController::class, 'css'])->name('theme.css');
 
 /*
 |--------------------------------------------------------------------------
 | Paystack Webhook (server-to-server)
 |--------------------------------------------------------------------------
-| This route must be public (outside auth middleware).
-| Paystack calls this endpoint directly to notify payment status.
 */
-Route::post('/payment/webhook', [PaymentController::class, 'webhook'])
-    ->name('payment.webhook');
+Route::post('/payment/webhook', [PaymentController::class, 'webhook'])->name('payment.webhook');
 
 // Grouped routes requiring authentication
 Route::middleware(['auth'])->group(function () {
-    // Show application form
-    Route::get('/apply', [ApplicationController::class, 'create'])
-        ->name('application.create');
+    /*
+    |--------------------------------------------------------------------------
+    | Application lifecycle
+    |--------------------------------------------------------------------------
+    */
+    Route::get('/apply', [ApplicationController::class, 'create'])->name('application.create');
+    Route::post('/apply', [ApplicationController::class, 'store'])->name('application.store');
+    Route::post('/application/{application}/submit', [ApplicationController::class, 'submit'])->name('application.submit');
 
-    // Store draft application
-    Route::post('/apply', [ApplicationController::class, 'store'])
-        ->name('application.store');
+    /*
+    |--------------------------------------------------------------------------
+    | Student application correction
+    |--------------------------------------------------------------------------
+    */
+    Route::get('/application/{application}/correct', [ApplicationController::class, 'edit'])
+        ->name('application.correct');
+    Route::post('/application/{application}/correct', [ApplicationController::class, 'update'])
+        ->name('application.correct.update');
 
-    // Submit application
-    Route::post('/application/{application}/submit', [ApplicationController::class, 'submit'])
-        ->name('application.submit');
+    /*
+    |--------------------------------------------------------------------------
+    | Application status + dossier
+    |--------------------------------------------------------------------------
+    */
+    Route::get('/application/{application}/status', [ApplicationStatusController::class, 'show'])->name('application.status');
+    Route::get('/application/{application}/show', [ApplicationDossierController::class, 'show'])->name('application.show');
+    Route::get('/application/{application}/print', [ApplicationDossierController::class, 'print'])->name('application.print');
+    Route::get('/application/{application}/pdf', [ApplicationDossierController::class, 'pdf'])->name('application.pdf');
+    Route::get('/application/{application}/export/excel', [ApplicationDossierController::class, 'exportExcel'])->name('application.export.excel');
+    Route::get('/application/{application}/export/csv', [ApplicationDossierController::class, 'exportCsv'])->name('application.export.csv');
 
-    // View application status
-    Route::get('/application/{application}/status', [ApplicationController::class, 'status'])
-        ->name('application.status');
+    /*
+    |--------------------------------------------------------------------------
+    | Payment
+    |--------------------------------------------------------------------------
+    */
+    Route::post('/application/{application}/pay', [PaymentController::class, 'initialize'])->name('payment.initialize');
+    Route::get('/payment/callback', [PaymentController::class, 'callback'])->name('payment.callback');
+    Route::get('/applications/payment', [PaymentController::class, 'show'])->name('applications.payment');
 
-    // 🔎 View full application dossier
-    Route::get('/application/{application}/show', [ApplicationController::class, 'show'])
-        ->name('application.show');
+    /*
+    |--------------------------------------------------------------------------
+    | Portal
+    |--------------------------------------------------------------------------
+    */
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/admission-letter/{application}', [AdmissionLetterController::class, 'show'])->name('admission.letter');
 
-    // 🔎 Print dossier (HTML view styled for printing)
-    Route::get('/application/{application}/print', [ApplicationController::class, 'print'])
-        ->name('application.print');
+    // User profile
+    Route::get('/profile', function () {
+        return view('profile');
+    })->name('profile');
 
-    // 🔎 Download dossier as PDF
-    Route::get('/application/{application}/pdf', [ApplicationController::class, 'pdf'])
-        ->name('application.pdf');
+    /*
+    |--------------------------------------------------------------------------
+    | Applications list + single dossier + legacy alias
+    |--------------------------------------------------------------------------
+    */
+    Route::get('/applications', [ApplicationListController::class, 'index'])->name('applications.index');
+    Route::get('/applications/my', function () {
+        $application = auth()->user()->applications()->latest()->first();
+        return view('applications.my-application', compact('application'));
+    })->name('applications.my');
 
-    // 🔎 Export dossier to Excel
-    Route::get('/application/{application}/export/excel', [ApplicationController::class, 'exportExcel'])
-        ->name('application.export.excel');
+    /*
+    |--------------------------------------------------------------------------
+    | Application-specific views
+    |--------------------------------------------------------------------------
+    */
+    Route::get('/applications/documents', [ApplicationDocumentController::class, 'index'])->name('applications.documents');
 
-    // 🔎 Export dossier to CSV
-    Route::get('/application/{application}/export/csv', [ApplicationController::class, 'exportCsv'])
-        ->name('application.export.csv');
+    // ✅ Upload documents
+    Route::post('/applications/{application}/documents/upload', [ApplicationDocumentController::class, 'upload'])->name('application.documents.upload');
 
-    // Initialize payment for an application
-    Route::post('/application/{application}/pay', [PaymentController::class, 'initialize'])
-        ->name('payment.initialize');
+    // ✅ Replace documents
+    Route::post('/applications/{application}/documents/{document}/replace', [ApplicationDocumentController::class, 'replace'])->name('application.documents.replace');
 
-    // Handle Paystack callback (browser redirect)
-    Route::get('/payment/callback', [PaymentController::class, 'callback'])
-        ->name('payment.callback');
+    // ✅ Secure view documents
+    Route::get('/application/{application}/documents/{document}/view', [ApplicationDocumentController::class, 'view'])->name('application.documents.view');
 
-    // Student dashboard
-    Route::get('/dashboard', [DashboardController::class, 'index'])
-        ->name('dashboard');
+    Route::get('/applications/decision', [ApplicationDecisionController::class, 'show'])->name('applications.decision');
+    Route::get('/applications/progress', [ApplicationStatusController::class, 'progress'])->name('applications.progress');
 
-    // Admission letter download
-    Route::get('/admission-letter/{application}', [AdmissionLetterController::class, 'show'])
-        ->name('admission.letter');
+    // Catch-all single dossier (must come last!)
+    Route::get('/applications/{application}', [ApplicationListController::class, 'show'])->name('applications.show');
+
+    /*
+    |--------------------------------------------------------------------------
+    | Support & Notifications
+    |--------------------------------------------------------------------------
+    */
+    Route::get('/support', function () {
+        return view('support.index');
+    })->name('support.index');
+
+    Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
+    Route::post('/notifications/{id}/read', [NotificationController::class, 'markAsRead'])->name('notifications.read');
+    Route::post('/notifications/read-all', [NotificationController::class, 'markAllAsRead'])->name('notifications.readAll');
+
+    /*
+    |--------------------------------------------------------------------------
+    | Logout
+    |--------------------------------------------------------------------------
+    */
+    Route::post('/logout', [LogoutController::class, 'logout'])->name('logout');
 });

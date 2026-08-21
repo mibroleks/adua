@@ -1,0 +1,52 @@
+.portal-empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    padding: 2.5rem 1.5rem;
+
+    border: 1px solid var(--theme-border);
+    border-radius: 0.9rem;
+
+    background: var(--theme-surface);
+
+    text-align: center;
+
+    box-shadow:
+        0 8px 25px color-mix(
+            in srgb,
+            var(--theme-heading) 5%,
+            transparent
+        );
+}
+
+.portal-empty-state__icon {
+    margin-bottom: 1rem;
+
+    color: var(--theme-muted);
+}
+
+.portal-empty-state__title {
+    margin: 0;
+
+    color: var(--theme-heading);
+
+    font-size: 1rem;
+    font-weight: 750;
+}
+
+.portal-empty-state__message {
+    max-width: 32rem;
+
+    margin: 0.5rem 0 0;
+
+    color: var(--theme-muted);
+
+    font-size: 0.75rem;
+    line-height: 1.6;
+}
+
+.portal-empty-state__action {
+    margin-top: 1.5rem;
+}

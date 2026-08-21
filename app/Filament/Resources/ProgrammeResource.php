@@ -17,7 +17,7 @@ Architecture:
 - Includes faculty and department dropdowns for hierarchy.
 
 Status: ✅ Production Ready
-Version: 1.6 (Filament v3 compatible, synced with migration/model)
+Version: 1.7 (Application Fee column fixed to use accessor)
 */
 
 namespace App\Filament\Resources;
@@ -142,7 +142,8 @@ class ProgrammeResource extends Resource
             Tables\Columns\TextColumn::make('code')->searchable()->sortable(),
             Tables\Columns\TextColumn::make('degree_type'),
             Tables\Columns\TextColumn::make('duration'),
-            Tables\Columns\TextColumn::make('application_fee')
+            // ✅ Use accessor to display fee in naira
+            Tables\Columns\TextColumn::make('applicationFeeInNaira')
                 ->money('NGN', true)
                 ->sortable()
                 ->label('Application Fee'),

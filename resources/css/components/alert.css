@@ -1,0 +1,46 @@
+.portal-alert {
+    padding: 1rem 1.1rem;
+
+    border: 1px solid;
+    border-radius: 0.8rem;
+
+    font-size: 0.8rem;
+}
+
+.portal-alert__title {
+    margin: 0;
+
+    color: var(--theme-heading);
+
+    font-size: 0.8rem;
+    font-weight: 750;
+}
+
+.portal-alert__message {
+    margin: 0.35rem 0 0;
+
+    color: var(--theme-body);
+
+    font-size: 0.75rem;
+    line-height: 1.6;
+}
+
+.portal-alert--success {
+    border-color: var(--theme-success);
+    background: var(--theme-success-soft);
+}
+
+.portal-alert--warning {
+    border-color: var(--theme-warning);
+    background: var(--theme-warning-soft);
+}
+
+.portal-alert--danger {
+    border-color: var(--theme-danger);
+    background: var(--theme-danger-soft);
+}
+
+.portal-alert--info {
+    border-color: var(--theme-info);
+    background: var(--theme-info-soft);
+}

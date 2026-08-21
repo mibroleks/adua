@@ -1,0 +1,314 @@
+/*
+|--------------------------------------------------------------------------
+| APPLICATION PORTAL — APPLICATION PROGRESS
+|--------------------------------------------------------------------------
+*/
+
+.admission-page--progress {
+    position: relative;
+}
+
+
+/* ==========================================================================
+   OVERVIEW
+========================================================================== */
+
+.progress-overview {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 2rem;
+
+    margin-bottom: 2rem;
+    padding: 1.35rem 1.5rem;
+
+    border: 1px solid var(--theme-border);
+    border-radius: 1rem;
+
+    background: var(--theme-surface);
+
+    box-shadow:
+        0 12px 35px color-mix(
+            in srgb,
+            var(--theme-heading) 5%,
+            transparent
+        );
+}
+
+.progress-overview__eyebrow,
+.progress-overview__status > span:first-child,
+.progress-stage__eyebrow,
+.progress-empty-state__eyebrow {
+    display: block;
+
+    color: var(--theme-primary);
+
+    font-size: 0.6rem;
+    font-weight: 800;
+
+    letter-spacing: 0.14em;
+
+    text-transform: uppercase;
+}
+
+.progress-overview strong {
+    display: block;
+
+    margin-top: 0.35rem;
+
+    color: var(--theme-heading);
+
+    font-family:
+        "Manrope",
+        var(--theme-font-family),
+        system-ui,
+        sans-serif;
+
+    font-size: 1rem;
+    font-weight: 850;
+}
+
+.progress-overview__programme {
+    display: block;
+
+    margin-top: 0.25rem;
+
+    color: var(--theme-muted);
+
+    font-size: 0.7rem;
+}
+
+.progress-overview__status {
+    display: flex;
+    align-items: flex-end;
+
+    flex-direction: column;
+
+    gap: 0.4rem;
+}
+
+
+/* ==========================================================================
+   JOURNEY
+========================================================================== */
+
+.progress-journey {
+    position: relative;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 0.9rem;
+}
+
+.progress-journey__line {
+    position: absolute;
+
+    top: 2.5rem;
+    bottom: 2.5rem;
+    left: 1.7rem;
+
+    width: 1px;
+
+    background:
+        linear-gradient(
+            to bottom,
+            var(--theme-primary),
+            var(--theme-border)
+        );
+}
+
+
+/* ==========================================================================
+   STAGE
+========================================================================== */
+
+.progress-stage {
+    position: relative;
+
+    display: grid;
+
+    grid-template-columns: 3.5rem minmax(0, 1fr);
+
+    gap: 1rem;
+
+    min-height: 6.5rem;
+}
+
+.progress-stage__marker {
+    position: relative;
+
+    z-index: 2;
+
+    display: grid;
+    place-items: center;
+
+    width: 3.5rem;
+    height: 3.5rem;
+
+    border: 1px solid var(--theme-border);
+    border-radius: 50%;
+
+    background: var(--theme-page);
+
+    box-shadow:
+        0 0 0 0.35rem var(--theme-page);
+}
+
+.progress-stage__marker span {
+    color: var(--theme-muted);
+
+    font-size: 0.7rem;
+    font-weight: 850;
+}
+
+.progress-stage.is-complete .progress-stage__marker {
+    border-color: var(--theme-primary);
+
+    background: var(--theme-primary-soft);
+}
+
+.progress-stage.is-complete .progress-stage__marker span {
+    color: var(--theme-primary);
+}
+
+.progress-stage.is-current .progress-stage__marker {
+    border-color: var(--theme-primary);
+}
+
+.progress-stage.is-current .progress-stage__marker span {
+    color: var(--theme-primary);
+}
+
+
+/* ==========================================================================
+   CONTENT
+========================================================================== */
+
+.progress-stage__content {
+    min-width: 0;
+
+    padding: 1rem 1.15rem;
+
+    border: 1px solid var(--theme-border);
+    border-radius: 0.9rem;
+
+    background: var(--theme-surface);
+
+    transition:
+        border-color var(--portal-transition),
+        box-shadow var(--portal-transition);
+}
+
+.progress-stage:hover .progress-stage__content {
+    border-color: var(--theme-border-strong);
+
+    box-shadow:
+        0 10px 28px color-mix(
+            in srgb,
+            var(--theme-heading) 5%,
+            transparent
+        );
+}
+
+.progress-stage__heading {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+
+    gap: 1rem;
+}
+
+.progress-stage__heading h2 {
+    margin: 0.25rem 0 0;
+
+    color: var(--theme-heading);
+
+    font-family:
+        "Manrope",
+        var(--theme-font-family),
+        system-ui,
+        sans-serif;
+
+    font-size: 0.9rem;
+    font-weight: 800;
+}
+
+.progress-stage__content > p {
+    margin: 0.55rem 0 0;
+
+    color: var(--theme-muted);
+
+    font-size: 0.7rem;
+    line-height: 1.6;
+}
+
+.progress-stage__state {
+    flex: 0 0 auto;
+
+    padding-top: 0.15rem;
+
+    color: var(--theme-muted);
+
+    font-size: 0.62rem;
+    font-weight: 750;
+}
+
+
+/* ==========================================================================
+   EMPTY
+========================================================================== */
+
+.progress-empty-state__mark {
+    display: grid;
+    place-items: center;
+
+    width: 4rem;
+    height: 4rem;
+
+    border-radius: 1rem;
+
+    background: var(--theme-primary-soft);
+
+    color: var(--theme-primary);
+
+    font-size: 0.65rem;
+    font-weight: 850;
+}
+
+
+/* ==========================================================================
+   RESPONSIVE
+========================================================================== */
+
+@media (max-width: 640px) {
+
+    .progress-overview {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .progress-overview__status {
+        align-items: flex-start;
+    }
+
+    .progress-stage {
+        grid-template-columns: 2.75rem minmax(0, 1fr);
+        gap: 0.75rem;
+    }
+
+    .progress-stage__marker {
+        width: 2.75rem;
+        height: 2.75rem;
+    }
+
+    .progress-journey__line {
+        left: 1.35rem;
+    }
+
+    .progress-stage__heading {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+}

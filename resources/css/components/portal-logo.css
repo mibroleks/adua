@@ -1,0 +1,10 @@
+.portal-logo {
+    display: block;
+
+    width: auto;
+    height: 3rem;
+
+    max-width: 12rem;
+
+    object-fit: contain;
+}

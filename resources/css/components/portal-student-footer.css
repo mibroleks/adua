@@ -1,0 +1,73 @@
+/*
+|--------------------------------------------------------------------------
+| PORTAL STUDENT FOOTER
+|--------------------------------------------------------------------------
+| File: resources/css/components/portal-student-footer.css
+| Company: Ygrace Tech
+| Author: Ibrahim Olalekan
+|
+| Purpose:
+| Slim, functional footer for student portal pages.
+| Not as elaborate as the institutional footer.
+| Now sticky at the bottom of the viewport.
+|--------------------------------------------------------------------------
+*/
+
+.portal-student-footer {
+    position: fixed;               /* stick to viewport */
+    bottom: 0;                     /* anchor to bottom */
+    left: 0;
+    width: 100%;                   /* full width */
+    background: var(--theme-footer-bg, #f8f9fa);
+    border-top: 1px solid var(--theme-footer-border, #e0e0e0);
+    padding: 1rem 2rem;
+    font-size: 0.85rem;
+    color: var(--theme-footer-text, #444);
+    z-index: 100;                  /* keep above other elements */
+}
+
+.portal-student-footer__container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.portal-student-footer__copy {
+    font-size: 0.8rem;
+    color: var(--theme-footer-muted, #777);
+}
+
+.portal-student-footer__nav {
+    display: flex;
+    gap: 1.25rem;
+}
+
+.portal-student-footer__nav a {
+    color: var(--theme-footer-text, #444);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.portal-student-footer__nav a:hover {
+    color: var(--theme-primary, #73152A);
+}
+
+@media (max-width: 640px) {
+    .portal-student-footer__container {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .portal-student-footer__nav {
+        margin-top: 0.5rem;
+    }
+}
+
+/* ==========================================================================
+   MAIN CONTENT ADJUSTMENT
+   Prevents overlap by adding bottom padding to portal main content.
+========================================================================== */
+.portal-main {
+    padding-bottom: 4rem; /* space for sticky footer */
+}

@@ -15,22 +15,13 @@ Version: 2.0 (semantic theme tokens integration)
 
 @php
     $theme = app(\App\Services\ThemeService::class);
+    $logoUrl = $theme->logoUrl() ?? setting('institution.logo') ?? asset('images/default-logo.png');
 @endphp
 
-@if($theme->logoUrl())
-    <img
-        src="{{ $theme->logoUrl() }}"
-        alt="{{ $theme->institutionName() ?? setting('institution.name') ?? 'Institution Logo' }}"
-        {{ $attributes->merge([
-            'class' => 'h-12 w-auto object-contain'
-        ]) }}
-    >
-@else
-    <img
-        src="{{ setting('institution.logo') ?? asset('images/default-logo.png') }}"
-        alt="{{ setting('institution.name') ?? 'Institution Logo' }}"
-        {{ $attributes->merge([
-            'class' => 'h-12 w-auto object-contain'
-        ]) }}
-    >
-@endif
+<img
+    src="{{ $logoUrl }}"
+    alt="{{ $theme->institutionName() ?? setting('institution.name') ?? 'Institution Logo' }}"
+    {{ $attributes->merge([
+        'class' => 'portal-logo'
+    ]) }}
+>

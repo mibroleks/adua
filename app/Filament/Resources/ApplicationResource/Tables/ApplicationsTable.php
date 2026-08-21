@@ -17,8 +17,8 @@ The table is intentionally read-oriented:
 - Submitted date uses submitted_at.
 - Record actions use the Filament v5 action API.
 
-Status: Production Ready
-Version: 3.0
+Status: ✅ Production Ready
+Version: 3.2 (fee accessor + latest decision)
 Filament: 5.x
 */
 
@@ -40,11 +40,7 @@ class ApplicationsTable
         return $table
             ->columns([
 
-                /*
-                |--------------------------------------------------------------------------
-                | Application Number
-                |--------------------------------------------------------------------------
-                */
+                // Application Number
                 TextColumn::make('application_number')
                     ->label('Application No.')
                     ->searchable()
@@ -53,152 +49,92 @@ class ApplicationsTable
                     ->copyMessage('Application number copied')
                     ->weight('bold'),
 
-                /*
-                |--------------------------------------------------------------------------
-                | Applicant
-                |--------------------------------------------------------------------------
-                */
+                // Applicant
                 TextColumn::make('user.name')
                     ->label('Applicant')
                     ->searchable()
                     ->sortable(),
 
-                /*
-                |--------------------------------------------------------------------------
-                | Programme
-                |--------------------------------------------------------------------------
-                */
+                // Programme
                 TextColumn::make('programme.name')
                     ->label('Programme')
                     ->searchable()
                     ->sortable()
                     ->wrap(),
 
-                /*
-                |--------------------------------------------------------------------------
-                | Application Status
-                |--------------------------------------------------------------------------
-                |
-                | IMPORTANT:
-                | The Application model uses application_status,
-                | not status.
-                |
-                */
+                // Application Status
                 TextColumn::make('application_status')
                     ->label('Application Status')
                     ->badge()
                     ->sortable()
-                    ->formatStateUsing(
-                        fn (?string $state): string => match ($state) {
-                            'DRAFT'        => 'Draft',
-                            'SUBMITTED'    => 'Submitted',
-                            'UNDER_REVIEW' => 'Under Review',
-                            'APPROVED'     => 'Approved',
-                            'REJECTED'     => 'Rejected',
-                            default        => $state ?? '—',
-                        }
-                    )
-                    ->color(
-                        fn (?string $state): string => match ($state) {
-                            'DRAFT'        => 'gray',
-                            'SUBMITTED'    => 'info',
-                            'UNDER_REVIEW' => 'warning',
-                            'APPROVED'     => 'success',
-                            'REJECTED'     => 'danger',
-                            default        => 'gray',
-                        }
-                    ),
+                    ->formatStateUsing(fn (?string $state): string => match ($state) {
+                        'DRAFT'              => 'Draft',
+                        'SUBMITTED'          => 'Submitted',
+                        'UNDER_REVIEW'       => 'Under Review',
+                        'APPROVED'           => 'Approved',
+                        'REJECTED'           => 'Rejected',
+                        'CORRECTION_REQUIRED'=> 'Correction Required',
+                        default              => $state ?? '—',
+                    })
+                    ->color(fn (?string $state): string => match ($state) {
+                        'DRAFT'              => 'gray',
+                        'SUBMITTED'          => 'info',
+                        'UNDER_REVIEW'       => 'warning',
+                        'APPROVED'           => 'success',
+                        'REJECTED'           => 'danger',
+                        'CORRECTION_REQUIRED'=> 'info',
+                        default              => 'gray',
+                    }),
 
-                /*
-                |--------------------------------------------------------------------------
-                | Payment Status
-                |--------------------------------------------------------------------------
-                |
-                | Payment status is deliberately independent from
-                | application lifecycle status.
-                |
-                */
+                // Payment Status
                 TextColumn::make('payment_status')
                     ->label('Payment')
                     ->badge()
                     ->sortable()
-                    ->formatStateUsing(
-                        fn (?string $state): string => match ($state) {
-                            'PENDING' => 'Pending',
-                            'SUCCESS' => 'Paid',
-                            'FAILED'  => 'Failed',
-                            default   => $state ?? '—',
-                        }
-                    )
-                    ->color(
-                        fn (?string $state): string => match ($state) {
-                            'PENDING' => 'warning',
-                            'SUCCESS' => 'success',
-                            'FAILED'  => 'danger',
-                            default   => 'gray',
-                        }
-                    ),
+                    ->formatStateUsing(fn (?string $state): string => match ($state) {
+                        'PENDING' => 'Pending',
+                        'SUCCESS' => 'Paid',
+                        'FAILED'  => 'Failed',
+                        default   => $state ?? '—',
+                    })
+                    ->color(fn (?string $state): string => match ($state) {
+                        'PENDING' => 'warning',
+                        'SUCCESS' => 'success',
+                        'FAILED'  => 'danger',
+                        default   => 'gray',
+                    }),
 
-                /*
-                |--------------------------------------------------------------------------
-                | Application Fee
-                |--------------------------------------------------------------------------
-                */
-                TextColumn::make('application_fee')
+                // ✅ Application Fee (use accessor)
+                TextColumn::make('formatted_application_fee')
                     ->label('Fee')
-                    ->money('NGN')
+                    ->money('NGN', true)
                     ->sortable(),
 
-                /*
-                |--------------------------------------------------------------------------
-                | Submitted At
-                |--------------------------------------------------------------------------
-                |
-                | Do not use created_at here.
-                | submitted_at represents the actual application submission.
-                |
-                */
+                // Submitted At
                 TextColumn::make('submitted_at')
                     ->label('Submitted')
                     ->dateTime('d M Y, H:i')
                     ->sortable()
                     ->placeholder('Not submitted'),
 
-                /*
-                |--------------------------------------------------------------------------
-                | Decision
-                |--------------------------------------------------------------------------
-                */
-                TextColumn::make('decision.status')
+                // ✅ Decision (latest)
+                TextColumn::make('decision.decision')
                     ->label('Decision')
                     ->badge()
-                    ->formatStateUsing(
-                        fn (?string $state): string => match ($state) {
-                            'APPROVED' => 'Approved',
-                            'REJECTED' => 'Rejected',
-                            default    => $state ?? 'Pending',
-                        }
-                    )
-                    ->color(
-                        fn (?string $state): string => match ($state) {
-                            'APPROVED' => 'success',
-                            'REJECTED' => 'danger',
-                            default    => 'gray',
-                        }
-                    )
+                    ->formatStateUsing(fn (?string $state): string => match ($state) {
+                        'APPROVED' => 'Approved',
+                        'REJECTED' => 'Rejected',
+                        default    => 'Pending',
+                    })
+                    ->color(fn (?string $state): string => match ($state) {
+                        'APPROVED' => 'success',
+                        'REJECTED' => 'danger',
+                        default    => 'gray',
+                    })
                     ->placeholder('Pending'),
             ])
 
-            /*
-            |--------------------------------------------------------------------------
-            | Filters
-            |--------------------------------------------------------------------------
-            */
             ->filters([
-
-                /*
-                | Application lifecycle status
-                */
                 SelectFilter::make('application_status')
                     ->label('Application Status')
                     ->options([
@@ -207,11 +143,9 @@ class ApplicationsTable
                         'UNDER_REVIEW' => 'Under Review',
                         'APPROVED'     => 'Approved',
                         'REJECTED'     => 'Rejected',
+                        'CORRECTION_REQUIRED' => 'Correction Required',
                     ]),
 
-                /*
-                | Payment status
-                */
                 SelectFilter::make('payment_status')
                     ->label('Payment Status')
                     ->options([
@@ -220,81 +154,28 @@ class ApplicationsTable
                         'FAILED'  => 'Failed',
                     ]),
 
-                /*
-                | Submission date range
-                */
                 Filter::make('submitted_at')
                     ->label('Submission Date')
                     ->form([
-                        DatePicker::make('from')
-                            ->label('From'),
-
-                        DatePicker::make('until')
-                            ->label('Until'),
+                        DatePicker::make('from')->label('From'),
+                        DatePicker::make('until')->label('Until'),
                     ])
-                    ->query(
-                        fn ($query, array $data) => $query
-                            ->when(
-                                $data['from'] ?? null,
-                                fn ($query, $date) =>
-                                    $query->whereDate(
-                                        'submitted_at',
-                                        '>=',
-                                        $date
-                                    )
-                            )
-                            ->when(
-                                $data['until'] ?? null,
-                                fn ($query, $date) =>
-                                    $query->whereDate(
-                                        'submitted_at',
-                                        '<=',
-                                        $date
-                                    )
-                            )
+                    ->query(fn ($query, array $data) =>
+                        $query
+                            ->when($data['from'], fn ($q) => $q->whereDate('submitted_at', '>=', $data['from']))
+                            ->when($data['until'], fn ($q) => $q->whereDate('submitted_at', '<=', $data['until']))
                     ),
             ])
 
-            /*
-            |--------------------------------------------------------------------------
-            | Record Actions
-            |--------------------------------------------------------------------------
-            |
-            | Filament 5:
-            | use Filament\Actions\Action
-            |
-            | NOT:
-            | Filament\Tables\Actions\Action
-            |
-            */
             ->recordActions([
                 Action::make('view')
                     ->label('View')
                     ->icon('heroicon-o-eye')
-                    ->url(
-                        fn (Application $record): string =>
-                            ApplicationResource::getUrl(
-                                'view',
-                                ['record' => $record]
-                            )
+                    ->url(fn (Application $record): string =>
+                        ApplicationResource::getUrl('view', ['record' => $record])
                     ),
-
-                /*
-                |--------------------------------------------------------------------------
-                | Optional direct edit action
-                |--------------------------------------------------------------------------
-                |
-                | Keep this disabled for now because your architecture says
-                | applicant data should not be casually edited by officers.
-                |
-                */
             ])
 
-            /*
-            |--------------------------------------------------------------------------
-            | Bulk Actions
-            |--------------------------------------------------------------------------
-            */
             ->toolbarActions([]);
     }
 }

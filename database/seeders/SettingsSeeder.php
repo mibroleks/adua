@@ -12,7 +12,7 @@ Provides defaults for university identity, branding, portal, and admissions.
 Ensures ThemeService and SettingResource have meaningful values on first run.
 
 Status: ✅ Production Ready
-Version: 3.1 (preset + mode aware, JSON overrides, hero media support)
+Version: 3.2 (application_fee corrected to kobo)
 */
 
 namespace Database\Seeders;
@@ -55,7 +55,8 @@ class SettingsSeeder extends Seeder
             // Admissions
             ['key' => 'admissions.application_start',    'value' => '2026-09-01',                'type' => 'date',    'group' => 'admissions',  'is_public' => true,  'is_editable' => true, 'sort_order' => 1],
             ['key' => 'admissions.application_deadline', 'value' => '2026-11-30',                'type' => 'date',    'group' => 'admissions',  'is_public' => true,  'is_editable' => true, 'sort_order' => 2],
-            ['key' => 'admissions.application_fee',      'value' => '20000',                     'type' => 'integer', 'group' => 'admissions',  'is_public' => false, 'is_editable' => true, 'sort_order' => 3],
+            // ✅ Corrected: store fee in kobo (2000000 = ₦20,000)
+            ['key' => 'admissions.application_fee',      'value' => '2000000',                   'type' => 'integer', 'group' => 'admissions',  'is_public' => false, 'is_editable' => true, 'sort_order' => 3],
         ];
 
         foreach ($settings as $data) {

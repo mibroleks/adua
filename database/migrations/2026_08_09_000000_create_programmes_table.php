@@ -14,6 +14,9 @@ the correct amount for the programme they select.
 Supports enabling/disabling programmes for admissions.
 Extended with global-standard fields: requirements, career paths,
 tuition, credits, delivery mode, language, accreditation, outcomes, scholarships.
+
+Status: ✅ Production Ready
+Version: 1.2 (application_fee stored in kobo as unsignedBigInteger)
 */
 
 use Illuminate\Database\Migrations\Migration;
@@ -39,8 +42,10 @@ return new class extends Migration {
             $table->string('degree_type')->default('BSc'); // Award type
 
             // Fees
-            $table->unsignedBigInteger('application_fee')->default(0); // Application fee
-            $table->decimal('tuition', 12, 2)->nullable();             // Tuition fees
+            // Application fee stored in minor units (kobo for NGN)
+            $table->unsignedBigInteger('application_fee')->default(0);
+            // Tuition stored in naira with 2 decimal places
+            $table->decimal('tuition', 12, 2)->nullable();
 
             // Academic metadata
             $table->integer('credits')->nullable();                    // Total credits/units

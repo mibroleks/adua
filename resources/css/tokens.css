@@ -22,7 +22,6 @@
     /* ============================================================
        BRAND
     ============================================================ */
-
     --theme-primary: var(--theme-primary-value);
     --theme-primary-soft: var(--theme-primary-soft-value);
     --theme-primary-deep: var(--theme-primary-deep-value);
@@ -36,7 +35,6 @@
     /* ============================================================
        CANVAS
     ============================================================ */
-
     --theme-page: var(--theme-page-value);
     --theme-surface: var(--theme-surface-value);
     --theme-surface-muted: var(--theme-surface-muted-value);
@@ -46,17 +44,25 @@
     /* ============================================================
        CONTENT
     ============================================================ */
-
     --theme-heading: var(--theme-heading-value);
     --theme-body: var(--theme-body-value);
     --theme-muted: var(--theme-muted-value);
     --theme-inverse: var(--theme-inverse-value);
 
+    /*
+     * Semantic text alias.
+     */
+    --theme-text: var(--theme-body);
+
+    /*
+     * Navigation / inline link color.
+     */
+    --theme-link: var(--theme-link-value);
+
 
     /* ============================================================
        BORDERS
     ============================================================ */
-
     --theme-border: var(--theme-border-value);
     --theme-border-strong: var(--theme-border-strong-value);
 
@@ -64,7 +70,6 @@
     /* ============================================================
        INTERACTION
     ============================================================ */
-
     --theme-action: var(--theme-action-value);
     --theme-action-hover: var(--theme-action-hover-value);
     --theme-focus: var(--theme-focus-value);
@@ -73,7 +78,6 @@
     /* ============================================================
        SEMANTIC
     ============================================================ */
-
     --theme-success: var(--theme-success-value);
     --theme-warning: var(--theme-warning-value);
     --theme-danger: var(--theme-danger-value);
@@ -81,9 +85,18 @@
 
 
     /* ============================================================
+       SEMANTIC SOFT SURFACES
+       Used for statuses, alerts and contextual feedback.
+    ============================================================ */
+    --theme-success-soft: var(--theme-success-soft-value);
+    --theme-warning-soft: var(--theme-warning-soft-value);
+    --theme-danger-soft: var(--theme-danger-soft-value);
+    --theme-info-soft: var(--theme-info-soft-value);
+
+
+    /* ============================================================
        ATMOSPHERE
     ============================================================ */
-
     --theme-hero-start: var(--theme-hero-start-value);
     --theme-hero-end: var(--theme-hero-end-value);
 
@@ -96,7 +109,6 @@
     /* ============================================================
        GLASS
     ============================================================ */
-
     --theme-glass: var(--theme-glass-value);
     --theme-glass-dark: var(--theme-glass-dark-value);
     --theme-glass-border: var(--theme-glass-border-value);
@@ -105,7 +117,6 @@
     /* ============================================================
        FOOTER
     ============================================================ */
-
     --theme-footer-bg: var(--theme-footer-bg-value);
     --theme-footer-surface: var(--theme-footer-surface-value);
     --theme-footer-text: var(--theme-footer-text-value);
@@ -116,7 +127,6 @@
     /* ============================================================
        CARD
     ============================================================ */
-
     --theme-card-bg: var(--theme-card-bg-value);
     --theme-card-border: var(--theme-card-border-value);
     --theme-card-border-hover: var(--theme-card-border-hover-value);
@@ -124,9 +134,16 @@
 
 
     /* ============================================================
+       SHADOWS
+    ============================================================ */
+    --theme-shadow-xs: var(--theme-shadow-xs-value);
+    --theme-shadow-sm: var(--theme-shadow-sm-value);
+    --theme-shadow-md: var(--theme-shadow-md-value);
+
+
+    /* ============================================================
        BUTTON
     ============================================================ */
-
     --theme-button-primary-bg: var(--theme-button-primary-bg-value);
     --theme-button-primary-hover: var(--theme-button-primary-hover-value);
     --theme-button-primary-text: var(--theme-button-primary-text-value);
@@ -139,7 +156,6 @@
     /* ============================================================
        COUNTDOWN
     ============================================================ */
-
     --theme-countdown-start: var(--theme-countdown-start-value);
     --theme-countdown-end: var(--theme-countdown-end-value);
     --theme-countdown-text: var(--theme-countdown-text-value);
@@ -149,7 +165,6 @@
     /* ============================================================
        MODAL
     ============================================================ */
-
     --theme-modal-bg: var(--theme-modal-bg-value);
     --theme-modal-overlay: var(--theme-modal-overlay-value);
     --theme-modal-border: var(--theme-modal-border-value);
@@ -158,6 +173,34 @@
     /* ============================================================
        TYPOGRAPHY
     ============================================================ */
-
     --theme-font-family: var(--theme-font-family-value);
+
+
+    /* ============================================================
+       PORTAL COMPONENTS
+    ============================================================ */
+
+    /* Breadcrumb */
+    --theme-breadcrumb-text: var(--theme-breadcrumb-text-value);
+    --theme-breadcrumb-hover: var(--theme-breadcrumb-hover-value);
+
+    /* User menu */
+    --theme-user-menu-bg: var(--theme-user-menu-bg-value);
+    --theme-user-menu-hover: var(--theme-user-menu-hover-value);
+    --theme-user-menu-border: var(--theme-user-menu-border-value);
+
+    /* Notification badge */
+    --theme-notification-badge-bg: var(--theme-notification-badge-bg-value);
+    --theme-notification-badge-text: var(--theme-notification-badge-text-value);
+
+    /* Alerts */
+    --theme-alert-success-bg: var(--theme-alert-success-bg-value);
+    --theme-alert-warning-bg: var(--theme-alert-warning-bg-value);
+    --theme-alert-danger-bg: var(--theme-alert-danger-bg-value);
+    --theme-alert-info-bg: var(--theme-alert-info-bg-value);
+
+    /* Progress */
+    --theme-progress-active: var(--theme-progress-active-value);
+    --theme-progress-completed: var(--theme-progress-completed-value);
+    --theme-progress-pending: var(--theme-progress-pending-value);
 }

@@ -11,8 +11,8 @@
  * Ensures the authenticated student owns the application,
  * loads programme and decision relations, and returns the letter view.
  *
- * Status: ✅ Production Ready
- * Version: 1.4
+ * Status: 🚦 Integration / Hardening
+ * Version: 2.1 (validated decision + improved view context)
  */
 
 namespace App\Http\Controllers;
@@ -24,6 +24,8 @@ class AdmissionLetterController extends Controller
 {
     /**
      * Display the admission letter for an approved application.
+     *
+     * Route name: admission.letter
      */
     public function show(Request $request, Application $application)
     {
@@ -33,7 +35,7 @@ class AdmissionLetterController extends Controller
         }
 
         // Load relations: programme + decision + officer
-        $application->load(['programme', 'decision.officer']);
+        $application->load(['programme', 'decision.officer', 'user']);
 
         // Ensure a decision exists
         if (! $application->decision) {
@@ -41,12 +43,19 @@ class AdmissionLetterController extends Controller
                 ->with('error', 'Admission decision not available yet.');
         }
 
-        // Only show letter if status is APPROVED
-        if ($application->decision->status !== 'APPROVED') {
+        // Only show letter if decision is APPROVED
+        if ($application->decision->decision !== 'APPROVED') {
             return redirect()->route('dashboard')
                 ->with('error', 'Admission letter is only available for approved applications.');
         }
 
-        return view('admission_letter', compact('application'));
+        // Pass additional context to the view for a richer letter
+        return view('admission_letter', [
+            'application' => $application,
+            'programme'   => $application->programme,
+            'decision'    => $application->decision,
+            'officer'     => $application->decision->officer,
+            'applicant'   => $application->user,
+        ]);
     }
 }

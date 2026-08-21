@@ -12,7 +12,7 @@ Officers can browse applications with filters and summary columns.
 Manual creation is disabled to enforce portal-only submission.
 
 Status: ✅ Hardened & Enriched (namespace corrected, v5 compatible)
-Version: 1.9 (Filament v5.7.6 compatible)
+Version: 2.0 (fixed field names, fee accessor, decision column)
 */
 
 namespace App\Filament\Resources\ApplicationResource\Pages;
@@ -34,7 +34,7 @@ class ListApplications extends ListRecords
         return [];
     }
 
-    // Quick summary columns
+    // Summary columns
     protected function getTableColumns(): array
     {
         return [
@@ -51,41 +51,111 @@ class ListApplications extends ListRecords
                 ->label('Programme')
                 ->sortable(),
 
-            TextColumn::make('status')
-                ->label('Status')
+            // ✅ Corrected field name
+            TextColumn::make('application_status')
+                ->label('Application Status')
                 ->badge()
+                ->sortable()
+                ->formatStateUsing(fn (?string $state): string => match ($state) {
+                    'DRAFT'              => 'Draft',
+                    'SUBMITTED'          => 'Submitted',
+                    'UNDER_REVIEW'       => 'Under Review',
+                    'APPROVED'           => 'Approved',
+                    'REJECTED'           => 'Rejected',
+                    'CORRECTION_REQUIRED'=> 'Correction Required',
+                    default              => $state ?? '—',
+                })
+                ->color(fn (?string $state): string => match ($state) {
+                    'DRAFT'              => 'gray',
+                    'SUBMITTED'          => 'info',
+                    'UNDER_REVIEW'       => 'warning',
+                    'APPROVED'           => 'success',
+                    'REJECTED'           => 'danger',
+                    'CORRECTION_REQUIRED'=> 'info',
+                    default              => 'gray',
+                }),
+
+            TextColumn::make('payment_status')
+                ->label('Payment')
+                ->badge()
+                ->sortable()
+                ->formatStateUsing(fn (?string $state): string => match ($state) {
+                    'PENDING' => 'Pending',
+                    'SUCCESS' => 'Paid',
+                    'FAILED'  => 'Failed',
+                    default   => $state ?? '—',
+                })
+                ->color(fn (?string $state): string => match ($state) {
+                    'PENDING' => 'warning',
+                    'SUCCESS' => 'success',
+                    'FAILED'  => 'danger',
+                    default   => 'gray',
+                }),
+
+            // ✅ Use accessor like PaymentsTable
+            TextColumn::make('formatted_application_fee')
+                ->label('Fee')
+                ->money('NGN', true)
                 ->sortable(),
 
-            TextColumn::make('created_at')
-                ->label('Submitted At')
-                ->dateTime()
-                ->sortable(),
+            TextColumn::make('submitted_at')
+                ->label('Submitted')
+                ->dateTime('d M Y, H:i')
+                ->sortable()
+                ->placeholder('Not submitted'),
+
+            // ✅ Show latest decision
+            TextColumn::make('decision.decision')
+                ->label('Decision')
+                ->badge()
+                ->formatStateUsing(fn (?string $state): string => match ($state) {
+                    'APPROVED' => 'Approved',
+                    'REJECTED' => 'Rejected',
+                    default    => 'Pending',
+                })
+                ->color(fn (?string $state): string => match ($state) {
+                    'APPROVED' => 'success',
+                    'REJECTED' => 'danger',
+                    default    => 'gray',
+                })
+                ->placeholder('Pending'),
         ];
     }
 
-    // Filters for narrowing down applications
+    // Filters
     protected function getTableFilters(): array
     {
         return [
-            SelectFilter::make('status')
-                ->label('Status')
+            SelectFilter::make('application_status')
+                ->label('Application Status')
                 ->options([
-                    'pending'   => 'Pending',
-                    'reviewed'  => 'Reviewed',
-                    'accepted'  => 'Accepted',
-                    'rejected'  => 'Rejected',
+                    'DRAFT'              => 'Draft',
+                    'SUBMITTED'          => 'Submitted',
+                    'UNDER_REVIEW'       => 'Under Review',
+                    'APPROVED'           => 'Approved',
+                    'REJECTED'           => 'Rejected',
+                    'CORRECTION_REQUIRED'=> 'Correction Required',
                 ]),
 
-            Filter::make('created_at')
+            SelectFilter::make('payment_status')
+                ->label('Payment Status')
+                ->options([
+                    'PENDING' => 'Pending',
+                    'SUCCESS' => 'Paid',
+                    'FAILED'  => 'Failed',
+                ]),
+
+            Filter::make('submitted_at')
+                ->label('Submission Date')
                 ->form([
                     DatePicker::make('from')->label('From'),
                     DatePicker::make('until')->label('Until'),
                 ])
-                ->query(function ($query, array $data) {
-                    return $query
-                        ->when($data['from'], fn ($q) => $q->whereDate('created_at', '>=', $data['from']))
-                        ->when($data['until'], fn ($q) => $q->whereDate('created_at', '<=', $data['until']));
-                }),
+                ->query(fn ($query, array $data) =>
+                    $query
+                        ->when($data['from'], fn ($q) => $q->whereDate('submitted_at', '>=', $data['from']))
+                        ->when($data['until'], fn ($q) => $q->whereDate('submitted_at', '<=', $data['until']))
+                ),
         ];
     }
 }

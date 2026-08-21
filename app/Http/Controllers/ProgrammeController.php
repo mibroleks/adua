@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Programme;
+use App\Models\Faculty;
 use Illuminate\Http\Request;
 
 class ProgrammeController extends Controller
@@ -14,12 +15,20 @@ class ProgrammeController extends Controller
      */
     public function index()
     {
-        // Paginate programmes with faculty relationship
-        $programmes = Programme::with('faculty')
-            ->orderBy('name')
-            ->paginate(9);
+        // Grouped by faculty for catalogue
+        $faculties = Faculty::with(['programmes' => function ($query) {
+            // Qualify columns to avoid ambiguity
+            $query->where('programmes.active', true)
+                  ->orderBy('programmes.name');
+        }])->orderBy('name')->get();
 
-        return view('programmes.index', compact('programmes'));
+        // Flat list of programmes (for legacy use or other components)
+        $programmes = Programme::with('faculty')
+            ->where('programmes.active', true)
+            ->orderBy('programmes.name')
+            ->get();
+
+        return view('programmes.index', compact('faculties', 'programmes'));
     }
 
     /**
@@ -34,7 +43,9 @@ class ProgrammeController extends Controller
 
         // Fetch related programmes from the same faculty
         $relatedProgrammes = Programme::with('faculty')
-            ->where('faculty_id', $programme->faculty_id)
+            ->whereHas('department', function ($query) use ($programme) {
+                $query->where('faculty_id', $programme->department->faculty_id);
+            })
             ->where('id', '!=', $programme->id)
             ->limit(3)
             ->get();

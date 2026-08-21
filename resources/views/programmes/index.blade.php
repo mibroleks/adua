@@ -1,4 +1,4 @@
-{{--
+{{-- 
 Component: Programmes Index
 File Path: resources/views/programmes/index.blade.php
 Company: Ygrace Tech
@@ -10,11 +10,11 @@ Full institutional programme catalogue.
 Design language:
 - Shares the Admissions Landing visual system
 - Editorial typography
-- Structured programme catalogue
+- Structured programme catalogue grouped by faculty
 - Reusable programme detail modal
 - Theme-token driven
 
-Version: 2.4 (modal trigger fix, requirements string split into list)
+Version: 3.1 (fixed fee display to use formatted_application_fee)
 --}}
 
 @extends('layouts.app')
@@ -65,49 +65,49 @@ Version: 2.4 (modal trigger fix, requirements string split into list)
             </div>
         </div>
 
-        @if($programmes->count())
-            <div class="programme-grid">
-                @foreach($programmes as $programme)
-                    <x-portal-card
-                        class="programme-card"
-                        :number="str_pad($loop->iteration, 2, '0', STR_PAD_LEFT)"
-                        :eyebrow="$programme->faculty?->name"
-                        :title="$programme->name"
-                        :subtitle="$programme->code ?? null"
-                    >
-                        <p>{{ Str::limit($programme->description, 145) }}</p>
+        @if($faculties->count())
+            @foreach($faculties as $faculty)
+                <div class="faculty-section">
+                    <h3 class="faculty-heading">{{ $faculty->name }}</h3>
 
-                        <div class="programme-card__meta">
-                            <span>{{ $programme->degree_type }}</span>
-                            @if($programme->duration)
-                                <span>{{ $programme->duration }} years</span>
-                            @endif
-                        </div>
-
-                        <div class="programme-card__actions">
-                            <button
-                                type="button"
-                                class="programme-card__details"
-                                data-modal-open="programme-modal-{{ $programme->id }}"
+                    <div class="programme-grid">
+                        @foreach($faculty->programmes as $programme)
+                            <x-portal-card
+                                class="programme-card"
+                                :number="str_pad($loop->iteration, 2, '0', STR_PAD_LEFT)"
+                                :eyebrow="$faculty->name"
+                                :title="$programme->name"
+                                :subtitle="$programme->code ?? null"
                             >
-                                Explore programme <span aria-hidden="true">→</span>
-                            </button>
-                            <a
-                                href="{{ route('application.create', ['programme' => $programme->id]) }}"
-                                class="programme-card__apply"
-                            >
-                                Apply
-                            </a>
-                        </div>
-                    </x-portal-card>
-                @endforeach
-            </div>
+                                <p>{{ Str::limit($programme->description, 145) }}</p>
 
-            @if($programmes->hasPages())
-                <div class="programmes-pagination">
-                    {{ $programmes->links() }}
+                                <div class="programme-card__meta">
+                                    <span>{{ $programme->degree_type }}</span>
+                                    @if($programme->duration)
+                                        <span>{{ $programme->duration }} years</span>
+                                    @endif
+                                </div>
+
+                                <div class="programme-card__actions">
+                                    <button
+                                        type="button"
+                                        class="programme-card__details"
+                                        data-modal-open="programme-modal-{{ $programme->id }}"
+                                    >
+                                        Explore programme <span aria-hidden="true">→</span>
+                                    </button>
+                                    <a
+                                        href="{{ route('application.create', ['programme' => $programme->id]) }}"
+                                        class="programme-card__apply"
+                                    >
+                                        Apply
+                                    </a>
+                                </div>
+                            </x-portal-card>
+                        @endforeach
+                    </div>
                 </div>
-            @endif
+            @endforeach
         @else
             <div class="programme-empty">
                 <span class="section-eyebrow">PROGRAMMES</span>
@@ -125,84 +125,85 @@ Version: 2.4 (modal trigger fix, requirements string split into list)
 {{-- ============================================================
      PROGRAMME MODALS
 ============================================================ --}}
-@foreach($programmes as $programme)
-    <x-portal-modal
-        id="programme-modal-{{ $programme->id }}"
-        :eyebrow="$programme->faculty?->name ?? 'Programme'"
-        :title="$programme->name"
-        size="medium"
-    >
-        <div class="programme-modal-content">
+@foreach($faculties as $faculty)
+    @foreach($faculty->programmes as $programme)
+        <x-portal-modal
+            id="programme-modal-{{ $programme->id }}"
+            :eyebrow="$faculty->name ?? 'Programme'"
+            :title="$programme->name"
+            size="medium"
+        >
+            <div class="programme-modal-content">
 
-            {{-- Meta --}}
-            <div class="programme-modal-meta">
-                @if($programme->code)
-                    <div><span>PROGRAMME CODE</span><strong>{{ $programme->code }}</strong></div>
-                @endif
-                @if($programme->degree_type)
-                    <div><span>DEGREE TYPE</span><strong>{{ $programme->degree_type }}</strong></div>
-                @endif
-                @if($programme->duration)
-                    <div><span>DURATION</span><strong>{{ $programme->duration }} years</strong></div>
-                @endif
-                @if($programme->department)
-                    <div><span>DEPARTMENT</span><strong>{{ $programme->department->name }}</strong></div>
-                @endif
-            </div>
-
-            {{-- Description --}}
-            <div class="programme-modal-description">
-                <h3>About this programme</h3>
-                <div>{!! nl2br(e($programme->description)) !!}</div>
-            </div>
-
-            {{-- Admissions --}}
-            <div class="programme-modal-admissions">
-                <h3>Admissions</h3>
-                <div class="programme-modal-admissions__fee">
-                    <span>APPLICATION FEE</span>
-                    <strong>₦{{ number_format($programme->application_fee) }}</strong>
+                {{-- Meta --}}
+                <div class="programme-modal-meta">
+                    @if($programme->code)
+                        <div><span>PROGRAMME CODE</span><strong>{{ $programme->code }}</strong></div>
+                    @endif
+                    @if($programme->degree_type)
+                        <div><span>DEGREE TYPE</span><strong>{{ $programme->degree_type }}</strong></div>
+                    @endif
+                    @if($programme->duration)
+                        <div><span>DURATION</span><strong>{{ $programme->duration }} years</strong></div>
+                    @endif
+                    @if($programme->department)
+                        <div><span>DEPARTMENT</span><strong>{{ $programme->department->name }}</strong></div>
+                    @endif
                 </div>
 
-                @if(!empty($programme->requirements))
-                    <div class="programme-modal-requirements">
-                        <h4>Admission requirements</h4>
+                {{-- Description --}}
+                <div class="programme-modal-description">
+                    <h3>About this programme</h3>
+                    <div>{!! nl2br(e($programme->description)) !!}</div>
+                </div>
 
-                        {{-- Robust handling: string split into list or array --}}
-                        @if(is_array($programme->requirements))
-                            <ul>
-                                @foreach($programme->requirements as $requirement)
-                                    <li><span aria-hidden="true">✓</span>{{ $requirement }}</li>
-                                @endforeach
-                            </ul>
-                        @else
-                            <ul>
-                                @foreach(explode(',', $programme->requirements) as $requirement)
-                                    <li><span aria-hidden="true">✓</span>{{ trim($requirement) }}</li>
-                                @endforeach
-                            </ul>
-                        @endif
+                {{-- Admissions --}}
+                <div class="programme-modal-admissions">
+                    <h3>Admissions</h3>
+                    <div class="programme-modal-admissions__fee">
+                        <span>APPLICATION FEE</span>
+                        <strong>{{ $programme->formatted_application_fee }}</strong>
                     </div>
-                @endif
-            </div>
-        </div>
 
-        <x-slot:footer>
-            <x-portal-button
-                href="{{ route('application.create', ['programme' => $programme->id]) }}"
-                variant="primary"
-            >
-                Apply for this programme
-            </x-portal-button>
-            <button
-                type="button"
-                class="portal-modal__close"
-                data-modal-close="programme-modal-{{ $programme->id }}"
-            >
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </x-slot:footer>
-    </x-portal-modal>
+                    @if(!empty($programme->requirements))
+                        <div class="programme-modal-requirements">
+                            <h4>Admission requirements</h4>
+
+                            @if(is_array($programme->requirements))
+                                <ul>
+                                    @foreach($programme->requirements as $requirement)
+                                        <li><span aria-hidden="true">✓</span>{{ $requirement }}</li>
+                                    @endforeach
+                                </ul>
+                            @else
+                                <ul>
+                                    @foreach(explode(',', $programme->requirements) as $requirement)
+                                        <li><span aria-hidden="true">✓</span>{{ trim($requirement) }}</li>
+                                    @endforeach
+                                </ul>
+                            @endif
+                        </div>
+                    @endif
+                </div>
+            </div>
+
+            <x-slot:footer>
+                <x-portal-button
+                    href="{{ route('application.create', ['programme' => $programme->id]) }}"
+                    variant="primary"
+                >
+                    Apply for this programme
+                </x-portal-button>
+                <button
+                    type="button"
+                    class="portal-modal__close"
+                    data-modal-close="programme-modal-{{ $programme->id }}"
+                >
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </x-slot:footer>
+        </x-portal-modal>
+    @endforeach
 @endforeach
 
 

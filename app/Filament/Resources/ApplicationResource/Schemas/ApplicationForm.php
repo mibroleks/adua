@@ -12,7 +12,7 @@ Primarily used for officer review or restricted edits.
 Applicants create applications via the public portal.
 
 Status: ✅ Production Ready (namespace corrected)
-Version: 1.7 (Filament v3 compatible)
+Version: 1.8 (Removed direct lifecycle editing)
 */
 
 namespace App\Filament\Resources\ApplicationResource\Schemas;
@@ -44,15 +44,8 @@ class ApplicationForm
                             ->searchable()
                             ->disabled(), // programme chosen by applicant
 
-                        Select::make('status')
-                            ->label('Status')
-                            ->options([
-                                'pending'   => 'Pending',
-                                'reviewed'  => 'Reviewed',
-                                'accepted'  => 'Accepted',
-                                'rejected'  => 'Rejected',
-                            ])
-                            ->required(),
+                        // Removed direct lifecycle status editing
+                        // Officers should not casually change application_status here.
                     ]),
             ]);
     }

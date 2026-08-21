@@ -1,20 +1,5 @@
 <?php
 
-/**
- * Component: Payment Model
- * File Path: app/Models/Payment.php
- * Company: Ygrace Tech
- * Author: Ibrahim Olalekan
- *
- * Purpose:
- * Represents a payment record linked to a student application.
- * Stores transaction reference, amount, currency, gateway, metadata, and status.
- * Provides helpers for success checks and amount formatting.
- *
- * Status: ✅ Production Ready
- * Version: 1.6 (Added helper methods and type enforcement)
- */
-
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
@@ -22,35 +7,26 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Payment extends Model
 {
-    /**
-     * Mass assignable attributes.
-     */
     protected $fillable = [
         'application_id',
         'reference',
-        'transaction_reference', // internal transaction reference
-        'payment_type',          // APPLICATION_FEE, ACCEPTANCE_FEE, etc.
-        'amount',
+        'transaction_reference',
+        'payment_type',
+        'amount',              // University/application fee in kobo
         'currency',
         'status',
         'gateway',
-        'metadata',
+        'metadata',            // Gateway metadata (requested_amount, amount, fees, etc.)
         'paid_at',
-        'verified_at',           // server-side verification timestamp
+        'verified_at',
     ];
 
-    /**
-     * Attribute casting.
-     */
     protected $casts = [
         'metadata'    => 'array',
         'paid_at'     => 'datetime',
         'verified_at' => 'datetime',
     ];
 
-    /**
-     * Relationship: Payment belongs to an Application.
-     */
     public function application(): BelongsTo
     {
         return $this->belongsTo(Application::class);
@@ -78,12 +54,53 @@ class Payment extends Model
 
     /*
     |--------------------------------------------------------------------------
-    | Display Helpers
+    | Display Helpers (Accessors + Proxy Method)
     |--------------------------------------------------------------------------
     */
+    // Proper accessor for Eloquent/Filament
+    public function getAmountInNairaAttribute(): float
+    {
+        return $this->amount ? $this->amount / 100 : 0.0;
+    }
+
+    public function getFormattedAmountAttribute(): string
+    {
+        return $this->amount === null
+            ? '—'
+            : '₦' . number_format($this->amount / 100, 2);
+    }
+
+    // Proxy method for backward compatibility
     public function amountInNaira(): float
     {
-        return $this->amount / 100;
+        return $this->getAmountInNairaAttribute();
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Gateway Metadata Helpers
+    |--------------------------------------------------------------------------
+    */
+    // Application/merchant amount (what the university charges)
+    public function getApplicationAmountAttribute(): ?int
+    {
+        return $this->amount;
+    }
+
+    // Gateway fee (if passed to customer)
+    public function getGatewayFeeAttribute(): float
+    {
+        return isset($this->metadata['fees'])
+            ? $this->metadata['fees'] / 100
+            : 0.0;
+    }
+
+    // Customer total paid (application fee + gateway fee)
+    public function getCustomerPaidAmountAttribute(): float
+    {
+        return isset($this->metadata['amount'])
+            ? $this->metadata['amount'] / 100
+            : $this->getAmountInNairaAttribute();
     }
 
     /*

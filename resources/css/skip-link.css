@@ -1,0 +1,18 @@
+/* Accessibility skip link (applies to both public and portal shells) */
+.skip-link {
+    position: absolute;
+    top: -40px; /* hide off-screen */
+    left: 0;
+    background: var(--theme-primary, #73152A);
+    color: #fff;
+    padding: 0.5rem 1rem;
+    z-index: 1000;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: top 0.2s ease-in-out;
+}
+
+/* Show skip link only when focused (keyboard users) */
+.skip-link:focus {
+    top: 0;
+}

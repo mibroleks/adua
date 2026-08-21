@@ -19,17 +19,17 @@ Version: 1.0 (semantic theme tokens integration)
 ])
 
 @php
-    $classes = match($type) {
-        'success' => 'bg-[var(--theme-success)] text-white',
-        'warning' => 'bg-[var(--theme-warning)] text-white',
-        'danger'  => 'bg-[var(--theme-danger)] text-white',
-        'info'    => 'bg-[var(--theme-info)] text-white',
-        default   => 'bg-[var(--theme-muted)] text-[var(--theme-inverse)]',
-    };
+    $type = in_array($type, [
+        'default',
+        'success',
+        'warning',
+        'danger',
+        'info'
+    ]) ? $type : 'default';
 @endphp
 
 <span {{ $attributes->merge([
-    'class' => "inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold {$classes}"
+    'class' => "portal-badge portal-badge--{$type}"
 ]) }}>
     {{ $label ?? $slot }}
 </span>

@@ -12,7 +12,7 @@ Allows officers to upload files, view metadata, verify/reject documents, and add
 Includes validation rules so errors appear under the upload field.
 
 Status: ✅ Production Ready
-Version: 1.4
+Version: 1.5 (fixed relationship reference)
 */
 
 namespace App\Filament\Resources\ApplicationDocumentResource\Schemas;
@@ -35,9 +35,9 @@ class ApplicationDocumentForm
                 ->label('Application')
                 ->required(),
 
-            // Link to Document Type
+            // Link to Document Type (fixed relationship name)
             Select::make('document_type_id')
-                ->relationship('type', 'name')
+                ->relationship('documentType', 'name')
                 ->label('Document Type')
                 ->required(),
 

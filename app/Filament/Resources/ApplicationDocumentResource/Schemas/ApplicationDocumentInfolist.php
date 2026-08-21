@@ -10,16 +10,17 @@ Purpose:
 Defines the infolist schema for viewing application documents in Filament.
 Provides read-only display of applicant, programme, file metadata, status, officer, remarks,
 and a direct download link to the uploaded file.
+Now also displays document history for audit trail.
 
 Status: ✅ Production Ready
-Version: 1.3
+Version: 1.5 (Filament v5 compatible, fixed relationship + added history section)
 */
 
 namespace App\Filament\Resources\ApplicationDocumentResource\Schemas;
 
 use Filament\Schemas\Schema;
 use Filament\Infolists\Components\TextEntry;
-use Filament\Infolists\Components\DateTimeEntry;
+use Filament\Infolists\Components\RepeatableEntry;
 use Illuminate\Support\Facades\Storage;
 
 class ApplicationDocumentInfolist
@@ -36,7 +37,8 @@ class ApplicationDocumentInfolist
             TextEntry::make('application.programme.name')
                 ->label('Programme'),
 
-            TextEntry::make('type.name')
+            // ✅ Fixed relationship naming
+            TextEntry::make('documentType.name')
                 ->label('Document Type'),
 
             TextEntry::make('original_name')
@@ -56,18 +58,23 @@ class ApplicationDocumentInfolist
                     'danger'    => 'REJECTED',
                 ]),
 
+            // ✅ Officer label clarified
             TextEntry::make('officer.name')
-                ->label('Verified By'),
+                ->label('Reviewed By'),
 
-            DateTimeEntry::make('uploaded_at')
-                ->label('Uploaded At'),
+            TextEntry::make('uploaded_at')
+                ->label('Uploaded At')
+                ->dateTime('d M Y, H:i'),
 
-            DateTimeEntry::make('verified_at')
-                ->label('Verified At'),
+            TextEntry::make('verified_at')
+                ->label('Reviewed At')
+                ->dateTime('d M Y, H:i'),
 
+            // ✅ Show rejection reason only when REJECTED
             TextEntry::make('rejection_reason')
                 ->label('Rejection Reason')
-                ->visible(fn ($record) => $record->status === 'REJECTED'),
+                ->visible(fn ($record) => $record->status === 'REJECTED')
+                ->columnSpanFull(),
 
             // Direct download link
             TextEntry::make('path')
@@ -78,6 +85,33 @@ class ApplicationDocumentInfolist
                 )
                 ->openUrlInNewTab()
                 ->visible(fn ($record) => !empty($record->path)),
+
+            // ✅ Document history audit trail
+            RepeatableEntry::make('histories')
+                ->label('Document History')
+                ->schema([
+                    TextEntry::make('action')
+                        ->label('Action')
+                        ->badge(),
+
+                    TextEntry::make('old_status')
+                        ->label('Previous Status'),
+
+                    TextEntry::make('new_status')
+                        ->label('New Status'),
+
+                    TextEntry::make('officer.name')
+                        ->label('Performed By'),
+
+                    TextEntry::make('remarks')
+                        ->label('Remarks')
+                        ->columnSpanFull(),
+
+                    TextEntry::make('performed_at')
+                        ->label('Date')
+                        ->dateTime('d M Y, H:i'),
+                ])
+                ->columnSpanFull(),
         ]);
     }
 }

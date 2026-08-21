@@ -24,11 +24,48 @@
 @import "./components/portal-card.css";
 @import "./components/portal-button.css";
 @import "./components/portal-modal.css";
+
+/* Authenticated portal */
+@import "./components/portal-topbar.css";
+@import "./components/portal-sidebar.css";
+@import "./components/portal-shell.css";
+
+/* Portal components */
+@import "./components/alert.css";
+@import "./components/application-progress.css";
+@import "./components/application-timeline.css";
+@import "./components/empty-state.css";
+@import "./components/form-field.css";
+@import "./components/portal-badge.css";
+@import "./components/portal-brand.css";
+@import "./components/portal-breadcrumbs.css";
+@import "./components/portal-logo.css";
+@import "./components/portal-mobile-navigation.css";
+
+
+@import "./components/portal-student-footer.css";
+
 @import "./pages/admissions-landing.css";
 @import "./pages/page-foundation.css";
 @import "./pages/programmes.css";
 @import "./auth.css"; 
+@import "./skip-link.css"; 
+@import "./print.css"; 
 @import "./pages/admissions.css";
+
+
+
+
+/* ==========================================================================
+   APPLICATION PAGES
+========================================================================== */
+
+@import "./pages/applications/decision.css";
+@import "./pages/applications/documents.css";
+@import "./pages/applications/my-application.css";
+@import "./pages/applications/payment.css";
+@import "./pages/applications/progress.css";
+@import "./pages/applications/applicant-pages.css";
 
 /* ============================================================
    GLOBAL FOUNDATION

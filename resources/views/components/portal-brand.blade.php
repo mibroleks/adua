@@ -17,22 +17,26 @@ Version: 2.0 (semantic theme tokens integration)
     $theme = app(\App\Services\ThemeService::class);
 @endphp
 
-<div {{ $attributes->merge(['class' => 'flex items-center gap-3']) }}>
+<div {{ $attributes->merge(['class' => 'portal-brand']) }}>
+
     @if($theme->logoUrl())
         <img
             src="{{ $theme->logoUrl() }}"
             alt="{{ $theme->institutionName() }}"
-            class="h-12 w-auto"
+            class="portal-brand__logo"
         >
     @endif
 
-    <div>
-        <div class="font-bold tracking-tight theme-heading">
-            {{ $theme->institutionName() ?? setting('institution.name') ?? 'University Name' }}
+    <div class="portal-brand__identity">
+
+        <div class="portal-brand__institution">
+            {{ $theme->institutionName() ?? 'University Name' }}
         </div>
 
-        <div class="text-[10px] font-semibold uppercase tracking-[0.18em] theme-muted">
+        <div class="portal-brand__label">
             Admissions
         </div>
+
     </div>
+
 </div>

@@ -13,7 +13,7 @@ so officers can only view structured details (not edit).
 Includes reference, type, amount, gateway, status, timestamps, and metadata.
 
 Status: ✅ Production Ready
-Version: 1.5 (Filament v3 compatible)
+Version: 1.7 (ensured amount display uses accessor consistently)
 */
 
 namespace App\Filament\Resources\PaymentResource\Schemas;
@@ -43,7 +43,8 @@ class PaymentInfolist
             TextEntry::make('payment_type')
                 ->label('Payment Type'),
 
-            TextEntry::make('amount')
+            // ✅ Use accessor to display amount in naira
+            TextEntry::make('amountInNaira')
                 ->money('NGN', true)
                 ->label('Amount'),
 

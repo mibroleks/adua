@@ -11,9 +11,11 @@ Represents a document uploaded by a student for their application.
 Includes metadata for officer review (verified/rejected).
 Links each file to its parent application and its document type.
 Automatically captures file metadata and enforces type/size validation.
+Provides helper methods for status labels and CSS classes.
+Now also links to ApplicationDocumentHistory for audit trail.
 
-Status: ✅ Production Ready
-Version: 1.6 (fixed filename + size validation)
+Status: 🚦 Integration / Hardening
+Version: 1.8 (added histories relationship)
 */
 
 namespace App\Models;
@@ -21,6 +23,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
 
@@ -70,6 +73,36 @@ class ApplicationDocument extends Model
     public function officer(): BelongsTo
     {
         return $this->belongsTo(User::class, 'verified_by');
+    }
+
+    /**
+     * Relationship: Document histories (audit trail).
+     */
+    public function histories(): HasMany
+    {
+        return $this->hasMany(ApplicationDocumentHistory::class, 'application_document_id')
+            ->latest('performed_at');
+    }
+
+    /**
+     * Helper: Human-friendly status label.
+     */
+    public function statusLabel(): string
+    {
+        return match (strtoupper((string) $this->status)) {
+            'VERIFIED' => 'Verified',
+            'REJECTED' => 'Rejected',
+            'PENDING'  => 'Pending Review',
+            default    => ucfirst(strtolower($this->status ?? 'Unknown')),
+        };
+    }
+
+    /**
+     * Helper: CSS class for status badge.
+     */
+    public function statusCssClass(): string
+    {
+        return 'admission-status--' . strtolower((string) $this->status ?? 'unknown');
     }
 
     /**

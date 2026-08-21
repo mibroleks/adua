@@ -12,7 +12,7 @@
  * Links to the application and officer user record.
  *
  * Status: ✅ Production Ready
- * Version: 1.5
+ * Version: 1.6 (normalized field name to `decision`)
  */
 
 namespace App\Models;

@@ -10,6 +10,9 @@ Purpose:
 Represents academic programmes available for admission.
 Each programme belongs to a department (and indirectly a faculty).
 Managed by officers via Filament.
+
+Status: ✅ Production Ready
+Version: 1.3 (application_fee stored in kobo as integer)
 */
 
 namespace App\Models;
@@ -34,8 +37,8 @@ class Programme extends Model
         'description',
         'duration',
         'degree_type',
-        'application_fee',
-        'tuition',
+        'application_fee',   // stored in kobo
+        'tuition',           // stored in naira
         'credits',
         'delivery_mode',
         'language',
@@ -52,10 +55,10 @@ class Programme extends Model
      * Attribute casting.
      */
     protected $casts = [
-        'application_fee'    => 'decimal:2',   // stored in naira
-        'tuition'            => 'decimal:2',   // stored in naira
-        'active'             => 'boolean',
-        'application_enabled'=> 'boolean',
+        'application_fee'     => 'integer',     // stored in kobo
+        'tuition'             => 'decimal:2',  // stored in naira
+        'active'              => 'boolean',
+        'application_enabled' => 'boolean',
         // If migrations use JSON columns, cast to array:
         // 'requirements' => 'array',
         // 'career_paths' => 'array',
@@ -92,5 +95,20 @@ class Programme extends Model
             'department_id', // Local key on programmes table
             'faculty_id'     // Local key on departments table
         );
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Display Helpers
+    |--------------------------------------------------------------------------
+    */
+    public function getApplicationFeeInNairaAttribute(): float
+    {
+        return $this->application_fee / 100;
+    }
+
+    public function getFormattedApplicationFeeAttribute(): string
+    {
+        return '₦' . number_format($this->application_fee / 100, 2);
     }
 }

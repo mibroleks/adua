@@ -10,6 +10,9 @@ Purpose:
 Seeds the database with the university's academic structure:
 Faculties → Departments → Programmes.
 Uses updateOrCreate to avoid duplicate key errors.
+
+Status: ✅ Production Ready
+Version: 3.2 (fees corrected to kobo values)
 */
 
 namespace Database\Seeders;
@@ -58,7 +61,7 @@ class UniversityStructureSeeder extends Seeder
                 'name'               => 'B.Sc. Microbiology',
                 'degree_type'        => 'BSc',
                 'duration'           => 4,
-                'application_fee'    => 20000,
+                'application_fee'    => 2000000, // ₦20,000.00
                 'description'        => 'Study of microorganisms and their impact on health, environment, and industry.',
                 'requirements'       => '5 O’Level credits including Biology, Chemistry, Physics, Mathematics, and English.',
                 'career_paths'       => 'Microbiologist, Laboratory Scientist, Researcher, Public Health Officer.',
@@ -76,7 +79,7 @@ class UniversityStructureSeeder extends Seeder
                 'name'               => 'B.Sc. Computer Science',
                 'degree_type'        => 'BSc',
                 'duration'           => 4,
-                'application_fee'    => 20000,
+                'application_fee'    => 2000000, // ₦20,000.00
                 'description'        => 'Focus on computing, algorithms, and software development.',
                 'requirements'       => '5 O’Level credits including Mathematics, English, Physics, and any science subject.',
                 'career_paths'       => 'Software Engineer, Data Analyst, Systems Developer.',
@@ -94,7 +97,7 @@ class UniversityStructureSeeder extends Seeder
                 'name'               => 'B.Sc. Cyber Security',
                 'degree_type'        => 'BSc',
                 'duration'           => 4,
-                'application_fee'    => 25000,
+                'application_fee'    => 2500000, // ₦25,000.00
                 'description'        => 'Specialisation in securing digital systems and networks.',
                 'requirements'       => '5 O’Level credits including Mathematics, English, Physics, and Computer Studies.',
                 'career_paths'       => 'Cybersecurity Analyst, Ethical Hacker, Security Consultant.',
@@ -112,7 +115,7 @@ class UniversityStructureSeeder extends Seeder
                 'name'               => 'B.Sc. Information Technology',
                 'degree_type'        => 'BSc',
                 'duration'           => 4,
-                'application_fee'    => 22000,
+                'application_fee'    => 2200000, // ₦22,000.00
                 'description'        => 'Covers IT systems, networking, and enterprise solutions.',
                 'requirements'       => '5 O’Level credits including Mathematics, English, Physics, and Computer Studies.',
                 'career_paths'       => 'IT Manager, Systems Analyst, Network Engineer.',
@@ -167,7 +170,7 @@ class UniversityStructureSeeder extends Seeder
                 'name'               => 'BNSc. Nursing Science',
                 'degree_type'        => 'BNSc',
                 'duration'           => 5,
-                'application_fee'    => 30000,
+                'application_fee'    => 3000000, // ₦30,000.00
                 'description'        => 'Training in nursing practice and patient care.',
                 'requirements'       => '5 O’Level credits including Biology, Chemistry, Physics, Mathematics, and English.',
                 'career_paths'       => 'Registered Nurse, Midwife, Clinical Practitioner.',
@@ -185,7 +188,7 @@ class UniversityStructureSeeder extends Seeder
                 'name'               => 'B.Sc. Public Health',
                 'degree_type'        => 'BSc',
                 'duration'           => 4,
-                'application_fee'    => 25000,
+                'application_fee'    => 2500000, // ₦25,000.00
                 'description'        => 'Focus on community health, epidemiology, and preventive medicine.',
                 'requirements'       => '5 O’Level credits including Biology, Chemistry, Mathematics, and English.',
                 'career_paths'       => 'Public Health Officer, Epidemiologist, Health Educator.',
@@ -203,7 +206,7 @@ class UniversityStructureSeeder extends Seeder
                 'name'               => 'B.HIM Health Information Management',
                 'degree_type'        => 'B.HIM',
                 'duration'           => 4,
-                'application_fee'    => 28000,
+                'application_fee'    => 2800000, // ₦28,000.00
                 'description'        => 'Management of health records and information systems.',
                 'requirements'       => '5 O’Level credits including Biology, Mathematics, English, and Computer Studies.',
                 'career_paths'       => 'Health Information Manager, Medical Records Officer.',
@@ -242,7 +245,6 @@ class UniversityStructureSeeder extends Seeder
             ]
         );
 
-
         $econ = Department::updateOrCreate(
             ['code' => 'ECN'],
             [
@@ -259,7 +261,7 @@ class UniversityStructureSeeder extends Seeder
                 'name'               => 'B.Sc. Accounting',
                 'degree_type'        => 'BSc',
                 'duration'           => 4,
-                'application_fee'    => 20000,
+                'application_fee'    => 2000000, // ₦20,000.00
                 'description'        => 'Study of financial reporting, auditing, and taxation.',
                 'requirements'       => '5 O’Level credits including Mathematics, English, Economics, and Accounting.',
                 'career_paths'       => 'Accountant, Auditor, Tax Consultant, Financial Analyst.',
@@ -277,7 +279,7 @@ class UniversityStructureSeeder extends Seeder
                 'name'               => 'B.Sc. Finance',
                 'degree_type'        => 'BSc',
                 'duration'           => 4,
-                'application_fee'    => 22000,
+                'application_fee'    => 2200000, // ₦22,000.00
                 'description'        => 'Focus on investment, banking, and financial management.',
                 'requirements'       => '5 O’Level credits including Mathematics, English, and Economics.',
                 'career_paths'       => 'Financial Analyst, Investment Banker, Risk Manager.',
@@ -295,7 +297,7 @@ class UniversityStructureSeeder extends Seeder
                 'name'               => 'B.Sc. Business Administration',
                 'degree_type'        => 'BSc',
                 'duration'           => 4,
-                'application_fee'    => 20000,
+                'application_fee'    => 2000000, // ₦20,000.00
                 'description'        => 'Covers management, entrepreneurship, and organisational behaviour.',
                 'requirements'       => '5 O’Level credits including Mathematics, English, and Economics.',
                 'career_paths'       => 'Business Manager, Entrepreneur, Consultant.',
@@ -313,7 +315,7 @@ class UniversityStructureSeeder extends Seeder
                 'name'               => 'B.Sc. Procurement Management',
                 'degree_type'        => 'BSc',
                 'duration'           => 4,
-                'application_fee'    => 21000,
+                'application_fee'    => 2100000, // ₦21,000.00
                 'description'        => 'Specialisation in supply chain and procurement processes.',
                 'requirements'       => '5 O’Level credits including Mathematics, English, and Economics.',
                 'career_paths'       => 'Procurement Officer, Supply Chain Manager.',
@@ -331,7 +333,7 @@ class UniversityStructureSeeder extends Seeder
                 'name'               => 'B.Sc. Developmental Studies',
                 'degree_type'        => 'BSc',
                 'duration'           => 4,
-                'application_fee'    => 20000,
+                'application_fee'    => 2000000, // ₦20,000.00
                 'description'        => 'Focus on socio-economic development and policy analysis.',
                 'requirements'       => '5 O’Level credits including Mathematics, English, and Economics.',
                 'career_paths'       => 'Development Analyst, Policy Advisor, NGO Specialist.',
@@ -349,7 +351,7 @@ class UniversityStructureSeeder extends Seeder
                 'name'               => 'B.Sc. Economics',
                 'degree_type'        => 'BSc',
                 'duration'           => 4,
-                'application_fee'    => 20000,
+                'application_fee'    => 2000000, // ₦20,000.00
                 'description'        => 'Study of economic theory, policy, and quantitative methods.',
                 'requirements'       => '5 O’Level credits including Mathematics, English, and Economics.',
                 'career_paths'       => 'Economist, Policy Analyst, Financial Consultant.',

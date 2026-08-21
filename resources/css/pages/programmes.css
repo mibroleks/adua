@@ -603,3 +603,25 @@
     }
 
 }
+
+/* ============================================================
+   FACULTY SECTION
+============================================================ */
+
+.faculty-section {
+    margin-top: 4rem;
+    margin-bottom: 4rem;
+    padding-top: 2rem;
+
+    border-top: 2px solid var(--theme-border);
+}
+
+.faculty-heading {
+    margin-bottom: 2rem;
+
+    color: var(--theme-heading);
+
+    font-size: 1.8rem;
+    font-weight: 800;
+    letter-spacing: -.02em;
+}

@@ -1,24 +1,9 @@
 <?php
 
-/**
- * Component: Payment Controller
- * File Path: app/Http/Controllers/PaymentController.php
- * Company: Ygrace Tech
- * Author: Ibrahim Olalekan
- *
- * Purpose:
- * Handles payment lifecycle for applications:
- * - initialize: start Paystack payment
- * - callback: handle user redirect after payment
- * - webhook: handle server-to-server verification
- *
- * Status: ✅ Production Ready
- * Version: 2.2 (Canonical response handling + webhook route)
- */
-
 namespace App\Http\Controllers;
 
 use App\Models\Application;
+use App\Models\Payment;
 use App\Services\PaymentService;
 use App\Services\PortalConfigService;
 use Illuminate\Http\Request;
@@ -37,7 +22,24 @@ class PaymentController extends Controller
     }
 
     /**
+     * Show the applicant’s payment details.
+     *
+     * Route name: applications.payment
+     * URL: /applications/payment
+     */
+    public function show(Request $request)
+    {
+        $application = Application::with('payment')
+            ->where('user_id', $request->user()->id)
+            ->first();
+
+        return view('applications.payment', compact('application'));
+    }
+
+    /**
      * Initialize payment for an application.
+     *
+     * Route name: payment.initialize
      */
     public function initialize(Application $application)
     {
@@ -77,7 +79,6 @@ class PaymentController extends Controller
 
         $result = $this->payments->initialize($application);
 
-        // Handle failure
         if (! ($result['success'] ?? false)) {
             Log::error("Payment initialization failed for application {$application->id}", [
                 'message' => $result['message'] ?? null,
@@ -90,19 +91,19 @@ class PaymentController extends Controller
                 ]);
         }
 
-        // Already paid
         if (($result['already_paid'] ?? false) === true) {
             return redirect()
                 ->route('application.status', $application)
                 ->with('status', 'This application has already been paid for.');
         }
 
-        // Redirect to Paystack checkout
         return redirect()->away($result['authorization_url']);
     }
 
     /**
      * Handle Paystack callback after payment attempt.
+     *
+     * Route name: payment.callback
      */
     public function callback(Request $request)
     {
@@ -120,18 +121,21 @@ class PaymentController extends Controller
                 ->withErrors(['payment' => 'Payment verification failed']);
         }
 
-        if ($payment->status === Application::PAYMENT_SUCCESS && ! $payment->verified_at) {
+        // ✅ Use requested_amount for validation; status SUCCESS means payment succeeded
+        if ($payment->status === Payment::STATUS_SUCCESS && ! $payment->verified_at) {
             $payment->update(['verified_at' => now()]);
         }
 
         return redirect()->route('application.status', $payment->application)
-            ->with('status', $payment->status === Application::PAYMENT_SUCCESS
-                ? 'Payment successful! Your application has been submitted.'
+            ->with('status', $payment->status === Payment::STATUS_SUCCESS
+                ? 'Payment successful! Your application is now eligible for submission.'
                 : 'Payment failed. Please try again.');
     }
 
     /**
      * Handle Paystack webhook (server-to-server).
+     *
+     * Route name: payment.webhook
      */
     public function webhook(Request $request)
     {
@@ -146,11 +150,17 @@ class PaymentController extends Controller
         $reference = $request->input('data.reference');
         $payment   = $this->payments->verify($reference);
 
-        if ($payment && $payment->status === Application::PAYMENT_SUCCESS) {
+        // ✅ Verification now tolerant of gateway fees
+        if ($payment && $payment->status === Payment::STATUS_SUCCESS) {
             if (! $payment->verified_at) {
                 $payment->update(['verified_at' => now()]);
             }
-            Log::info("Webhook verified payment for application {$payment->application_id}");
+            Log::info("Webhook verified payment for application {$payment->application_id}", [
+                'expected_amount' => $payment->amount,
+                'requested_amount' => $payment->metadata['requested_amount'] ?? null,
+                'customer_paid'   => $payment->metadata['amount'] ?? null,
+                'gateway_fee'     => $payment->metadata['fees'] ?? null,
+            ]);
             return response()->json(['status' => 'ok']);
         }
 

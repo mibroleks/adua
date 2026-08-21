@@ -1,0 +1,141 @@
+/*
+|--------------------------------------------------------------------------
+| PORTAL SIDEBAR
+|--------------------------------------------------------------------------
+| File:
+| resources/css/components/portal-sidebar.css
+|
+| Purpose:
+| Authenticated applicant navigation.
+|
+| Status: ✅ Production Ready
+| Version: 2.1 (adjusted for sticky footer)
+|--------------------------------------------------------------------------
+*/
+
+.portal-sidebar {
+    position: sticky;
+    top: 4.5rem;
+
+    align-self: flex-start;
+
+    width: 16rem;
+    min-width: 16rem;
+
+    /* Adjusted height to account for sticky footer */
+    height: calc(100vh - 4.5rem - 4rem);
+
+    overflow-y: auto;
+
+    background: var(--theme-surface);
+
+    border-right: 1px solid var(--theme-border);
+
+    scrollbar-width: thin;
+
+    /* Extra padding so last menu items are not hidden */
+    padding-bottom: 4rem;
+}
+
+.portal-sidebar__nav {
+    padding: 1rem 0.75rem;
+}
+
+.portal-sidebar__list {
+    display: flex;
+    flex-direction: column;
+
+    gap: 0.2rem;
+
+    margin: 0;
+    padding: 0;
+
+    list-style: none;
+}
+
+.portal-sidebar__link {
+    position: relative;
+
+    display: flex;
+    align-items: center;
+
+    min-height: 2.75rem;
+
+    padding-inline: 0.85rem;
+
+    border-radius: 0.7rem;
+
+    color: var(--theme-body);
+
+    font-size: 0.78rem;
+    font-weight: 650;
+
+    text-decoration: none;
+
+    transition:
+        background var(--portal-transition),
+        color var(--portal-transition),
+        transform var(--portal-transition);
+}
+
+.portal-sidebar__link:hover {
+    background: var(--theme-primary-soft);
+    color: var(--theme-heading);
+}
+
+.portal-sidebar__link:active {
+    transform: translateX(1px);
+}
+
+.portal-sidebar__link--active {
+    background: var(--theme-primary-soft);
+    color: var(--theme-primary);
+
+    font-weight: 750;
+}
+
+.portal-sidebar__link--active::before {
+    content: "";
+
+    position: absolute;
+
+    left: 0;
+
+    width: 3px;
+    height: 1.5rem;
+
+    border-radius: 999px;
+
+    background: var(--theme-primary);
+}
+
+.portal-sidebar__link:focus-visible {
+    outline: 3px solid color-mix(
+        in srgb,
+        var(--theme-focus) 45%,
+        transparent
+    );
+
+    outline-offset: 2px;
+}
+
+/*
+|--------------------------------------------------------------------------
+| MOBILE
+|--------------------------------------------------------------------------
+*/
+
+@media (max-width: 900px) {
+    .portal-sidebar {
+        display: none;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .portal-sidebar *,
+    .portal-sidebar *::before,
+    .portal-sidebar *::after {
+        transition-duration: 0.001ms !important;
+        animation-duration: 0.001ms !important;
+    }
+}

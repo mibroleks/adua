@@ -20,28 +20,30 @@ Version: 1.0 (semantic theme tokens integration)
     'action' => null,     // optional slot for button or link
 ])
 
-<div class="flex flex-col items-center justify-center rounded-lg border border-[var(--theme-border)] bg-[var(--theme-surface)] p-10 text-center shadow-sm">
+<div class="portal-empty-state">
+
     {{-- Icon --}}
     @if($icon)
-        <div class="mb-4 text-[var(--theme-muted)]">
+        <div class="portal-empty-state__icon">
             {!! $icon !!}
         </div>
     @endif
 
     {{-- Title --}}
-    <h3 class="text-lg font-bold theme-heading">
+    <h3 class="portal-empty-state__title">
         {{ $title }}
     </h3>
 
     {{-- Message --}}
-    <p class="mt-2 text-sm theme-muted">
+    <p class="portal-empty-state__message">
         {{ $message }}
     </p>
 
     {{-- Action --}}
     @if($action)
-        <div class="mt-6">
+        <div class="portal-empty-state__action">
             {{ $action }}
         </div>
     @endif
+
 </div>

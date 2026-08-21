@@ -1,0 +1,39 @@
+.portal-badge {
+    display: inline-flex;
+    align-items: center;
+
+    min-height: 1.5rem;
+
+    padding-inline: 0.65rem;
+
+    border-radius: 999px;
+
+    font-size: 0.65rem;
+    line-height: 1;
+    font-weight: 750;
+}
+
+.portal-badge--default {
+    background: var(--theme-surface-muted);
+    color: var(--theme-body);
+}
+
+.portal-badge--success {
+    background: var(--theme-success-soft);
+    color: var(--theme-success);
+}
+
+.portal-badge--warning {
+    background: var(--theme-warning-soft);
+    color: var(--theme-warning);
+}
+
+.portal-badge--danger {
+    background: var(--theme-danger-soft);
+    color: var(--theme-danger);
+}
+
+.portal-badge--info {
+    background: var(--theme-info-soft);
+    color: var(--theme-info);
+}

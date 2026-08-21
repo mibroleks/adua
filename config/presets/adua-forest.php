@@ -41,6 +41,32 @@ return [
         'danger'        => '#B42318',
         'info'          => '#1769AA',
 
+        // SEMANTIC SOFT
+        'success_soft'  => '#E5F4EC',
+        'warning_soft'  => '#FFF4D6',
+        'danger_soft'   => '#FDE8E7',
+        'info_soft'     => '#E7F1FA',
+
+        // PORTAL COMPONENTS
+        'breadcrumb_text'       => '#718078',
+        'breadcrumb_hover'      => '#15563D',
+
+        'user_menu_bg'          => '#FFFFFF',
+        'user_menu_hover'       => '#E4F0EA',
+        'user_menu_border'      => '#DCE4DD',
+
+        'notification_badge_bg' => '#B42318',
+        'notification_badge_text'=> '#FFFFFF',
+
+        'alert_success_bg'      => '#E5F4EC',
+        'alert_warning_bg'      => '#FFF4D6',
+        'alert_danger_bg'       => '#FDE8E7',
+        'alert_info_bg'         => '#E7F1FA',
+
+        'progress_active'       => '#15563D',
+        'progress_completed'    => '#147A4B',
+        'progress_pending'      => '#C6D2CA',
+
         // ATMOSPHERE
         'hero_start'    => '#0D3A29',
         'hero_end'      => '#22704F',
@@ -119,6 +145,32 @@ return [
         'danger'        => '#F16B62',
         'info'          => '#65A9DC',
 
+        // SEMANTIC SOFT
+        'success_soft'  => '#173526',
+        'warning_soft'  => '#3A2E17',
+        'danger_soft'   => '#3A1F1E',
+        'info_soft'     => '#182E40',
+
+        // PORTAL COMPONENTS
+        'breadcrumb_text'       => '#9BAAA1',
+        'breadcrumb_hover'      => '#56A77F',
+
+        'user_menu_bg'          => '#111B16',
+        'user_menu_hover'       => '#18261F',
+        'user_menu_border'      => '#26372E',
+
+        'notification_badge_bg' => '#F16B62',
+        'notification_badge_text'=> '#FFFFFF',
+
+        'alert_success_bg'      => '#173526',
+        'alert_warning_bg'      => '#3A2E17',
+        'alert_danger_bg'       => '#3A1F1E',
+        'alert_info_bg'         => '#182E40',
+
+        'progress_active'       => '#56A77F',
+        'progress_completed'    => '#55C18A',
+        'progress_pending'      => '#34493D',
+
         // ATMOSPHERE
         'hero_start'    => '#07130D',
         'hero_end'      => '#153F2C',
@@ -161,3 +213,4 @@ return [
         'modal_border'    => '#26372E',
     ],
 ];
+

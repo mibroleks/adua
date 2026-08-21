@@ -13,7 +13,7 @@ list and view them, and manage decisions/documents. Manual create/edit
 may be restricted depending on policy.
 
 Status: ✅ Production Ready (namespace corrected)
-Version: 1.7 (Filament v3 compatible)
+Version: 1.8 (Filament v3 compatible, with relation manager registered)
 */
 
 namespace App\Filament\Resources;
@@ -25,6 +25,7 @@ use App\Filament\Resources\ApplicationResource\Pages\ViewApplication;
 use App\Filament\Resources\ApplicationResource\Schemas\ApplicationForm;
 use App\Filament\Resources\ApplicationResource\Schemas\ApplicationInfolist;
 use App\Filament\Resources\ApplicationResource\Tables\ApplicationsTable;
+use App\Filament\Resources\ApplicationResource\RelationManagers\DocumentsRelationManager;
 use App\Models\Application;
 use BackedEnum;
 use UnitEnum;
@@ -63,9 +64,12 @@ class ApplicationResource extends Resource
         return ApplicationsTable::configure($table);
     }
 
+    // ✅ Register relation managers (Documents tab)
     public static function getRelations(): array
     {
-        return [];
+        return [
+            DocumentsRelationManager::class,
+        ];
     }
 
     // ✅ Pages (List + View always; Create/Edit optional depending on policy)

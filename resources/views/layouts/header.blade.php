@@ -1,10 +1,10 @@
 {{--
-Component: Application Header
+Component: Application Header (Public Navigation)
 File Path: resources/views/layouts/header.blade.php
 Company: Ygrace Tech
 Author: Ibrahim Olalekan
 
-Version: 3.1
+Version: 3.2 (split public vs portal shells, preserved Apply link)
 Design: Premium Institutional Shell (theme‑driven, accessible, responsive)
 --}}
 
@@ -35,12 +35,10 @@ Design: Premium Institutional Shell (theme‑driven, accessible, responsive)
         </div>
     </div>
 
-
     {{-- ============================================================
-         PRIMARY NAVIGATION
+         PRIMARY NAVIGATION (Public)
     ============================================================= --}}
     <nav class="portal-header__nav">
-
         <div class="portal-header__nav-inner">
 
             {{-- Brand --}}
@@ -49,7 +47,6 @@ Design: Premium Institutional Shell (theme‑driven, accessible, responsive)
                 class="portal-header__brand"
                 aria-label="{{ $institutionName }} Admissions"
             >
-
                 @if($theme->logoUrl())
                     <span class="portal-header__brand-mark">
                         <img
@@ -61,23 +58,17 @@ Design: Premium Institutional Shell (theme‑driven, accessible, responsive)
                 @endif
 
                 <span class="portal-header__identity">
-
                     <span class="portal-header__institution">
                         {{ $institutionName }}
                     </span>
-
                     <span class="portal-header__department">
                         Admissions
                     </span>
-
                 </span>
-
             </a>
-
 
             {{-- Desktop navigation --}}
             <div class="portal-header__navigation">
-
                 <a
                     href="{{ url('/') }}"
                     class="portal-header__link"
@@ -94,6 +85,7 @@ Design: Premium Institutional Shell (theme‑driven, accessible, responsive)
                     Programmes
                 </a>
 
+                {{-- Public applicant entry point --}}
                 <a
                     href="{{ route('login') }}"
                     class="portal-header__link"
@@ -102,15 +94,14 @@ Design: Premium Institutional Shell (theme‑driven, accessible, responsive)
                     Applicant Login
                 </a>
 
+                {{-- Public CTA preserved --}}
                 <a
                     href="{{ route('application.create') }}"
                     class="portal-header__cta"
                 >
                     Start Application
                 </a>
-
             </div>
-
 
             {{-- Mobile navigation trigger --}}
             <button
@@ -123,9 +114,6 @@ Design: Premium Institutional Shell (theme‑driven, accessible, responsive)
             >
                 <span aria-hidden="true">☰</span>
             </button>
-
         </div>
-
     </nav>
-
 </header>

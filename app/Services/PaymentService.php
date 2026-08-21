@@ -15,9 +15,10 @@
  * - maintain payment lifecycle
  * - update application payment status
  * - trigger application submission after successful payment
+ * - dispatch applicant notifications
  *
- * Status: ✅ Production Ready
- * Version: 2.2 (Canonical response normalization)
+ * Status: 🚦 Integration / Hardening
+ * Version: 2.5 (Verification fixed to use requested_amount)
  */
 
 namespace App\Services;
@@ -32,10 +33,12 @@ use Illuminate\Support\Str;
 class PaymentService
 {
     protected AdmissionService $admissions;
+    protected NotificationService $notifications;
 
-    public function __construct(AdmissionService $admissions)
+    public function __construct(AdmissionService $admissions, NotificationService $notifications)
     {
-        $this->admissions = $admissions;
+        $this->admissions    = $admissions;
+        $this->notifications = $notifications;
     }
 
     /**
@@ -56,8 +59,7 @@ class PaymentService
             ];
         }
 
-        $amountInKobo = (int) round(((float) $fee) * 100);
-
+        $amountInKobo = (int) $fee;
         if ($amountInKobo <= 0) {
             return [
                 'success' => false,
@@ -85,31 +87,35 @@ class PaymentService
                 ];
             }
 
-            if ($existing->status === Payment::STATUS_PENDING) {
-                $existing->update(['status' => Payment::STATUS_FAILED]);
-            }
+            return [
+                'success' => true,
+                'authorization_url' => null,
+                'reference' => $existing->reference,
+                'message' => 'Payment already initialized, awaiting completion.',
+                'already_paid' => false,
+            ];
         }
 
         // Create local payment record
         $payment = Payment::create([
-            'application_id' => $application->id,
-            'reference' => 'ADM-' . Str::upper(Str::random(20)),
+            'application_id'        => $application->id,
+            'reference'             => 'ADM-' . Str::upper(Str::random(20)),
             'transaction_reference' => Str::uuid()->toString(),
-            'payment_type' => Payment::TYPE_APPLICATION_FEE,
-            'amount' => $amountInKobo,
-            'currency' => 'NGN',
-            'status' => Payment::STATUS_PENDING,
-            'gateway' => 'paystack',
+            'payment_type'          => Payment::TYPE_APPLICATION_FEE,
+            'amount'                => $amountInKobo,
+            'currency'              => 'NGN',
+            'status'                => Payment::STATUS_PENDING,
+            'gateway'               => 'paystack',
         ]);
 
         // Initialize transaction with Paystack
         $response = Http::withToken(config('services.paystack.secret'))
             ->post(rtrim(config('services.paystack.url'), '/') . '/transaction/initialize', [
-                'reference' => $payment->reference,
-                'amount' => $payment->amount,
-                'email' => $application->user->email,
-                'currency' => $payment->currency,
-                'callback_url' => route('payment.callback'),
+                'reference'     => $payment->reference,
+                'amount'        => $payment->amount,
+                'email'         => $application->user->email,
+                'currency'      => $payment->currency,
+                'callback_url'  => route('payment.callback'),
             ]);
 
         if ($response->failed()) {
@@ -117,10 +123,10 @@ class PaymentService
 
             Log::error('Paystack transaction initialization failed.', [
                 'application_id' => $application->id,
-                'payment_id' => $payment->id,
-                'reference' => $payment->reference,
-                'http_status' => $response->status(),
-                'response' => $response->json(),
+                'payment_id'     => $payment->id,
+                'reference'      => $payment->reference,
+                'http_status'    => $response->status(),
+                'response'       => $response->json(),
             ]);
 
             return [
@@ -131,21 +137,21 @@ class PaymentService
             ];
         }
 
-        $data = $response->json('data');
+        $data             = $response->json('data');
         $authorizationUrl = $data['authorization_url'] ?? null;
-        $reference = $data['reference'] ?? $payment->reference;
+        $reference        = $data['reference'] ?? $payment->reference;
 
         if (! $authorizationUrl) {
             $payment->update([
-                'status' => Payment::STATUS_FAILED,
+                'status'   => Payment::STATUS_FAILED,
                 'metadata' => $response->json(),
             ]);
 
             Log::error('Paystack initialization returned no authorization URL.', [
                 'application_id' => $application->id,
-                'payment_id' => $payment->id,
-                'reference' => $payment->reference,
-                'response' => $response->json(),
+                'payment_id'     => $payment->id,
+                'reference'      => $payment->reference,
+                'response'       => $response->json(),
             ]);
 
             return [
@@ -157,11 +163,11 @@ class PaymentService
         }
 
         return [
-            'success' => true,
-            'authorization_url' => $authorizationUrl,
-            'reference' => $reference,
-            'message' => $response->json('message') ?? 'Payment initialized successfully.',
-            'already_paid' => false,
+            'success'          => true,
+            'authorization_url'=> $authorizationUrl,
+            'reference'        => $reference,
+            'message'          => $response->json('message') ?? 'Payment initialized successfully.',
+            'already_paid'     => false,
         ];
     }
 
@@ -171,7 +177,6 @@ class PaymentService
     public function verify(string $reference): ?Payment
     {
         $payment = Payment::where('reference', $reference)->first();
-
         if (! $payment) {
             return null;
         }
@@ -185,7 +190,7 @@ class PaymentService
 
         if ($response->failed()) {
             Log::error('Paystack payment verification request failed.', [
-                'reference' => $reference,
+                'reference'  => $reference,
                 'payment_id' => $payment->id,
             ]);
             return null;
@@ -193,22 +198,34 @@ class PaymentService
 
         $data = $response->json('data');
 
+        // ✅ Compare requested_amount to our payment.amount, not amount (which includes gateway fees)
+        $requestedAmount = (int) ($data['requested_amount'] ?? 0);
+        $currency        = $data['currency'] ?? null;
+        $status          = $data['status'] ?? null;
+
         $isSuccessful = $data
-            && ($data['status'] ?? null) === 'success'
-            && (int) ($data['amount'] ?? 0) === (int) $payment->amount
-            && ($data['currency'] ?? null) === $payment->currency;
+            && $status === 'success'
+            && $requestedAmount === (int) $payment->amount
+            && $currency === $payment->currency;
 
         if ($isSuccessful) {
             DB::transaction(function () use ($payment, $data) {
                 $payment->update([
-                    'status' => Payment::STATUS_SUCCESS,
-                    'paid_at' => now(),
-                    'verified_at' => now(),
-                    'metadata' => $data,
+                    'status'     => Payment::STATUS_SUCCESS,
+                    'paid_at'    => now(),
+                    'verified_at'=> now(),
+                    'metadata'   => $data,
                 ]);
 
                 $application = $payment->application->fresh();
                 $application->setPaymentStatus(Application::PAYMENT_SUCCESS);
+
+                // 🔔 Notify applicant of payment success
+                $this->notifications->paymentSuccess(
+                    $application->user,
+                    $payment->reference,
+                    $payment->amount_in_naira
+                );
 
                 if (
                     $payment->payment_type === Payment::TYPE_APPLICATION_FEE &&
@@ -219,25 +236,30 @@ class PaymentService
             });
 
             Log::info('Payment successfully verified.', [
-                'payment_id' => $payment->id,
+                'payment_id'     => $payment->id,
                 'application_id' => $payment->application_id,
-                'reference' => $payment->reference,
+                'reference'      => $payment->reference,
+                'requested_amount'=> $requestedAmount,
+                'customer_paid'   => $data['amount'] ?? null,
+                'gateway_fee'     => $data['fees'] ?? null,
             ]);
 
             return $payment->fresh();
         }
 
         $payment->update([
-            'status' => Payment::STATUS_FAILED,
+            'status'   => Payment::STATUS_FAILED,
             'metadata' => $data,
         ]);
 
         $payment->application->setPaymentStatus(Application::PAYMENT_FAILED);
 
         Log::warning('Payment verification did not succeed.', [
-            'payment_id' => $payment->id,
+            'payment_id'     => $payment->id,
             'application_id' => $payment->application_id,
-            'reference' => $payment->reference,
+            'reference'      => $payment->reference,
+            'requested_amount'=> $requestedAmount,
+            'customer_paid'   => $data['amount'] ?? null,
         ]);
 
         return $payment->fresh();

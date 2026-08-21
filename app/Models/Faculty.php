@@ -8,7 +8,7 @@ Author: Ibrahim Olalekan
 
 Purpose:
 Represents academic faculties in the university.
-Each faculty groups multiple departments.
+Each faculty groups multiple departments and programmes.
 */
 
 namespace App\Models;
@@ -16,6 +16,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 
 class Faculty extends Model
 {
@@ -45,5 +46,20 @@ class Faculty extends Model
     public function departments(): HasMany
     {
         return $this->hasMany(Department::class);
+    }
+
+    /**
+     * Relationship: Faculty has many Programmes through Departments.
+     */
+    public function programmes(): HasManyThrough
+    {
+        return $this->hasManyThrough(
+            Programme::class,   // Final model
+            Department::class,  // Intermediate model
+            'faculty_id',       // Foreign key on departments table
+            'department_id',    // Foreign key on programmes table
+            'id',               // Local key on faculties table
+            'id'                // Local key on departments table
+        );
     }
 }

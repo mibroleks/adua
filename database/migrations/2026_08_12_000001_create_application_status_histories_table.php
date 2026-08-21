@@ -28,6 +28,9 @@ return new class extends Migration {
                   ->constrained('users')
                   ->onDelete('set null');
 
+            // Optional remarks explaining the transition
+            $table->text('remarks')->nullable();
+
             // Timestamp of change
             $table->timestamp('changed_at')->useCurrent();
 

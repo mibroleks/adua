@@ -1,0 +1,565 @@
+/*
+|--------------------------------------------------------------------------
+| APPLICATION PORTAL — DECISION PAGE
+|--------------------------------------------------------------------------
+| File:
+| resources/css/pages/applications/decision.css
+|
+| Purpose:
+| Premium institutional presentation of an applicant's admission decision.
+|--------------------------------------------------------------------------
+*/
+
+.admission-page--decision {
+    position: relative;
+}
+
+.decision-page-header {
+    max-width: 54rem;
+}
+
+
+/* ==========================================================================
+   APPLICATION CONTEXT
+========================================================================== */
+
+.decision-context {
+    display: grid;
+    grid-template-columns: minmax(12rem, 1fr) minmax(16rem, 1.5fr) auto;
+    gap: 1px;
+
+    margin-bottom: 1.5rem;
+
+    overflow: hidden;
+
+    border: 1px solid var(--theme-border);
+    border-radius: 1rem;
+
+    background: var(--theme-border);
+
+    box-shadow:
+        0 12px 35px color-mix(
+            in srgb,
+            var(--theme-heading) 5%,
+            transparent
+        );
+}
+
+.decision-context > div {
+    min-width: 0;
+
+    padding: 1.15rem 1.25rem;
+
+    background: var(--theme-surface);
+}
+
+.decision-context__label {
+    display: block;
+
+    margin-bottom: 0.45rem;
+
+    color: var(--theme-muted);
+
+    font-size: 0.6rem;
+    line-height: 1.2;
+    font-weight: 800;
+
+    letter-spacing: 0.13em;
+
+    text-transform: uppercase;
+}
+
+.decision-context__number {
+    color: var(--theme-heading);
+
+    font-family:
+        "Manrope",
+        var(--theme-font-family),
+        system-ui,
+        sans-serif;
+
+    font-size: 0.9rem;
+    font-weight: 800;
+}
+
+.decision-context__programme strong {
+    display: block;
+
+    overflow: hidden;
+
+    color: var(--theme-heading);
+
+    font-size: 0.85rem;
+    line-height: 1.4;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+
+/* ==========================================================================
+   DECISION CARD
+========================================================================== */
+
+.decision-card {
+    position: relative;
+
+    overflow: hidden;
+
+    border: 1px solid var(--theme-border);
+    border-radius: 1.25rem;
+
+    background: var(--theme-surface);
+
+    box-shadow:
+        0 18px 55px color-mix(
+            in srgb,
+            var(--theme-heading) 7%,
+            transparent
+        );
+}
+
+.decision-card::before {
+    content: "";
+
+    position: absolute;
+
+    inset: 0 0 auto;
+
+    height: 0.25rem;
+
+    background:
+        linear-gradient(
+            90deg,
+            var(--theme-gradient-start),
+            var(--theme-gradient-end)
+        );
+}
+
+.decision-card__top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+
+    gap: 1.5rem;
+
+    padding: 1.75rem 1.75rem 1.5rem;
+
+    border-bottom: 1px solid var(--theme-border);
+}
+
+.decision-card__eyebrow,
+.decision-card__message-label,
+.decision-card__remarks-label,
+.decision-letter-callout__eyebrow,
+.decision-pending__eyebrow {
+    display: block;
+
+    color: var(--theme-primary);
+
+    font-size: 0.62rem;
+    line-height: 1.3;
+    font-weight: 800;
+
+    letter-spacing: 0.14em;
+
+    text-transform: uppercase;
+}
+
+.decision-card__heading h2 {
+    margin: 0.35rem 0 0;
+
+    color: var(--theme-heading);
+
+    font-family:
+        "Manrope",
+        var(--theme-font-family),
+        system-ui,
+        sans-serif;
+
+    font-size: clamp(1.25rem, 2vw, 1.55rem);
+    line-height: 1.2;
+    font-weight: 800;
+
+    letter-spacing: -0.025em;
+}
+
+
+/* ==========================================================================
+   DECISION BODY
+========================================================================== */
+
+.decision-card__body {
+    display: grid;
+
+    grid-template-columns: 4.25rem minmax(0, 1fr);
+
+    gap: 1.5rem;
+
+    padding: 2rem 1.75rem;
+}
+
+.decision-card__signal {
+    display: grid;
+    place-items: center;
+
+    width: 4rem;
+    height: 4rem;
+
+    border: 1px solid var(--theme-border);
+    border-radius: 1rem;
+
+    background:
+        linear-gradient(
+            145deg,
+            var(--theme-primary-soft),
+            var(--theme-surface)
+        );
+}
+
+.decision-card__signal-mark {
+    color: var(--theme-primary);
+
+    font-size: 1.65rem;
+    line-height: 1;
+    font-weight: 800;
+}
+
+.decision-card__message h3 {
+    margin: 0.4rem 0 0.65rem;
+
+    color: var(--theme-heading);
+
+    font-family:
+        "Manrope",
+        var(--theme-font-family),
+        system-ui,
+        sans-serif;
+
+    font-size: 1.2rem;
+    line-height: 1.35;
+    font-weight: 800;
+
+    letter-spacing: -0.02em;
+}
+
+.decision-card__message p {
+    max-width: 48rem;
+
+    margin: 0;
+
+    color: var(--theme-muted);
+
+    font-size: 0.88rem;
+    line-height: 1.8;
+}
+
+
+/* ==========================================================================
+   REMARKS
+========================================================================== */
+
+.decision-card__remarks {
+    margin: 0 1.75rem;
+
+    padding: 1.2rem 1.25rem;
+
+    border-left: 3px solid var(--theme-primary);
+
+    background:
+        color-mix(
+            in srgb,
+            var(--theme-primary-soft) 55%,
+            var(--theme-surface)
+        );
+}
+
+.decision-card__remarks p {
+    margin: 0.5rem 0 0;
+
+    color: var(--theme-body);
+
+    font-size: 0.86rem;
+    line-height: 1.75;
+}
+
+
+/* ==========================================================================
+   DECISION FOOTER
+========================================================================== */
+
+.decision-card__footer {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+
+    gap: 1rem;
+
+    margin-top: 1.75rem;
+    padding: 1.25rem 1.75rem;
+
+    border-top: 1px solid var(--theme-border);
+
+    background:
+        color-mix(
+            in srgb,
+            var(--theme-page) 45%,
+            var(--theme-surface)
+        );
+}
+
+.decision-card__footer > div {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.decision-card__footer-label {
+    color: var(--theme-muted);
+
+    font-size: 0.6rem;
+    font-weight: 800;
+
+    letter-spacing: 0.12em;
+
+    text-transform: uppercase;
+}
+
+.decision-card__footer strong {
+    color: var(--theme-heading);
+
+    font-size: 0.78rem;
+    font-weight: 700;
+}
+
+
+/* ==========================================================================
+   ADMISSION LETTER
+========================================================================== */
+
+.decision-letter-callout {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 2rem;
+
+    margin-top: 1.25rem;
+    padding: 1.5rem 1.6rem;
+
+    border: 1px solid var(--theme-border);
+    border-radius: 1rem;
+
+    background:
+        linear-gradient(
+            135deg,
+            color-mix(
+                in srgb,
+                var(--theme-primary-soft) 65%,
+                var(--theme-surface)
+            ),
+            var(--theme-surface)
+        );
+}
+
+.decision-letter-callout h2 {
+    margin: 0.35rem 0;
+
+    color: var(--theme-heading);
+
+    font-family:
+        "Manrope",
+        var(--theme-font-family),
+        system-ui,
+        sans-serif;
+
+    font-size: 1rem;
+    font-weight: 800;
+}
+
+.decision-letter-callout p {
+    margin: 0;
+
+    color: var(--theme-muted);
+
+    font-size: 0.78rem;
+    line-height: 1.6;
+}
+
+
+/* ==========================================================================
+   PENDING
+========================================================================== */
+
+.decision-pending {
+    display: flex;
+    align-items: center;
+
+    gap: 1.5rem;
+
+    padding: 2rem;
+
+    border: 1px solid var(--theme-border);
+    border-radius: 1.25rem;
+
+    background: var(--theme-surface);
+
+    box-shadow:
+        0 16px 45px color-mix(
+            in srgb,
+            var(--theme-heading) 5%,
+            transparent
+        );
+}
+
+.decision-pending__visual {
+    display: grid;
+    place-items: center;
+
+    flex: 0 0 auto;
+
+    width: 4rem;
+    height: 4rem;
+
+    border-radius: 50%;
+
+    background: var(--theme-primary-soft);
+}
+
+.decision-pending__visual span {
+    width: 0.7rem;
+    height: 0.7rem;
+
+    border-radius: 50%;
+
+    background: var(--theme-primary);
+
+    box-shadow:
+        0 0 0 0.45rem
+        color-mix(in srgb, var(--theme-primary) 12%, transparent);
+}
+
+.decision-pending__content h2 {
+    margin: 0.35rem 0 0.4rem;
+
+    color: var(--theme-heading);
+
+    font-family:
+        "Manrope",
+        var(--theme-font-family),
+        system-ui,
+        sans-serif;
+
+    font-size: 1.1rem;
+    font-weight: 800;
+}
+
+.decision-pending__content p {
+    max-width: 45rem;
+
+    margin: 0;
+
+    color: var(--theme-muted);
+
+    font-size: 0.83rem;
+    line-height: 1.7;
+}
+
+
+/* ==========================================================================
+   EMPTY STATE
+========================================================================== */
+
+.decision-empty-state {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+
+    align-items: center;
+
+    gap: 1.5rem;
+}
+
+.decision-empty-state__icon {
+    display: grid;
+    place-items: center;
+
+    width: 4rem;
+    height: 4rem;
+
+    border: 1px solid var(--theme-border);
+    border-radius: 1rem;
+
+    background: var(--theme-primary-soft);
+
+    color: var(--theme-primary);
+
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+}
+
+.decision-empty-state__label {
+    color: var(--theme-primary);
+
+    font-size: 0.6rem;
+    font-weight: 800;
+
+    letter-spacing: 0.14em;
+}
+
+
+/* ==========================================================================
+   RESPONSIVE
+========================================================================== */
+
+@media (max-width: 760px) {
+
+    .decision-context {
+        grid-template-columns: 1fr;
+    }
+
+    .decision-card__top {
+        flex-direction: column;
+    }
+
+    .decision-card__body {
+        grid-template-columns: 1fr;
+    }
+
+    .decision-card__signal {
+        width: 3.5rem;
+        height: 3.5rem;
+    }
+
+    .decision-card__footer {
+        grid-template-columns: 1fr;
+    }
+
+    .decision-letter-callout {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .decision-pending {
+        align-items: flex-start;
+    }
+}
+
+@media (max-width: 520px) {
+
+    .decision-card__top,
+    .decision-card__body {
+        padding-inline: 1.15rem;
+    }
+
+    .decision-card__remarks {
+        margin-inline: 1.15rem;
+    }
+
+    .decision-card__footer {
+        padding-inline: 1.15rem;
+    }
+
+    .decision-empty-state {
+        grid-template-columns: 1fr;
+    }
+}
