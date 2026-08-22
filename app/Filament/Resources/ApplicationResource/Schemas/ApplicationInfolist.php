@@ -54,7 +54,8 @@ class ApplicationInfolist
                         TextEntry::make('programme.name')->label('Programme')->weight('bold'),
                         TextEntry::make('programme.code')->label('Programme Code')->placeholder('—'),
                         TextEntry::make('programme.degree_type')->label('Degree Type')->placeholder('—'),
-                        TextEntry::make('application_fee')->label('Application Fee')->money('NGN'),
+                        // ✅ Fixed: use accessor instead of raw field
+                        TextEntry::make('formatted_application_fee')->label('Application Fee')->money('NGN'),
                     ]),
 
                 Section::make('Payment Information')

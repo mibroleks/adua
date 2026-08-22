@@ -11,9 +11,10 @@ Creates the payments table for storing application payment transactions.
 Each payment is linked to an application, records the gateway reference,
 amount, currency, status, gateway provider, metadata, and timestamps.
 Supports server-side verification with verified_at.
+Future-proofed with reconciliation fields for finance integration.
 
 Status: ✅ Production Ready
-Version: 1.3 (Development Stage Hardened)
+Version: 1.4 (Future-Proof with Reconciliation Fields)
 */
 
 use Illuminate\Database\Migrations\Migration;
@@ -59,6 +60,18 @@ return new class extends Migration {
 
             // Timestamp when payment was verified server-side
             $table->timestamp('verified_at')->nullable();
+
+            /*
+            |--------------------------------------------------------------------------
+            | Finance Reconciliation Fields (Future-Proof)
+            |--------------------------------------------------------------------------
+            */
+            $table->unsignedBigInteger('balance_after')->nullable()
+                  ->comment('Balance after this transaction, stored in kobo');
+            $table->string('ledger_code')->nullable()
+                  ->comment('Finance ledger code for reconciliation');
+            $table->string('narration')->nullable()
+                  ->comment('Narration/description for finance reporting');
 
             $table->timestamps();
         });

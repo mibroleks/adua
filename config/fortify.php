@@ -67,7 +67,7 @@ return [
     'features' => [
         Features::registration(),              // Students only
         Features::resetPasswords(),
-        // Features::emailVerification(),      // Optional
+      //  Features::emailVerification(),      // Optional
         Features::updateProfileInformation(),
         Features::updatePasswords(),
         Features::twoFactorAuthentication([

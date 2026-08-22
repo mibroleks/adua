@@ -11,9 +11,10 @@ Provides Filament admin interface for managing application payments.
 Payments are immutable audit records created via PaymentService,
 so officers can only list and view payments (no manual create/edit).
 Supports filters by status, type, gateway, and date.
+Future-proofed with reconciliation fields for finance integration.
 
 Status: ✅ Production Ready
-Version: 1.6 (Filament v3 compatible)
+Version: 2.0 (added reconciliation fields)
 */
 
 namespace App\Filament\Resources;
@@ -42,13 +43,13 @@ class PaymentResource extends Resource
     // Title attribute for display
     protected static ?string $recordTitleAttribute = 'reference';
 
-    // ✅ Infolist definition
+    // ✅ Infolist definition (includes reconciliation fields)
     public static function infolist(Schema $schema): Schema
     {
         return PaymentInfolist::configure($schema);
     }
 
-    // ✅ Table definition
+    // ✅ Table definition (includes reconciliation fields)
     public static function table(Table $table): Table
     {
         return PaymentsTable::configure($table);

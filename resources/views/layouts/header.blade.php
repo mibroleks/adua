@@ -4,7 +4,7 @@ File Path: resources/views/layouts/header.blade.php
 Company: Ygrace Tech
 Author: Ibrahim Olalekan
 
-Version: 3.2 (split public vs portal shells, preserved Apply link)
+Version: 3.3 (split public vs portal shells, preserved Apply link, added mobile nav include)
 Design: Premium Institutional Shell (theme‑driven, accessible, responsive)
 --}}
 
@@ -110,10 +110,15 @@ Design: Premium Institutional Shell (theme‑driven, accessible, responsive)
                 aria-label="Open navigation menu"
                 aria-expanded="false"
                 aria-controls="portal-mobile-navigation"
-                data-mobile-nav-toggle
+                data-mobile-menu-toggle
             >
                 <span aria-hidden="true">☰</span>
             </button>
         </div>
     </nav>
+
+    {{-- ============================================================
+         MOBILE NAVIGATION INCLUDE
+    ============================================================= --}}
+    @include('components.public-mobile-navigation')
 </header>

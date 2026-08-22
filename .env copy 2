@@ -1,0 +1,64 @@
+APP_NAME="Abdulfattah Durojaiye University"
+APP_ENV=production
+APP_KEY=base64:L11WEew3ju/A774dMMvuvOkpX8PODYTWHE25Ly3lqaE=
+APP_DEBUG=false
+APP_URL=https://apply.adua.edu.ng
+
+APP_LOCALE=en
+APP_FALLBACK_LOCALE=en
+APP_FAKER_LOCALE=en_US
+
+APP_MAINTENANCE_DRIVER=file
+
+BCRYPT_ROUNDS=12
+
+LOG_CHANNEL=stack
+LOG_STACK=single
+LOG_DEPRECATIONS_CHANNEL=null
+LOG_LEVEL=info
+
+DB_CONNECTION=sqlite
+
+SESSION_DRIVER=database
+SESSION_LIFETIME=120
+SESSION_ENCRYPT=false
+SESSION_PATH=/
+SESSION_DOMAIN=null
+
+BROADCAST_CONNECTION=log
+FILESYSTEM_DISK=local
+QUEUE_CONNECTION=database
+
+CACHE_STORE=database
+
+MEMCACHED_HOST=127.0.0.1
+
+REDIS_CLIENT=phpredis
+REDIS_HOST=127.0.0.1
+REDIS_PASSWORD=null
+REDIS_PORT=6379
+
+# -----------------------------
+# Mail Configuration (Production cPanel)
+# -----------------------------
+MAIL_MAILER=smtp
+MAIL_HOST=adua.edu.ng
+MAIL_PORT=465
+MAIL_USERNAME=apply@adua.edu.ng
+MAIL_PASSWORD=ADUAR@2026
+MAIL_ENCRYPTION=ssl
+MAIL_FROM_ADDRESS=apply@adua.edu.ng
+MAIL_FROM_NAME="Abdulfattah Durojaiye University Admissions"
+
+AWS_ACCESS_KEY_ID=
+AWS_SECRET_ACCESS_KEY=
+AWS_DEFAULT_REGION=us-east-1
+AWS_BUCKET=
+AWS_USE_PATH_STYLE_ENDPOINT=false
+
+VITE_APP_NAME="${APP_NAME}"
+
+# Paystack Sandbox Configuration
+PAYSTACK_SECRET_KEY=sk_test_9bdfc23505c5ecae8d9bccf8c43e7af91cf016ea
+PAYSTACK_PUBLIC_KEY=pk_test_3805b8bd70d2dbc1fb6ecb3ace31007351a4c5db
+PAYSTACK_PAYMENT_URL=https://api.paystack.co

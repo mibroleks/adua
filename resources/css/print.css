@@ -9,43 +9,82 @@ Provides professional print layout for admission letters and other official docu
 Ensures branding, typography, and spacing are optimized for paper output.
 
 Status: ✅ Production Ready
-Version: 1.0
+Version: 1.2 (Scoped header + color toggle + single page)
 */
 
-/* Reset margins and background for print */
 @media print {
     body {
         margin: 0;
         padding: 0;
         background: #fff !important;
-        color: #000 !important;
         font-family: "Times New Roman", Georgia, serif;
         line-height: 1.5;
+        /* Force all content to fit one page */
+        page-break-inside: avoid;
     }
 
-    /* Hide navigation, buttons, and interactive elements */
-    header, footer, nav, .portal-button, .btn-primary, .btn-secondary, .btn-success, .btn-danger {
+    /* Hide portal navigation/header/footer, keep admission letter header */
+    .portal-header,
+    .portal-footer,
+    nav,
+    .portal-button,
+    .btn-primary,
+    .btn-secondary,
+    .btn-success,
+    .btn-danger {
         display: none !important;
     }
 
+    .admission-letter__header {
+        display: block !important;
+    }
+
     /* Admission letter container */
-    .portal-card, .print-container {
+    .portal-card,
+    .print-container,
+    .admission-letter {
         box-shadow: none !important;
         border: none !important;
         background: #fff !important;
         padding: 2rem;
         max-width: 100%;
+        page-break-inside: avoid;
     }
 
-    /* Typography */
-    h1, h2, h3 {
+    /* Black & White mode */
+    body.print-bw {
+        color: #000 !important;
+    }
+
+    body.print-bw h1,
+    body.print-bw h2,
+    body.print-bw h3 {
         color: #000 !important;
         font-weight: bold;
     }
 
-    p {
+    body.print-bw p,
+    body.print-bw td,
+    body.print-bw th {
+        color: #000 !important;
+    }
+
+    /* Color mode */
+    body.print-color {
+        color: #222 !important;
+    }
+
+    body.print-color h1,
+    body.print-color h2,
+    body.print-color h3 {
+        color: #004080 !important; /* Example brand color */
+        font-weight: bold;
+    }
+
+    body.print-color p {
         font-size: 14pt;
         margin-bottom: 1rem;
+        color: #222 !important;
     }
 
     /* Branding logo */

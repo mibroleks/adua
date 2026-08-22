@@ -11,9 +11,10 @@ Defines the Filament table schema for listing payment records.
 Payments are immutable audit records created via PaymentService,
 so officers can only view them (no manual create/edit/delete).
 Supports filters by status, type, gateway, and date.
+Future-proofed with reconciliation fields for finance integration.
 
 Status: ✅ Production Ready
-Version: 1.9 (ensured amount display uses accessor consistently)
+Version: 2.0 (added reconciliation fields)
 */
 
 namespace App\Filament\Resources\PaymentResource\Tables;
@@ -74,6 +75,27 @@ class PaymentsTable
                 Tables\Columns\TextColumn::make('verified_at')
                     ->dateTime()
                     ->label('Verified At'),
+
+                /*
+                |--------------------------------------------------------------------------
+                | Finance Reconciliation Fields
+                |--------------------------------------------------------------------------
+                */
+                Tables\Columns\TextColumn::make('balance_after_in_naira')
+                    ->label('Balance After')
+                    ->money('NGN', true)
+                    ->sortable()
+                    ->placeholder('—'),
+
+                Tables\Columns\TextColumn::make('ledger_code')
+                    ->label('Ledger Code')
+                    ->sortable()
+                    ->placeholder('—'),
+
+                Tables\Columns\TextColumn::make('narration')
+                    ->label('Narration')
+                    ->wrap()
+                    ->placeholder('—'),
             ])
             ->filters([
                 Tables\Filters\SelectFilter::make('status')

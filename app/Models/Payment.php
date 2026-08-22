@@ -12,21 +12,31 @@ class Payment extends Model
         'reference',
         'transaction_reference',
         'payment_type',
-        'amount',              // University/application fee in kobo
+        'amount',              // stored in kobo
         'currency',
         'status',
         'gateway',
         'metadata',            // Gateway metadata (requested_amount, amount, fees, etc.)
         'paid_at',
         'verified_at',
+        // ✅ Future-proof reconciliation fields
+        'balance_after',       // balance after transaction, stored in kobo
+        'ledger_code',         // finance ledger code for reconciliation
+        'narration',           // description for finance reporting
     ];
 
     protected $casts = [
-        'metadata'    => 'array',
-        'paid_at'     => 'datetime',
-        'verified_at' => 'datetime',
+        'metadata'     => 'array',
+        'paid_at'      => 'datetime',
+        'verified_at'  => 'datetime',
+        'balance_after'=> 'integer',
     ];
 
+    /*
+    |--------------------------------------------------------------------------
+    | Relationships
+    |--------------------------------------------------------------------------
+    */
     public function application(): BelongsTo
     {
         return $this->belongsTo(Application::class);
@@ -57,7 +67,6 @@ class Payment extends Model
     | Display Helpers (Accessors + Proxy Method)
     |--------------------------------------------------------------------------
     */
-    // Proper accessor for Eloquent/Filament
     public function getAmountInNairaAttribute(): float
     {
         return $this->amount ? $this->amount / 100 : 0.0;
@@ -70,7 +79,6 @@ class Payment extends Model
             : '₦' . number_format($this->amount / 100, 2);
     }
 
-    // Proxy method for backward compatibility
     public function amountInNaira(): float
     {
         return $this->getAmountInNairaAttribute();
@@ -81,13 +89,11 @@ class Payment extends Model
     | Gateway Metadata Helpers
     |--------------------------------------------------------------------------
     */
-    // Application/merchant amount (what the university charges)
     public function getApplicationAmountAttribute(): ?int
     {
         return $this->amount;
     }
 
-    // Gateway fee (if passed to customer)
     public function getGatewayFeeAttribute(): float
     {
         return isset($this->metadata['fees'])
@@ -95,12 +101,21 @@ class Payment extends Model
             : 0.0;
     }
 
-    // Customer total paid (application fee + gateway fee)
     public function getCustomerPaidAmountAttribute(): float
     {
         return isset($this->metadata['amount'])
             ? $this->metadata['amount'] / 100
             : $this->getAmountInNairaAttribute();
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Reconciliation Helpers
+    |--------------------------------------------------------------------------
+    */
+    public function getBalanceAfterInNairaAttribute(): float
+    {
+        return $this->balance_after ? $this->balance_after / 100 : 0.0;
     }
 
     /*

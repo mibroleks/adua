@@ -10,7 +10,7 @@ Mirrors sidebar links, accessible and responsive.
 Triggered by the mobile toggle in portal-header.
 
 Status: ✅ Production Ready
-Version: 1.1 (fixed data attributes for JS integration)
+Version: 1.2 (added Application Status link)
 --}}
 
 <nav
@@ -39,6 +39,25 @@ Version: 1.1 (fixed data attributes for JS integration)
                     Dashboard
                 </a>
             </li>
+
+            {{-- Apply --}}
+            <li>
+                <a href="{{ route('application.create') }}"
+                   class="portal-mobile-nav__link @if(request()->routeIs('application.create')) portal-mobile-nav__link--active @endif">
+                    Apply
+                </a>
+            </li>
+
+            {{-- Application Status (conditional) --}}
+            @if(isset($application) && $application)
+                <li>
+                    <a href="{{ route('application.status', $application) }}"
+                       class="portal-mobile-nav__link @if(request()->routeIs('application.status')) portal-mobile-nav__link--active @endif">
+                        Application Status
+                    </a>
+                </li>
+            @endif
+
             <li>
                 <a href="{{ route('applications.my') }}"
                    class="portal-mobile-nav__link @if(request()->routeIs('applications.my')) portal-mobile-nav__link--active @endif">
