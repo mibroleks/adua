@@ -249,7 +249,7 @@ Version: 6.0 (portal integration + safe draft workflow)
                     @if($globalDocs->count() || $programmeDocs->count())
                         <section class="admission-panel admission-panel--documents">
                             <div class="admission-panel__header">
-                                <div class="admission-panel__icon" aria-hidden="true"><span>03</span></div>
+                                <div class="admission-panel__icon" aria-hidden="true"><span>02</span></div>
                                 <div>
                                     <span class="admission-panel__kicker">Supporting documents</span>
                                     <h2 class="admission-panel__title">Required Documents</h2>
