@@ -532,7 +532,8 @@
     position: absolute;
 
     right: 1rem;
-    bottom: 1rem;
+    bottom: -2.5rem; /* pushes it below the media */
+    
 
     z-index: 4;
 

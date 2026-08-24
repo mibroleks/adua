@@ -57,7 +57,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             UniversityStructureSeeder::class,          // Faculties, Departments, Programmes
             GlobalFormFieldsSeeder::class,             // Global fields with validation rules
-            ProgrammeSpecificFormFieldsSeeder::class,  // Programme-specific fields with validation rules
+     //       ProgrammeSpecificFormFieldsSeeder::class,  // Programme-specific fields with validation rules
             DocumentTypeSeeder::class,                 // Document types with validation rules
             SettingsSeeder::class,                     // Portal identity, appearance, admissions settings
         ]);
