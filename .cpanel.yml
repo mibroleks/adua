@@ -1,0 +1,8 @@
+deployment:
+  tasks:
+    # Deployment path is your Laravel project root
+    - export DEPLOYPATH=/home/aduawthr/adua
+
+    # Run a simple artisan cache refresh
+    - cd $DEPLOYPATH && php artisan config:clear
+    - cd $DEPLOYPATH && php artisan config:cache
