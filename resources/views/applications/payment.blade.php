@@ -25,15 +25,15 @@ Version: 2.0
 
             <div class="admission-eyebrow">
                 <span class="admission-eyebrow__dot" aria-hidden="true"></span>
-                Application Payment
+                Admission form / administration charges and logistics fee Payment
             </div>
 
             <h1 class="admission-page-title">
-                Application fee
+                Admission form / Administration charges and Logistics fee
             </h1>
 
             <p class="admission-page-description">
-                Review your application fee and payment status. If a payment
+                Review your Admission form / administration charges and logistics fee and payment status. If a payment
                 attempt failed, you can safely retry it.
             </p>
 
@@ -78,7 +78,7 @@ Version: 2.0
                     <div>
 
                         <span class="payment-card__eyebrow">
-                            APPLICATION FEE
+                            ADMISSION FORM / ADMINISTRATION CHARGES AND LOGISTICS FEE
                         </span>
 
                         <h2>
@@ -200,7 +200,7 @@ Version: 2.0
                                 variant="primary"
                                 type="submit"
                             >
-                                Pay Application Fee
+                                Pay Admission form / administration charges and logistics fee
                             </x-portal-button>
                         </form>
 

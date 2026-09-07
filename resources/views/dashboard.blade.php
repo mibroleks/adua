@@ -118,7 +118,7 @@
                 </x-portal-card>
 
                 {{-- Payment --}}
-                <x-portal-card title="Payment" subtitle="Application fee" class="dashboard-card">
+                <x-portal-card title="Payment" subtitle="Admission form / administration charges and logistics fee" class="dashboard-card">
                     @if($application->payment)
                         <div class="dashboard-payment-state">
                             <span class="admission-status admission-status--{{ strtolower($application->payment->status) }}">
@@ -130,10 +130,10 @@
                     @else
                         <div class="dashboard-payment-state dashboard-payment-state--empty">
                             <strong>Payment required</strong>
-                            <span>Complete your application fee payment to continue.</span>
+                            <span>Complete your Admission form / administration charges and logistics fee payment to continue.</span>
                             <form method="POST" action="{{ route('payment.initialize', $application) }}">
                                 @csrf
-                                <x-portal-button variant="success" type="submit">Pay Application Fee</x-portal-button>
+                                <x-portal-button variant="success" type="submit">Pay Admission form / administration charges and logistics fee</x-portal-button>
                             </form>
                         </div>
                     @endif

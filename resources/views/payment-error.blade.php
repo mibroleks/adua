@@ -49,7 +49,7 @@ Version: 1.0 (semantic theme tokens integration)
 
     {{-- Error Message --}}
     <x-alert type="danger">
-        Your payment could not be processed. Please try again to complete your application fee payment.
+        Your payment could not be processed. Please try again to complete your Admission form / administration charges and logistics fee payment.
     </x-alert>
 
     {{-- Retry Action --}}

@@ -12,7 +12,7 @@ Faculties → Departments → Programmes.
 Uses updateOrCreate to avoid duplicate key errors.
 
 Status: ✅ Production Ready
-Version: 3.2 (fees corrected to kobo values)
+Version: 3.4 (fees updated to ₦15,250 for all programmes)
 */
 
 namespace Database\Seeders;
@@ -61,9 +61,9 @@ class UniversityStructureSeeder extends Seeder
                 'name'               => 'B.Sc. Microbiology',
                 'degree_type'        => 'BSc',
                 'duration'           => 4,
-                'application_fee'    => 2000000, // ₦20,000.00
+                'application_fee'    => 1525000, // ₦15,250.00
                 'description'        => 'Study of microorganisms and their impact on health, environment, and industry.',
-                'requirements'       => '5 O’Level credits including Biology, Chemistry, Physics, Mathematics, and English.',
+                'requirements'       => '5 O’Level credits including English, Mathematics, Biology, Chemistry, and Physics.',
                 'career_paths'       => 'Microbiologist, Laboratory Scientist, Researcher, Public Health Officer.',
                 'scholarships'       => 'Merit-based scholarships available.',
                 'accreditation_body' => 'NUC',
@@ -79,9 +79,9 @@ class UniversityStructureSeeder extends Seeder
                 'name'               => 'B.Sc. Computer Science',
                 'degree_type'        => 'BSc',
                 'duration'           => 4,
-                'application_fee'    => 2000000, // ₦20,000.00
+                'application_fee'    => 1525000, // ₦15,250.00
                 'description'        => 'Focus on computing, algorithms, and software development.',
-                'requirements'       => '5 O’Level credits including Mathematics, English, Physics, and any science subject.',
+                'requirements'       => '5 O’Level credits including English, Mathematics, Physics, Chemistry, and Computer Studies/Information Technology.',
                 'career_paths'       => 'Software Engineer, Data Analyst, Systems Developer.',
                 'scholarships'       => 'ICT scholarships available.',
                 'accreditation_body' => 'NUC',
@@ -97,9 +97,9 @@ class UniversityStructureSeeder extends Seeder
                 'name'               => 'B.Sc. Cyber Security',
                 'degree_type'        => 'BSc',
                 'duration'           => 4,
-                'application_fee'    => 2500000, // ₦25,000.00
+                'application_fee'    => 1525000, // ₦15,250.00
                 'description'        => 'Specialisation in securing digital systems and networks.',
-                'requirements'       => '5 O’Level credits including Mathematics, English, Physics, and Computer Studies.',
+                'requirements'       => '5 O’Level credits including English, Mathematics, Physics, Chemistry, and Computer Studies/Information Technology.',
                 'career_paths'       => 'Cybersecurity Analyst, Ethical Hacker, Security Consultant.',
                 'scholarships'       => 'Cybersecurity grants available.',
                 'accreditation_body' => 'NUC',
@@ -115,9 +115,9 @@ class UniversityStructureSeeder extends Seeder
                 'name'               => 'B.Sc. Information Technology',
                 'degree_type'        => 'BSc',
                 'duration'           => 4,
-                'application_fee'    => 2200000, // ₦22,000.00
+                'application_fee'    => 1525000, // ₦15,250.00
                 'description'        => 'Covers IT systems, networking, and enterprise solutions.',
-                'requirements'       => '5 O’Level credits including Mathematics, English, Physics, and Computer Studies.',
+                'requirements'       => '5 O’Level credits including English, Mathematics, Physics, Chemistry, and Computer Studies/Information Technology.',
                 'career_paths'       => 'IT Manager, Systems Analyst, Network Engineer.',
                 'scholarships'       => 'ICT scholarships available.',
                 'accreditation_body' => 'NUC',
@@ -170,9 +170,9 @@ class UniversityStructureSeeder extends Seeder
                 'name'               => 'BNSc. Nursing Science',
                 'degree_type'        => 'BNSc',
                 'duration'           => 5,
-                'application_fee'    => 3000000, // ₦30,000.00
+                'application_fee'    => 1525000, // ₦15,250.00
                 'description'        => 'Training in nursing practice and patient care.',
-                'requirements'       => '5 O’Level credits including Biology, Chemistry, Physics, Mathematics, and English.',
+                'requirements'       => '5 O’Level credits including English, Mathematics, Biology, Chemistry, and Physics.',
                 'career_paths'       => 'Registered Nurse, Midwife, Clinical Practitioner.',
                 'scholarships'       => 'Nursing scholarships available.',
                 'accreditation_body' => 'NUC',
@@ -188,9 +188,9 @@ class UniversityStructureSeeder extends Seeder
                 'name'               => 'B.Sc. Public Health',
                 'degree_type'        => 'BSc',
                 'duration'           => 4,
-                'application_fee'    => 2500000, // ₦25,000.00
+                'application_fee'    => 1525000, // ₦15,250.00
                 'description'        => 'Focus on community health, epidemiology, and preventive medicine.',
-                'requirements'       => '5 O’Level credits including Biology, Chemistry, Mathematics, and English.',
+                'requirements'       => '5 O’Level credits including English, Mathematics, Biology, Chemistry, and Physics.',
                 'career_paths'       => 'Public Health Officer, Epidemiologist, Health Educator.',
                 'scholarships'       => 'Health scholarships available.',
                 'accreditation_body' => 'NUC',
@@ -206,9 +206,9 @@ class UniversityStructureSeeder extends Seeder
                 'name'               => 'B.HIM Health Information Management',
                 'degree_type'        => 'B.HIM',
                 'duration'           => 4,
-                'application_fee'    => 2800000, // ₦28,000.00
+                'application_fee'    => 1525000, // ₦15,250.00
                 'description'        => 'Management of health records and information systems.',
-                'requirements'       => '5 O’Level credits including Biology, Mathematics, English, and Computer Studies.',
+                'requirements'       => '5 O’Level credits including English, Mathematics, Biology, Physics, and Computer Studies/Information Technology.',
                 'career_paths'       => 'Health Information Manager, Medical Records Officer.',
                 'scholarships'       => 'Health IT scholarships available.',
                 'accreditation_body' => 'NUC',
@@ -216,6 +216,13 @@ class UniversityStructureSeeder extends Seeder
                 'application_enabled'=> true,
             ]
         );
+
+
+
+
+
+
+        
 
         // Faculty of Management and Social Sciences
         $mss = Faculty::updateOrCreate(
@@ -226,6 +233,7 @@ class UniversityStructureSeeder extends Seeder
                 'active' => true,
             ]
         );
+
 
         $acct = Department::updateOrCreate(
             ['code' => 'ACC'],
@@ -261,9 +269,9 @@ class UniversityStructureSeeder extends Seeder
                 'name'               => 'B.Sc. Accounting',
                 'degree_type'        => 'BSc',
                 'duration'           => 4,
-                'application_fee'    => 2000000, // ₦20,000.00
+                'application_fee'    => 1525000, // ₦15,250.00
                 'description'        => 'Study of financial reporting, auditing, and taxation.',
-                'requirements'       => '5 O’Level credits including Mathematics, English, Economics, and Accounting.',
+                'requirements'       => '5 O’Level credits including English, Mathematics, Economics, Financial Accounting, and Government.',
                 'career_paths'       => 'Accountant, Auditor, Tax Consultant, Financial Analyst.',
                 'scholarships'       => 'Accounting scholarships available.',
                 'accreditation_body' => 'NUC',
@@ -279,9 +287,9 @@ class UniversityStructureSeeder extends Seeder
                 'name'               => 'B.Sc. Finance',
                 'degree_type'        => 'BSc',
                 'duration'           => 4,
-                'application_fee'    => 2200000, // ₦22,000.00
+                'application_fee'    => 1525000, // ₦15,250.00
                 'description'        => 'Focus on investment, banking, and financial management.',
-                'requirements'       => '5 O’Level credits including Mathematics, English, and Economics.',
+                'requirements'       => '5 O’Level credits including English, Mathematics, Economics, Financial Accounting, and Government.',
                 'career_paths'       => 'Financial Analyst, Investment Banker, Risk Manager.',
                 'scholarships'       => 'Finance scholarships available.',
                 'accreditation_body' => 'NUC',
@@ -297,9 +305,9 @@ class UniversityStructureSeeder extends Seeder
                 'name'               => 'B.Sc. Business Administration',
                 'degree_type'        => 'BSc',
                 'duration'           => 4,
-                'application_fee'    => 2000000, // ₦20,000.00
+                'application_fee'    => 1525000, // ₦15,250.00
                 'description'        => 'Covers management, entrepreneurship, and organisational behaviour.',
-                'requirements'       => '5 O’Level credits including Mathematics, English, and Economics.',
+                'requirements'       => '5 O’Level credits including English, Mathematics, Economics, Commerce, and Government.',
                 'career_paths'       => 'Business Manager, Entrepreneur, Consultant.',
                 'scholarships'       => 'Business scholarships available.',
                 'accreditation_body' => 'NUC',
@@ -315,9 +323,9 @@ class UniversityStructureSeeder extends Seeder
                 'name'               => 'B.Sc. Procurement Management',
                 'degree_type'        => 'BSc',
                 'duration'           => 4,
-                'application_fee'    => 2100000, // ₦21,000.00
+                'application_fee'    => 1525000, // ₦15,250.00
                 'description'        => 'Specialisation in supply chain and procurement processes.',
-                'requirements'       => '5 O’Level credits including Mathematics, English, and Economics.',
+                'requirements'       => '5 O’Level credits including English, Mathematics, Economics, Commerce, and Financial Accounting.',
                 'career_paths'       => 'Procurement Officer, Supply Chain Manager.',
                 'scholarships'       => 'Management scholarships available.',
                 'accreditation_body' => 'NUC',
@@ -333,9 +341,9 @@ class UniversityStructureSeeder extends Seeder
                 'name'               => 'B.Sc. Developmental Studies',
                 'degree_type'        => 'BSc',
                 'duration'           => 4,
-                'application_fee'    => 2000000, // ₦20,000.00
+                'application_fee'    => 1525000, // ₦15,250.00
                 'description'        => 'Focus on socio-economic development and policy analysis.',
-                'requirements'       => '5 O’Level credits including Mathematics, English, and Economics.',
+                'requirements'       => '5 O’Level credits including English, Mathematics, Economics, Government, and Geography.',
                 'career_paths'       => 'Development Analyst, Policy Advisor, NGO Specialist.',
                 'scholarships'       => 'Development scholarships available.',
                 'accreditation_body' => 'NUC',
@@ -351,9 +359,9 @@ class UniversityStructureSeeder extends Seeder
                 'name'               => 'B.Sc. Economics',
                 'degree_type'        => 'BSc',
                 'duration'           => 4,
-                'application_fee'    => 2000000, // ₦20,000.00
+                'application_fee'    => 1525000, // ₦15,250.00
                 'description'        => 'Study of economic theory, policy, and quantitative methods.',
-                'requirements'       => '5 O’Level credits including Mathematics, English, and Economics.',
+                'requirements'       => '5 O’Level credits including English, Mathematics, Economics, Government, and Geography.',
                 'career_paths'       => 'Economist, Policy Analyst, Financial Consultant.',
                 'scholarships'       => 'Economics scholarships available.',
                 'accreditation_body' => 'NUC',

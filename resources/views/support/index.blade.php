@@ -122,7 +122,7 @@
                         <li class="support-faq">
 
                             <h3 class="support-faq__question">
-                                How do I pay my application fee?
+                                How do I pay my Admission form / administration charges and logistics fee?
                             </h3>
 
                             <p class="support-faq__answer">
@@ -234,7 +234,7 @@
                             </span>
 
                             <strong class="support-contact__value">
-                                admissions@example.edu
+                                admissions@adua.edu.ng
                             </strong>
 
                         </div>
@@ -252,7 +252,7 @@
                                     href="tel:+2348001234567"
                                     class="admission-link"
                                 >
-                                    +234 800 123 4567
+                                    +234-9136-0644-87 ,+234-8076-8019-43
                                 </a>
 
                             </strong>

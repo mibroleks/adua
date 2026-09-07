@@ -106,7 +106,7 @@ Version: 2.1 (documents stage fixed to use VERIFIED status)
                         <div class="progress-stage__heading">
                             <div>
                                 <span class="progress-stage__eyebrow">STAGE 02</span>
-                                <h2>Application payment</h2>
+                                <h2>Admission form / administration charges and logistics fee</h2>
                             </div>
                             @if($application->payment)
                                 <span class="admission-status admission-status--{{ strtolower($application->payment->status) }}">

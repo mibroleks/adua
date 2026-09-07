@@ -104,7 +104,7 @@ Version: 2.1 (secure document view route)
                 @if($application->payment)
                     <div class="dossier-payment">
                         <div class="dossier-payment__amount">
-                            <span>Application fee</span>
+                            <span>Admission form / administration charges and logistics fee</span>
                             <strong>₦{{ number_format($application->payment->amountInNaira(), 2) }}</strong>
                         </div>
                         <div class="dossier-payment__status">

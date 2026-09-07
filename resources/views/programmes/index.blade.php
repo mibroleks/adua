@@ -14,7 +14,7 @@ Design language:
 - Reusable programme detail modal
 - Theme-token driven
 
-Version: 3.1 (fixed fee display to use formatted_application_fee)
+Version: 3.2 (updated fee label wording)
 --}}
 
 @extends('layouts.app')
@@ -161,7 +161,7 @@ Version: 3.1 (fixed fee display to use formatted_application_fee)
                 <div class="programme-modal-admissions">
                     <h3>Admissions</h3>
                     <div class="programme-modal-admissions__fee">
-                        <span>APPLICATION FEE</span>
+                        <span>ADMISSION FORM / ADMINISTRATION CHARGES AND LOGISTICS</span>
                         <strong>{{ $programme->formatted_application_fee }}</strong>
                     </div>
 

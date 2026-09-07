@@ -156,7 +156,7 @@ Version: 5.4 (timeline + decision integrated)
             <div class="admission-panel__header">
                 <div>
                     <span class="admission-panel__kicker">Payment</span>
-                    <h2 class="admission-panel__title">Application Fee</h2>
+                    <h2 class="admission-panel__title">Admission form / administration charges and logistics fee</h2>
                     <p class="admission-panel__description">
                         Payment is tracked separately from your application status.
                     </p>
@@ -165,7 +165,7 @@ Version: 5.4 (timeline + decision integrated)
 
             <div class="status-payment__body">
                 <div class="status-payment__amount">
-                    <span>Application Fee</span>
+                    <span>Admission form / administration charges and logistics fee</span>
                     <strong>{{ $application->formatted_application_fee }}</strong>
                 </div>
 
@@ -208,10 +208,10 @@ Version: 5.4 (timeline + decision integrated)
                     @endif
                 @else
                     <div class="status-payment__pending">
-                        <p>Your application fee has not been paid yet.</p>
+                        <p>Your Admission form / administration charges and logistics fee has not been paid yet.</p>
                         <form method="POST" action="{{ route('payment.initialize', $application) }}">
                             @csrf
-                            <x-portal-button variant="success" type="submit">Pay Application Fee</x-portal-button>
+                            <x-portal-button variant="success" type="submit">Pay Admission form / administration charges and logistics fee</x-portal-button>
                         </form>
                     </div>
                 @endif

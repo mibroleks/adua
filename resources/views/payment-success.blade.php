@@ -47,7 +47,7 @@ Version: 1.0 (semantic theme tokens integration)
 
     {{-- Success Message --}}
     <x-alert type="success">
-        Your application fee has been paid successfully. You may now continue with your admission process.
+        Your Admission form / administration charges and logistics fee has been paid successfully. You may now continue with your admission process.
     </x-alert>
 
     {{-- Next Actions --}}
