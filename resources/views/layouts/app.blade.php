@@ -60,6 +60,9 @@ Version: 3.3 (split public vs portal shells)
 </head>
 <body class="portal-body theme-background theme-text antialiased">
 
+    {{-- Admissions Portal Disclaimer --}}
+    <x-portal-disclaimer />
+
     {{-- Accessibility --}}
     <a href="#main-content" class="skip-link">
         Skip to content

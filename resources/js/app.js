@@ -21,3 +21,4 @@ import './portal/notifications.js';
 import './portal/progress.js';
 import './portal/unsaved-changes.js';
 import './portal/user-menu.js';
+import './portal/portal-disclaimer.js'; // ✅ handles admissions portal disclaimer modal

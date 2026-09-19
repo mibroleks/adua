@@ -41,7 +41,7 @@
 @import "./components/portal-breadcrumbs.css";
 @import "./components/portal-logo.css";
 @import "./components/portal-mobile-navigation.css";
-
+@import "./components/portal-disclaimer.css";
 
 @import "./components/portal-student-footer.css";
 
@@ -53,6 +53,7 @@
 @import "./print.css"; 
 @import "./pages/admissions.css";
 @import "./pages/show.css";
+
 
 
 

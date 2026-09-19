@@ -1,0 +1,865 @@
+/*
+|--------------------------------------------------------------------------
+| Admissions Portal Disclaimer
+|--------------------------------------------------------------------------
+| File Path:
+| resources/css/components/portal-disclaimer.css
+|
+| Purpose:
+| Official institutional admissions notice.
+|
+| Design Direction:
+| - Serious
+| - Authoritative
+| - Premium
+| - Restrained
+| - Accessible
+| - Institutionally branded
+|
+| Uses semantic theme tokens supplied by the global theme system.
+|--------------------------------------------------------------------------
+*/
+
+.portal-disclaimer {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+
+    display: grid;
+    place-items: center;
+
+    padding: clamp(1rem, 4vw, 2.5rem);
+
+    isolation: isolate;
+}
+
+.portal-disclaimer[hidden] {
+    display: none;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| Backdrop
+|--------------------------------------------------------------------------
+*/
+
+.portal-disclaimer__backdrop {
+    position: absolute;
+    inset: 0;
+
+    background:
+        rgb(8 12 18 / 78%);
+
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| Dialog
+|--------------------------------------------------------------------------
+*/
+
+.portal-disclaimer__dialog {
+    position: relative;
+
+    width: min(100%, 720px);
+    max-height: min(90vh, 780px);
+
+    overflow-y: auto;
+
+    background:
+        var(--theme-surface, #ffffff);
+
+    color:
+        var(--theme-body, #333333);
+
+    border:
+        1px solid var(
+            --theme-border,
+            rgb(0 0 0 / 10%)
+        );
+
+    border-radius:
+        24px;
+
+    box-shadow:
+        0 40px 100px rgb(0 0 0 / 28%),
+        0 15px 40px rgb(0 0 0 / 15%);
+
+    animation:
+        portal-disclaimer-dialog-enter
+        260ms cubic-bezier(.22, 1, .36, 1);
+
+    scrollbar-width: thin;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| Institutional Identity
+|--------------------------------------------------------------------------
+*/
+
+.portal-disclaimer__identity {
+    display: flex;
+    align-items: center;
+
+    gap: 1rem;
+
+    padding:
+        1.35rem
+        clamp(1.35rem, 4vw, 2rem);
+
+    background:
+        var(
+            --theme-page,
+            #f7f7f7
+        );
+
+    border-bottom:
+        1px solid
+        var(
+            --theme-border,
+            rgb(0 0 0 / 8%)
+        );
+}
+
+
+.portal-disclaimer__logo-wrap {
+    flex: 0 0 auto;
+
+    display: grid;
+    place-items: center;
+
+    width: 58px;
+    height: 58px;
+
+    padding: 0.45rem;
+
+    background:
+        var(--theme-surface, #ffffff);
+
+    border:
+        1px solid
+        var(
+            --theme-border,
+            rgb(0 0 0 / 10%)
+        );
+
+    border-radius: 14px;
+
+    box-shadow:
+        0 5px 16px rgb(0 0 0 / 7%);
+}
+
+
+.portal-disclaimer__logo {
+    display: block;
+
+    width: 100%;
+    height: 100%;
+
+    object-fit: contain;
+}
+
+
+.portal-disclaimer__identity-text {
+    display: flex;
+    flex-direction: column;
+
+    min-width: 0;
+}
+
+
+.portal-disclaimer__institution {
+    color:
+        var(--theme-heading, #171717);
+
+    font-size:
+        0.96rem;
+
+    font-weight:
+        800;
+
+    line-height:
+        1.25;
+
+    letter-spacing:
+        -0.01em;
+}
+
+
+.portal-disclaimer__portal-label {
+    margin-top:
+        0.25rem;
+
+    color:
+        var(--theme-muted, #707070);
+
+    font-size:
+        0.72rem;
+
+    font-weight:
+        600;
+
+    line-height:
+        1.3;
+
+    letter-spacing:
+        0.08em;
+
+    text-transform:
+        uppercase;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| Notice Header
+|--------------------------------------------------------------------------
+*/
+
+.portal-disclaimer__header {
+    display: flex;
+    align-items: flex-start;
+
+    gap: 1rem;
+
+    padding:
+        clamp(1.5rem, 4vw, 2rem)
+        clamp(1.5rem, 4vw, 2.2rem)
+        1.35rem;
+}
+
+
+.portal-disclaimer__notice-mark {
+    flex: 0 0 auto;
+
+    display: grid;
+    place-items: center;
+
+    width: 50px;
+    height: 50px;
+
+    color:
+        var(--theme-primary, #73152a);
+
+    background:
+        var(
+            --theme-primary-soft,
+            rgb(115 21 42 / 9%)
+        );
+
+    border-radius:
+        14px;
+}
+
+
+.portal-disclaimer__notice-mark svg {
+    width: 25px;
+    height: 25px;
+}
+
+
+.portal-disclaimer__heading {
+    min-width: 0;
+}
+
+
+.portal-disclaimer__eyebrow {
+    display: block;
+
+    margin-bottom:
+        0.4rem;
+
+    color:
+        var(--theme-primary, #73152a);
+
+    font-size:
+        0.68rem;
+
+    font-weight:
+        800;
+
+    line-height:
+        1.2;
+
+    letter-spacing:
+        0.14em;
+
+    text-transform:
+        uppercase;
+}
+
+
+.portal-disclaimer__title {
+    margin:
+        0;
+
+    color:
+        var(--theme-heading, #171717);
+
+    font-family:
+        inherit;
+
+    font-size:
+        clamp(1.4rem, 3.5vw, 1.8rem);
+
+    font-weight:
+        800;
+
+    line-height:
+        1.15;
+
+    letter-spacing:
+        -0.025em;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| Content
+|--------------------------------------------------------------------------
+*/
+
+.portal-disclaimer__content {
+    padding:
+        0
+        clamp(1.5rem, 4vw, 2.2rem)
+        1.85rem;
+}
+
+
+.portal-disclaimer__content p {
+    margin:
+        0 0 1rem;
+
+    color:
+        var(--theme-body, #333333);
+
+    font-size:
+        0.95rem;
+
+    line-height:
+        1.75;
+}
+
+
+.portal-disclaimer__content p:last-child {
+    margin-bottom:
+        0;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| Acknowledgement
+|--------------------------------------------------------------------------
+*/
+
+.portal-disclaimer__acknowledgement {
+    display: flex;
+    align-items: flex-start;
+
+    gap: 0.8rem;
+
+    margin-top:
+        1.35rem;
+
+    padding:
+        1rem 1.05rem;
+
+    background:
+        var(
+            --theme-primary-soft,
+            rgb(115 21 42 / 7%)
+        );
+
+    border:
+        1px solid
+        var(
+            --theme-border,
+            rgb(0 0 0 / 8%)
+        );
+
+    border-left:
+        3px solid
+        var(--theme-primary, #73152a);
+
+    border-radius:
+        10px;
+}
+
+
+.portal-disclaimer__acknowledgement-icon {
+    flex: 0 0 auto;
+
+    display: grid;
+    place-items: center;
+
+    width: 23px;
+    height: 23px;
+
+    margin-top:
+        0.08rem;
+
+    border-radius:
+        50%;
+
+    background:
+        var(--theme-primary, #73152a);
+
+    color:
+        var(--theme-inverse, #ffffff);
+}
+
+
+.portal-disclaimer__acknowledgement-icon svg {
+    width: 14px;
+    height: 14px;
+}
+
+
+.portal-disclaimer__acknowledgement p {
+    margin:
+        0;
+
+    color:
+        var(--theme-heading, #171717);
+
+    font-size:
+        0.86rem;
+
+    font-weight:
+        650;
+
+    line-height:
+        1.6;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| Footer
+|--------------------------------------------------------------------------
+*/
+
+.portal-disclaimer__footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 1rem;
+
+    padding:
+        1.15rem
+        clamp(1.5rem, 4vw, 2.2rem);
+
+    background:
+        var(--theme-page, #f7f7f7);
+
+    border-top:
+        1px solid
+        var(
+            --theme-border,
+            rgb(0 0 0 / 9%)
+        );
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| Security Note
+|--------------------------------------------------------------------------
+*/
+
+.portal-disclaimer__security-note {
+    display: flex;
+    align-items: center;
+
+    gap: 0.55rem;
+
+    color:
+        var(--theme-muted, #707070);
+
+    font-size:
+        0.73rem;
+
+    font-weight:
+        650;
+
+    line-height:
+        1.4;
+}
+
+
+.portal-disclaimer__security-icon {
+    flex: 0 0 auto;
+
+    display: grid;
+    place-items: center;
+
+    width: 25px;
+    height: 25px;
+
+    color:
+        var(--theme-primary, #73152a);
+
+    background:
+        var(
+            --theme-primary-soft,
+            rgb(115 21 42 / 8%)
+        );
+
+    border-radius:
+        7px;
+}
+
+
+.portal-disclaimer__security-icon svg {
+    width: 15px;
+    height: 15px;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| Continue Button
+|--------------------------------------------------------------------------
+*/
+
+.portal-disclaimer__button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 0.65rem;
+
+    min-height:
+        48px;
+
+    padding:
+        0.75rem
+        1.15rem;
+
+    border:
+        1px solid
+        var(--theme-primary, #73152a);
+
+    border-radius:
+        10px;
+
+    background:
+        var(--theme-primary, #73152a);
+
+    color:
+        var(--theme-inverse, #ffffff);
+
+    font:
+        inherit;
+
+    font-size:
+        0.84rem;
+
+    font-weight:
+        750;
+
+    line-height:
+        1;
+
+    cursor:
+        pointer;
+
+    box-shadow:
+        0 5px 15px
+        rgb(0 0 0 / 10%);
+
+    transition:
+        transform 160ms ease,
+        box-shadow 160ms ease,
+        background 160ms ease;
+}
+
+
+.portal-disclaimer__button svg {
+    width: 18px;
+    height: 18px;
+
+    transition:
+        transform 160ms ease;
+}
+
+
+.portal-disclaimer__button:hover {
+    transform:
+        translateY(-1px);
+
+    box-shadow:
+        0 9px 22px
+        rgb(0 0 0 / 16%);
+}
+
+
+.portal-disclaimer__button:hover svg {
+    transform:
+        translateX(3px);
+}
+
+
+.portal-disclaimer__button:active {
+    transform:
+        translateY(0);
+}
+
+
+.portal-disclaimer__button:focus-visible {
+    outline:
+        3px solid
+        var(--theme-primary-soft, rgb(115 21 42 / 22%));
+
+    outline-offset:
+        3px;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| Open / Close States
+|--------------------------------------------------------------------------
+*/
+
+.portal-disclaimer.is-closing {
+    animation:
+        portal-disclaimer-exit
+        180ms ease-in
+        forwards;
+}
+
+
+.portal-disclaimer.is-closing
+.portal-disclaimer__dialog {
+    animation:
+        portal-disclaimer-dialog-exit
+        180ms ease-in
+        forwards;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| Animations
+|--------------------------------------------------------------------------
+*/
+
+@keyframes portal-disclaimer-dialog-enter {
+
+    from {
+        opacity: 0;
+
+        transform:
+            translateY(16px)
+            scale(0.985);
+    }
+
+    to {
+        opacity: 1;
+
+        transform:
+            translateY(0)
+            scale(1);
+    }
+}
+
+
+@keyframes portal-disclaimer-exit {
+
+    from {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0;
+    }
+}
+
+
+@keyframes portal-disclaimer-dialog-exit {
+
+    from {
+        opacity: 1;
+
+        transform:
+            translateY(0)
+            scale(1);
+    }
+
+    to {
+        opacity: 0;
+
+        transform:
+            translateY(8px)
+            scale(0.985);
+    }
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| Mobile
+|--------------------------------------------------------------------------
+*/
+
+@media (max-width: 640px) {
+
+    .portal-disclaimer {
+        padding:
+            0.65rem;
+    }
+
+
+    .portal-disclaimer__dialog {
+        width:
+            100%;
+
+        max-height:
+            95vh;
+
+        border-radius:
+            19px;
+    }
+
+
+    .portal-disclaimer__identity {
+        padding:
+            1rem
+            1.1rem;
+    }
+
+
+    .portal-disclaimer__logo-wrap {
+        width:
+            48px;
+
+        height:
+            48px;
+
+        border-radius:
+            12px;
+    }
+
+
+    .portal-disclaimer__institution {
+        font-size:
+            0.88rem;
+    }
+
+
+    .portal-disclaimer__portal-label {
+        font-size:
+            0.63rem;
+    }
+
+
+    .portal-disclaimer__header {
+        gap:
+            0.8rem;
+
+        padding:
+            1.35rem
+            1.1rem
+            1.1rem;
+    }
+
+
+    .portal-disclaimer__notice-mark {
+        width:
+            44px;
+
+        height:
+            44px;
+
+        border-radius:
+            12px;
+    }
+
+
+    .portal-disclaimer__title {
+        font-size:
+            1.3rem;
+    }
+
+
+    .portal-disclaimer__content {
+        padding:
+            0
+            1.1rem
+            1.4rem;
+    }
+
+
+    .portal-disclaimer__content p {
+        font-size:
+            0.9rem;
+
+        line-height:
+            1.68;
+    }
+
+
+    .portal-disclaimer__acknowledgement {
+        padding:
+            0.9rem;
+    }
+
+
+    .portal-disclaimer__footer {
+        align-items:
+            stretch;
+
+        flex-direction:
+            column;
+
+        padding:
+            1rem
+            1.1rem;
+    }
+
+
+    .portal-disclaimer__security-note {
+        justify-content:
+            center;
+
+        text-align:
+            center;
+    }
+
+
+    .portal-disclaimer__button {
+        width:
+            100%;
+    }
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| Reduced Motion
+|--------------------------------------------------------------------------
+*/
+
+@media (prefers-reduced-motion: reduce) {
+
+    .portal-disclaimer,
+    .portal-disclaimer__dialog,
+    .portal-disclaimer__button,
+    .portal-disclaimer__button svg {
+        animation:
+            none !important;
+
+        transition:
+            none !important;
+    }
+}
