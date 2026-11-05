@@ -1,0 +1,1184 @@
+/*
+|--------------------------------------------------------------------------
+| Component: Officer Login Interface
+| File Path: resources/css/filament/officer/login.css
+| Company: Ygrace Tech
+| Author: Ibrahim Olalekan
+|--------------------------------------------------------------------------
+|
+| Purpose:
+| Premium, responsive and institution-aware login interface
+| for the Officer Panel.
+|
+| Design direction:
+| - Dynamic institutional theme integration
+| - Elegant split-screen composition
+| - Refined institutional surfaces
+| - Theme-derived primary and accent colours
+| - Light and dark mode support
+| - Responsive mobile experience
+| - Accessible interaction and focus states
+|
+| Theme source:
+| ThemeService -> resolved institutional CSS custom properties
+|
+| Important:
+| This stylesheet does not define institution-specific colours.
+| All primary and accent colours are resolved from the active
+| institution theme, with neutral fallbacks where necessary.
+|
+| Version: 2.0
+|
+*/
+
+/* =========================================================
+   1. THEME DESIGN TOKENS
+========================================================= */
+
+.officer-login {
+    /* Institutional identity */
+
+    --officer-login-primary:
+        var(--theme-primary, var(--primary-600, #73152a));
+
+    --officer-login-primary-hover:
+        var(--theme-action-hover, var(--primary-700, #581020));
+
+    --officer-login-accent:
+        var(--theme-accent, #a98a54);
+
+    /* Main surfaces */
+
+    --officer-login-page:
+        var(--theme-page, #f7f5f1);
+
+    --officer-login-surface:
+        var(--theme-card-bg, var(--theme-surface, #ffffff));
+
+    --officer-login-surface-muted:
+        var(--theme-surface-muted, #f3f1ed);
+
+    /* Typography */
+
+    --officer-login-heading:
+        var(--theme-heading, #252025);
+
+    --officer-login-body:
+        var(--theme-body, #484148);
+
+    --officer-login-muted:
+        var(--theme-muted, #77717a);
+
+    --officer-login-inverse:
+        #ffffff;
+
+    /* Borders */
+
+    --officer-login-border:
+        var(--theme-card-border, var(--theme-border, #e7e1da));
+
+    --officer-login-border-strong:
+        var(--theme-border-strong, #d7cec4);
+
+    /* Semantic colours */
+
+    --officer-login-success:
+        var(--theme-success, #18794e);
+
+    --officer-login-warning:
+        var(--theme-warning, #a96c00);
+
+    --officer-login-danger:
+        var(--theme-danger, #b42318);
+
+    --officer-login-info:
+        var(--theme-info, #1769aa);
+
+    /* Derived colours */
+
+    --officer-login-primary-soft:
+        color-mix(
+            in srgb,
+            var(--officer-login-primary) 11%,
+            var(--officer-login-surface)
+        );
+
+    --officer-login-accent-soft:
+        color-mix(
+            in srgb,
+            var(--officer-login-accent) 13%,
+            var(--officer-login-surface)
+        );
+
+    --officer-login-primary-border:
+        color-mix(
+            in srgb,
+            var(--officer-login-primary) 25%,
+            var(--officer-login-border)
+        );
+
+    --officer-login-shadow:
+        0 2px 8px rgb(30 25 30 / 3%),
+        0 15px 40px rgb(30 25 30 / 4%);
+
+    --officer-login-radius:
+        18px;
+
+    --officer-login-transition:
+        220ms ease;
+
+    color: var(--officer-login-body);
+    font-family: inherit;
+}
+
+
+/* =========================================================
+   2. FILAMENT SIMPLE PAGE OVERRIDES
+========================================================= */
+
+.fi-simple-layout {
+    display: flex;
+    width: 100%;
+    min-height: 100vh;
+    align-items: stretch;
+    justify-content: stretch;
+
+    padding: 0 !important;
+    margin: 0 !important;
+
+    background: var(--theme-page, #f7f5f1);
+}
+
+.fi-simple-main-ctn {
+    display: flex;
+    width: 100% !important;
+    max-width: none !important;
+    min-height: 100vh;
+    align-items: stretch;
+    justify-content: stretch;
+
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+.fi-simple-main {
+    width: 100% !important;
+    max-width: none !important;
+    min-height: 100vh;
+
+    padding: 0 !important;
+    margin: 0 !important;
+
+    border: 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+
+    background: transparent !important;
+}
+
+.fi-simple-header {
+    display: none !important;
+}
+
+
+/* =========================================================
+   3. MAIN LOGIN LAYOUT
+========================================================= */
+
+.officer-login {
+    position: relative;
+
+    display: grid;
+
+    grid-template-columns:
+        minmax(0, 1.08fr)
+        minmax(440px, 0.92fr);
+
+    width: 100%;
+    min-height: 100vh;
+
+    overflow: hidden;
+
+    background: var(--officer-login-page);
+}
+
+.officer-login *,
+.officer-login *::before,
+.officer-login *::after {
+    box-sizing: border-box;
+}
+
+
+/* =========================================================
+   4. INSTITUTIONAL VISUAL PANEL
+========================================================= */
+
+.officer-login__visual {
+    position: relative;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    min-height: 100vh;
+    overflow: hidden;
+
+    padding: clamp(38px, 5vw, 76px);
+
+    color: var(--officer-login-inverse);
+
+    /*
+     * The active institution's primary colour drives
+     * the entire visual panel.
+     *
+     * The accent is used only as a secondary decorative tone.
+     */
+
+    background:
+        radial-gradient(
+            circle at 85% 18%,
+            color-mix(
+                in srgb,
+                var(--officer-login-accent) 24%,
+                transparent
+            ),
+            transparent 34%
+        ),
+        radial-gradient(
+            circle at 8% 90%,
+            color-mix(
+                in srgb,
+                var(--officer-login-primary) 22%,
+                transparent
+            ),
+            transparent 40%
+        ),
+        linear-gradient(
+            145deg,
+            color-mix(
+                in srgb,
+                var(--officer-login-primary) 80%,
+                #ffffff 20%
+            ),
+            color-mix(
+                in srgb,
+                var(--officer-login-primary) 78%,
+                #000000 22%
+            ) 75%
+        );
+}
+
+.officer-login__visual::before {
+    position: absolute;
+    inset: 0;
+
+    content: "";
+    pointer-events: none;
+
+    background-image:
+        linear-gradient(
+            rgb(255 255 255 / 3%) 1px,
+            transparent 1px
+        ),
+        linear-gradient(
+            90deg,
+            rgb(255 255 255 / 3%) 1px,
+            transparent 1px
+        );
+
+    background-size: 64px 64px;
+
+    mask-image: linear-gradient(
+        to bottom right,
+        black,
+        transparent 85%
+    );
+}
+
+.officer-login__visual-pattern {
+    position: absolute;
+
+    right: -260px;
+    bottom: -210px;
+
+    width: 580px;
+    height: 580px;
+
+    border: 1px solid
+        color-mix(
+            in srgb,
+            var(--officer-login-accent) 35%,
+            transparent
+        );
+
+    border-radius: 50%;
+
+    pointer-events: none;
+}
+
+.officer-login__visual-pattern::before,
+.officer-login__visual-pattern::after {
+    position: absolute;
+    inset: 36px;
+
+    content: "";
+
+    border: 1px solid
+        color-mix(
+            in srgb,
+            var(--officer-login-accent) 25%,
+            transparent
+        );
+
+    border-radius: 50%;
+}
+
+.officer-login__visual-pattern::after {
+    inset: 86px;
+}
+
+
+/* =========================================================
+   5. BRAND IDENTITY
+========================================================= */
+
+.officer-login__visual-content {
+    position: relative;
+    z-index: 1;
+
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+
+    min-width: 0;
+}
+
+.officer-login__identity {
+    display: flex;
+    align-items: center;
+
+    gap: 17px;
+
+    max-width: 540px;
+    min-width: 0;
+}
+
+.officer-login__logo {
+    width: 66px;
+    height: 66px;
+    flex-shrink: 0;
+
+    padding: 7px;
+
+    object-fit: contain;
+
+    border: 1px solid rgb(255 255 255 / 25%);
+    border-radius: 14px;
+
+    background: #ffffff;
+}
+
+.officer-login__logo-fallback {
+    display: flex;
+
+    width: 66px;
+    height: 66px;
+    flex-shrink: 0;
+
+    align-items: center;
+    justify-content: center;
+
+    color: #ffffff;
+
+    background: rgb(255 255 255 / 10%);
+
+    border: 1px solid
+        color-mix(
+            in srgb,
+            var(--officer-login-accent) 50%,
+            transparent
+        );
+
+    border-radius: 14px;
+}
+
+.officer-login__logo-icon {
+    width: 34px;
+    height: 34px;
+}
+
+.officer-login__identity-text {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.officer-login__institution-name {
+    color: #ffffff;
+
+    font-size: clamp(15px, 1.3vw, 19px);
+    font-weight: 750;
+    line-height: 1.4;
+    letter-spacing: -0.025em;
+
+    overflow-wrap: anywhere;
+}
+
+.officer-login__institution-caption {
+    color: color-mix(
+        in srgb,
+        var(--officer-login-accent) 65%,
+        #ffffff
+    );
+
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.19em;
+}
+
+
+/* =========================================================
+   6. HERO MESSAGE
+========================================================= */
+
+.officer-login__message {
+    max-width: 650px;
+
+    margin-top: auto;
+    margin-bottom: auto;
+
+    padding-top: 80px;
+    padding-bottom: 80px;
+
+    animation: officer-login-reveal 700ms ease both;
+}
+
+.officer-login__eyebrow {
+    display: inline-block;
+
+    margin-bottom: 27px;
+
+    color: color-mix(
+        in srgb,
+        var(--officer-login-accent) 65%,
+        #ffffff
+    );
+
+    font-size: 10px;
+    font-weight: 750;
+    letter-spacing: 0.2em;
+}
+
+.officer-login__message h1 {
+    max-width: 620px;
+
+    margin: 0;
+
+    color: #ffffff;
+
+    font-size: clamp(43px, 5.1vw, 76px);
+    font-weight: 750;
+    line-height: 1.08;
+    letter-spacing: -0.055em;
+}
+
+.officer-login__message h1 span {
+    display: block;
+
+    color: color-mix(
+        in srgb,
+        var(--officer-login-accent) 65%,
+        #ffffff
+    );
+}
+
+.officer-login__message p {
+    max-width: 480px;
+
+    margin-top: 28px;
+
+    color: rgb(255 255 255 / 76%);
+
+    font-size: 15px;
+    line-height: 1.95;
+}
+
+
+/* =========================================================
+   7. SECURITY STATEMENT
+========================================================= */
+
+.officer-login__security {
+    display: flex;
+    align-items: center;
+
+    gap: 15px;
+
+    max-width: 450px;
+    padding: 17px 19px;
+
+    border: 1px solid rgb(255 255 255 / 15%);
+    border-radius: 14px;
+
+    background: rgb(255 255 255 / 7%);
+
+    backdrop-filter: blur(12px);
+}
+
+.officer-login__security-icon {
+    display: flex;
+
+    width: 42px;
+    height: 42px;
+    flex-shrink: 0;
+
+    align-items: center;
+    justify-content: center;
+
+    color: #ffffff;
+
+    background: color-mix(
+        in srgb,
+        var(--officer-login-accent) 25%,
+        transparent
+    );
+
+    border: 1px solid
+        color-mix(
+            in srgb,
+            var(--officer-login-accent) 30%,
+            transparent
+        );
+
+    border-radius: 11px;
+}
+
+.officer-login__security-icon svg {
+    width: 21px;
+    height: 21px;
+}
+
+.officer-login__security-title,
+.officer-login__security-description {
+    display: block;
+}
+
+.officer-login__security-title {
+    color: #ffffff;
+
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.officer-login__security-description {
+    margin-top: 5px;
+
+    color: rgb(255 255 255 / 68%);
+
+    font-size: 11px;
+    line-height: 1.6;
+}
+
+
+/* =========================================================
+   8. VISUAL PANEL FOOTER
+========================================================= */
+
+.officer-login__visual-footer {
+    position: relative;
+    z-index: 1;
+
+    display: flex;
+    align-items: center;
+
+    gap: 13px;
+
+    padding-top: 25px;
+
+    color: rgb(255 255 255 / 58%);
+
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+}
+
+.officer-login__footer-divider {
+    width: 25px;
+    height: 1px;
+
+    background: var(--officer-login-accent);
+}
+
+
+/* =========================================================
+   9. AUTHENTICATION PANEL
+========================================================= */
+
+.officer-login__form-panel {
+    display: flex;
+
+    min-width: 0;
+    min-height: 100vh;
+
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    padding: 65px clamp(30px, 6vw, 100px);
+
+    background: var(--officer-login-page);
+}
+
+.officer-login__form-container {
+    width: 100%;
+    max-width: 445px;
+
+    animation: officer-login-reveal 700ms 100ms ease both;
+}
+
+.officer-login__mobile-brand {
+    display: none;
+}
+
+
+/* =========================================================
+   10. FORM HEADING
+========================================================= */
+
+.officer-login__form-heading {
+    margin-bottom: 37px;
+}
+
+.officer-login__form-eyebrow {
+    display: inline-block;
+
+    margin-bottom: 17px;
+
+    color: var(--officer-login-primary);
+
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.2em;
+}
+
+.officer-login__form-heading h2 {
+    margin: 0;
+
+    color: var(--officer-login-heading);
+
+    font-size: clamp(34px, 3vw, 43px);
+    font-weight: 750;
+    line-height: 1.15;
+    letter-spacing: -0.045em;
+}
+
+.officer-login__form-heading p {
+    max-width: 380px;
+
+    margin-top: 15px;
+
+    color: var(--officer-login-muted);
+
+    font-size: 13px;
+    line-height: 1.9;
+}
+
+
+/* =========================================================
+   11. FILAMENT AUTHENTICATION FORM
+========================================================= */
+
+.officer-login__form {
+    width: 100%;
+
+    color: var(--officer-login-body);
+}
+
+.officer-login__form .fi-sc {
+    width: 100%;
+}
+
+.officer-login__form .fi-fo-field-wrp {
+    margin-bottom: 23px;
+}
+
+.officer-login__form .fi-fo-field-wrp-label {
+    margin-bottom: 9px;
+
+    color: var(--officer-login-heading);
+
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.officer-login__form .fi-input-wrp {
+    min-height: 53px;
+
+    border: 1px solid var(--officer-login-border);
+    border-radius: 11px;
+
+    background: var(--officer-login-surface);
+
+    box-shadow: 0 2px 7px rgb(30 25 30 / 3%);
+
+    transition:
+        border-color var(--officer-login-transition),
+        box-shadow var(--officer-login-transition),
+        background var(--officer-login-transition);
+}
+
+.officer-login__form .fi-input-wrp:hover {
+    border-color: var(--officer-login-border-strong);
+}
+
+.officer-login__form .fi-input-wrp:focus-within {
+    border-color: var(--officer-login-primary);
+
+    box-shadow:
+        0 0 0 4px
+        color-mix(
+            in srgb,
+            var(--officer-login-primary) 13%,
+            transparent
+        );
+}
+
+.officer-login__form input {
+    color: var(--officer-login-heading);
+
+    font-size: 13px;
+}
+
+.officer-login__form input::placeholder {
+    color: var(--officer-login-muted);
+    opacity: 0.8;
+}
+
+.officer-login__form .fi-checkbox-input {
+    border-radius: 5px;
+}
+
+.officer-login__form .fi-checkbox-input:checked {
+    background-color: var(--officer-login-primary);
+    border-color: var(--officer-login-primary);
+}
+
+.officer-login__form .fi-checkbox-label {
+    color: var(--officer-login-muted);
+    font-size: 12px;
+}
+
+.officer-login__form .fi-form-actions {
+    margin-top: 27px;
+}
+
+.officer-login__form .fi-btn {
+    min-height: 53px;
+
+    border-radius: 11px;
+
+    font-size: 13px;
+    font-weight: 750;
+    letter-spacing: 0.015em;
+
+    transition:
+        transform var(--officer-login-transition),
+        box-shadow var(--officer-login-transition),
+        background var(--officer-login-transition);
+}
+
+.officer-login__form .fi-btn-color-primary {
+    color: #ffffff;
+
+    background: var(--officer-login-primary);
+    border-color: var(--officer-login-primary);
+}
+
+.officer-login__form .fi-btn-color-primary:not(:disabled):hover {
+    color: #ffffff;
+
+    background: var(--officer-login-primary-hover);
+    border-color: var(--officer-login-primary-hover);
+}
+
+.officer-login__form .fi-btn:not(:disabled):hover {
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 9px 22px
+        color-mix(
+            in srgb,
+            var(--officer-login-primary) 20%,
+            transparent
+        );
+}
+
+.officer-login__form .fi-btn:focus-visible {
+    outline: 3px solid
+        color-mix(
+            in srgb,
+            var(--officer-login-primary) 35%,
+            transparent
+        );
+
+    outline-offset: 3px;
+}
+
+
+/* =========================================================
+   12. FORM VALIDATION AND NOTIFICATIONS
+========================================================= */
+
+.officer-login__form .fi-fo-field-wrp-error-message {
+    color: var(--officer-login-danger);
+    font-size: 11px;
+    line-height: 1.6;
+}
+
+.officer-login__form .fi-input-wrp:has(
+    [aria-invalid="true"]
+) {
+    border-color: var(--officer-login-danger);
+}
+
+.officer-login__form .fi-input-wrp:has(
+    [aria-invalid="true"]
+):focus-within {
+    box-shadow:
+        0 0 0 4px
+        color-mix(
+            in srgb,
+            var(--officer-login-danger) 12%,
+            transparent
+        );
+}
+
+
+/* =========================================================
+   13. FORM FOOTER
+========================================================= */
+
+.officer-login__form-footer {
+    margin-top: 38px;
+}
+
+.officer-login__form-footer-line {
+    width: 100%;
+    height: 1px;
+
+    background: var(--officer-login-border);
+}
+
+.officer-login__form-footer-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 8px;
+
+    padding-top: 21px;
+
+    color: var(--officer-login-muted);
+
+    font-size: 11px;
+}
+
+.officer-login__form-footer-content svg {
+    width: 15px;
+    height: 15px;
+
+    color: var(--officer-login-primary);
+}
+
+
+/* =========================================================
+   14. COPYRIGHT
+========================================================= */
+
+.officer-login__copyright {
+    display: flex;
+
+    width: 100%;
+    max-width: 445px;
+
+    justify-content: space-between;
+
+    gap: 12px;
+    margin-top: auto;
+    padding-top: 45px;
+
+    color: var(--officer-login-muted);
+
+    font-size: 10px;
+}
+
+
+/* =========================================================
+   15. ANIMATION
+========================================================= */
+
+@keyframes officer-login-reveal {
+    from {
+        opacity: 0;
+        transform: translateY(13px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+/* =========================================================
+   16. TABLET RESPONSIVENESS
+========================================================= */
+
+@media (max-width: 1100px) {
+    .officer-login {
+        grid-template-columns:
+            minmax(0, 1fr)
+            minmax(390px, 0.95fr);
+    }
+
+    .officer-login__visual {
+        padding: 42px;
+    }
+
+    .officer-login__form-panel {
+        padding-right: 38px;
+        padding-left: 38px;
+    }
+
+    .officer-login__message h1 {
+        font-size: clamp(42px, 5vw, 59px);
+    }
+}
+
+
+/* =========================================================
+   17. MOBILE RESPONSIVENESS
+========================================================= */
+
+@media (max-width: 760px) {
+    .officer-login {
+        display: flex;
+
+        min-height: 100vh;
+
+        flex-direction: column;
+
+        overflow: visible;
+    }
+
+    .officer-login__visual {
+        display: none;
+    }
+
+    .officer-login__form-panel {
+        min-height: 100vh;
+
+        justify-content: flex-start;
+
+        padding: 35px 24px 25px;
+    }
+
+    .officer-login__form-container {
+        max-width: 480px;
+
+        margin: auto 0;
+    }
+
+    .officer-login__mobile-brand {
+        display: flex;
+        align-items: center;
+
+        gap: 12px;
+        margin-bottom: 62px;
+    }
+
+    .officer-login__mobile-brand img {
+        width: 49px;
+        height: 49px;
+
+        padding: 4px;
+
+        object-fit: contain;
+
+        border: 1px solid var(--officer-login-border);
+        border-radius: 10px;
+
+        background: var(--officer-login-surface);
+    }
+
+    .officer-login__mobile-brand > svg {
+        width: 49px;
+        height: 49px;
+
+        padding: 10px;
+
+        color: var(--officer-login-primary);
+
+        background: var(--officer-login-surface);
+
+        border: 1px solid var(--officer-login-border);
+        border-radius: 10px;
+    }
+
+    .officer-login__mobile-brand span {
+        color: var(--officer-login-heading);
+
+        font-size: 13px;
+        font-weight: 750;
+        line-height: 1.5;
+    }
+
+    .officer-login__form-heading {
+        margin-bottom: 30px;
+    }
+
+    .officer-login__form-heading h2 {
+        font-size: 35px;
+    }
+
+    .officer-login__copyright {
+        margin-top: 50px;
+        padding-top: 25px;
+    }
+}
+
+
+/* =========================================================
+   18. SMALL MOBILE DEVICES
+========================================================= */
+
+@media (max-width: 420px) {
+    .officer-login__form-panel {
+        padding-right: 19px;
+        padding-left: 19px;
+    }
+
+    .officer-login__mobile-brand {
+        margin-bottom: 47px;
+    }
+
+    .officer-login__form-heading h2 {
+        font-size: 32px;
+    }
+
+    .officer-login__copyright {
+        flex-direction: column;
+        gap: 7px;
+    }
+}
+
+
+/* =========================================================
+   19. DARK MODE
+========================================================= */
+
+.dark .officer-login {
+    --officer-login-page:
+        var(--theme-page, #17151a);
+
+    --officer-login-surface:
+        var(--theme-card-bg, var(--theme-surface, #211e24));
+
+    --officer-login-surface-muted:
+        var(--theme-surface-muted, #29252d);
+
+    --officer-login-heading:
+        var(--theme-heading, #f0edf0);
+
+    --officer-login-body:
+        var(--theme-body, #d5cfd7);
+
+    --officer-login-muted:
+        var(--theme-muted, #aaa3ad);
+
+    --officer-login-border:
+        var(--theme-card-border, var(--theme-border, #39333d));
+
+    --officer-login-border-strong:
+        var(--theme-border-strong, #514956);
+
+    background: var(--officer-login-page);
+}
+
+.dark .fi-simple-layout {
+    background: var(--theme-page, #17151a);
+}
+
+.dark .officer-login__visual {
+    background:
+        radial-gradient(
+            circle at 85% 18%,
+            color-mix(
+                in srgb,
+                var(--officer-login-accent) 22%,
+                transparent
+            ),
+            transparent 34%
+        ),
+        linear-gradient(
+            145deg,
+            color-mix(
+                in srgb,
+                var(--officer-login-primary) 83%,
+                #ffffff 17%
+            ),
+            color-mix(
+                in srgb,
+                var(--officer-login-primary) 72%,
+                #000000 28%
+            ) 75%
+        );
+}
+
+.dark .officer-login__form-panel {
+    background: var(--officer-login-page);
+}
+
+.dark .officer-login__form .fi-input-wrp {
+    background: var(--officer-login-surface);
+    border-color: var(--officer-login-border);
+}
+
+.dark .officer-login__form .fi-input-wrp:hover {
+    border-color: var(--officer-login-border-strong);
+}
+
+.dark .officer-login__form input {
+    color: var(--officer-login-heading);
+}
+
+.dark .officer-login__form .fi-checkbox-label {
+    color: var(--officer-login-muted);
+}
+
+.dark .officer-login__mobile-brand img,
+.dark .officer-login__mobile-brand > svg {
+    background: var(--officer-login-surface);
+    border-color: var(--officer-login-border);
+}
+
+.dark .officer-login__form-footer-line {
+    background: var(--officer-login-border);
+}
+
+
+/* =========================================================
+   20. REDUCED MOTION
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+    .officer-login *,
+    .officer-login *::before,
+    .officer-login *::after {
+        scroll-behavior: auto !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}

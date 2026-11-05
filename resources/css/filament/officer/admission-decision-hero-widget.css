@@ -1,0 +1,904 @@
+/*
+|--------------------------------------------------------------------------
+| Ygrace Tech — Admission Decision Hero
+|--------------------------------------------------------------------------
+| File: resources/css/filament/officer/admission-decision-hero-widget.css
+|
+| Purpose:
+| Premium, institution-aware Admission Decision hero presentation.
+|
+| Design:
+| - Dynamic institutional theme tokens.
+| - Separate application and admission status treatments.
+| - Referral partner attribution.
+| - Responsive five-item decision metadata.
+| - Responsive decision workflow.
+| - Light and dark mode support.
+|--------------------------------------------------------------------------
+*/
+
+.admission-decision-hero {
+    --decision-primary: var(--theme-primary, #73152A);
+    --decision-accent: var(--theme-accent, #B89245);
+
+    --decision-surface: var(--theme-card-bg, var(--theme-surface, #FFFFFF));
+    --decision-muted-surface: var(--theme-surface-muted, var(--theme-page, #F7F4EE));
+
+    --decision-heading: var(--theme-heading, #20191C);
+    --decision-body: var(--theme-body, #3C3437);
+    --decision-muted: var(--theme-muted, #756C70);
+
+    --decision-border: var(--theme-card-border, var(--theme-border, #E6DFD7));
+
+    --decision-success: var(--theme-success, #18794E);
+    --decision-warning: var(--theme-warning, #A96C00);
+    --decision-danger: var(--theme-danger, #B42318);
+    --decision-info: var(--theme-info, #1769AA);
+
+    --decision-primary-soft: color-mix(
+        in srgb,
+        var(--decision-primary) 11%,
+        var(--decision-surface)
+    );
+
+    --decision-radius: 18px;
+
+    display: block;
+    width: 100%;
+    max-width: none;
+    min-width: 0;
+    overflow: hidden;
+
+    box-sizing: border-box;
+
+    color: var(--decision-body);
+    background: var(--decision-surface);
+
+    border: 1px solid var(--decision-border);
+    border-radius: var(--decision-radius);
+
+    box-shadow:
+        0 2px 6px rgb(15 23 42 / 3.5%),
+        0 14px 35px rgb(15 23 42 / 4.5%);
+}
+
+.admission-decision-hero *,
+.admission-decision-hero *::before,
+.admission-decision-hero *::after {
+    box-sizing: border-box;
+}
+
+
+/* --------------------------------------------------------------------------
+   Main identity header
+-------------------------------------------------------------------------- */
+
+.admission-decision-hero__main {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+
+    width: 100%;
+    min-width: 0;
+
+    padding: 27px 30px;
+
+    background:
+        linear-gradient(
+            115deg,
+            color-mix(
+                in srgb,
+                var(--decision-primary) 15%,
+                var(--decision-surface)
+            ),
+            var(--decision-surface) 72%
+        );
+
+    border-bottom: 1px solid var(--decision-border);
+}
+
+.admission-decision-hero__identity {
+    display: flex;
+    align-items: center;
+    flex: 1 1 auto;
+    gap: 19px;
+    min-width: 0;
+}
+
+.admission-decision-hero__avatar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex: 0 0 66px;
+
+    width: 66px;
+    height: 66px;
+
+    color: #fff;
+
+    background:
+        linear-gradient(
+            145deg,
+            var(--decision-primary),
+            color-mix(
+                in srgb,
+                var(--decision-primary) 65%,
+                var(--decision-accent)
+            )
+        );
+
+    border: 4px solid var(--decision-surface);
+    border-radius: 19px;
+
+    box-shadow:
+        0 5px 15px color-mix(
+            in srgb,
+            var(--decision-primary) 22%,
+            transparent
+        );
+
+    font-size: 1.25rem;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+}
+
+.admission-decision-hero__identity-content {
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+.admission-decision-hero__eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    margin-bottom: 7px;
+
+    color: var(--decision-primary);
+
+    font-size: 0.66rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    line-height: 1.4;
+}
+
+.admission-decision-hero__eyebrow-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 19px;
+
+    width: 19px;
+    height: 19px;
+
+    color: var(--decision-primary);
+    background: var(--decision-primary-soft);
+    border-radius: 6px;
+}
+
+.admission-decision-hero__eyebrow-icon svg {
+    width: 13px;
+    height: 13px;
+}
+
+.admission-decision-hero__applicant-name {
+    margin: 0;
+
+    color: var(--decision-heading);
+
+    font-size: clamp(1.15rem, 2vw, 1.55rem);
+    font-weight: 800;
+    letter-spacing: -0.045em;
+    line-height: 1.25;
+
+    overflow-wrap: anywhere;
+}
+
+.admission-decision-hero__contact {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 7px 17px;
+    margin-top: 10px;
+
+    color: var(--decision-muted);
+
+    font-size: 0.78rem;
+    font-weight: 500;
+}
+
+.admission-decision-hero__contact span {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+
+.admission-decision-hero__contact svg {
+    flex: 0 0 auto;
+    width: 14px;
+    height: 14px;
+    color: var(--decision-primary);
+}
+
+
+/* --------------------------------------------------------------------------
+   Institutional admission status
+-------------------------------------------------------------------------- */
+
+.admission-decision-hero__status-area {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    flex: 0 0 auto;
+    gap: 9px;
+}
+
+.admission-decision-hero__status-label {
+    color: var(--decision-muted);
+    font-size: 0.63rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-align: right;
+}
+
+.admission-decision-hero__status {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+
+    padding: 9px 14px;
+
+    border: 1px solid transparent;
+    border-radius: 999px;
+
+    font-size: 0.75rem;
+    font-weight: 800;
+    line-height: 1.2;
+    white-space: nowrap;
+}
+
+.admission-decision-hero__status-dot {
+    flex: 0 0 7px;
+    width: 7px;
+    height: 7px;
+    background: currentColor;
+    border-radius: 50%;
+}
+
+.admission-decision-hero__status--pending {
+    color: var(--decision-warning);
+    background: color-mix(in srgb, var(--decision-warning) 11%, var(--decision-surface));
+    border-color: color-mix(in srgb, var(--decision-warning) 24%, var(--decision-border));
+}
+
+.admission-decision-hero__status--admitted {
+    color: var(--decision-success);
+    background: color-mix(in srgb, var(--decision-success) 11%, var(--decision-surface));
+    border-color: color-mix(in srgb, var(--decision-success) 24%, var(--decision-border));
+}
+
+.admission-decision-hero__status--not-admitted {
+    color: var(--decision-danger);
+    background: color-mix(in srgb, var(--decision-danger) 10%, var(--decision-surface));
+    border-color: color-mix(in srgb, var(--decision-danger) 23%, var(--decision-border));
+}
+
+.admission-decision-hero__status--waitlisted {
+    color: var(--decision-info);
+    background: color-mix(in srgb, var(--decision-info) 11%, var(--decision-surface));
+    border-color: color-mix(in srgb, var(--decision-info) 24%, var(--decision-border));
+}
+
+.admission-decision-hero__status--deferred {
+    color: var(--decision-accent);
+    background: color-mix(in srgb, var(--decision-accent) 13%, var(--decision-surface));
+    border-color: color-mix(in srgb, var(--decision-accent) 28%, var(--decision-border));
+}
+
+.admission-decision-hero__secondary-label {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 5px;
+
+    color: var(--decision-muted);
+    font-size: 0.7rem;
+    line-height: 1.5;
+}
+
+.admission-decision-hero__secondary-status {
+    font-weight: 800;
+}
+
+.admission-decision-hero__secondary-status--approved {
+    color: var(--decision-success);
+}
+
+.admission-decision-hero__secondary-status--rejected {
+    color: var(--decision-danger);
+}
+
+.admission-decision-hero__secondary-status--neutral {
+    color: var(--decision-muted);
+}
+
+
+/* --------------------------------------------------------------------------
+   Decision metadata
+-------------------------------------------------------------------------- */
+
+.admission-decision-hero__metadata {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    width: 100%;
+    min-width: 0;
+    background: var(--decision-surface);
+}
+
+.admission-decision-hero__meta-item {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    gap: 7px;
+    padding: 19px 17px;
+    border-right: 1px solid var(--decision-border);
+}
+
+.admission-decision-hero__meta-item:last-child {
+    border-right: 0;
+}
+
+.admission-decision-hero__meta-item--primary {
+    background: color-mix(
+        in srgb,
+        var(--decision-primary) 6%,
+        var(--decision-surface)
+    );
+}
+
+.admission-decision-hero__meta-label {
+    color: var(--decision-muted);
+    font-size: 0.62rem;
+    font-weight: 800;
+    letter-spacing: 0.09em;
+    line-height: 1.4;
+}
+
+.admission-decision-hero__meta-value {
+    color: var(--decision-heading);
+    font-size: 0.84rem;
+    font-weight: 750;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+}
+
+.admission-decision-hero__meta-item--primary
+.admission-decision-hero__meta-value {
+    color: var(--decision-primary);
+    font-size: 0.91rem;
+    letter-spacing: 0.015em;
+}
+
+.admission-decision-hero__meta-description {
+    color: var(--decision-muted);
+    font-size: 0.70rem;
+    font-weight: 600;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+}
+
+
+/* --------------------------------------------------------------------------
+   Workflow progress
+-------------------------------------------------------------------------- */
+
+.admission-decision-hero__progress {
+    width: 100%;
+    min-width: 0;
+    padding: 22px 30px 25px;
+
+    background:
+        color-mix(
+            in srgb,
+            var(--decision-muted-surface) 45%,
+            var(--decision-surface)
+        );
+
+    border-top: 1px solid var(--decision-border);
+}
+
+.admission-decision-hero__progress-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    margin-bottom: 19px;
+}
+
+.admission-decision-hero__progress-heading > div {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.admission-decision-hero__progress-title {
+    color: var(--decision-heading);
+    font-size: 0.81rem;
+    font-weight: 800;
+}
+
+.admission-decision-hero__progress-description {
+    color: var(--decision-muted);
+    font-size: 0.71rem;
+    line-height: 1.5;
+}
+
+.admission-decision-hero__progress-stage {
+    color: var(--decision-primary);
+    font-size: 0.69rem;
+    font-weight: 800;
+    white-space: nowrap;
+}
+
+.admission-decision-hero__steps {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    min-width: 0;
+}
+
+.admission-decision-hero__step {
+    display: flex;
+    align-items: center;
+    flex: 0 0 auto;
+    gap: 9px;
+}
+
+.admission-decision-hero__step-marker {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 29px;
+
+    width: 29px;
+    height: 29px;
+
+    color: var(--decision-muted);
+    background: var(--decision-surface);
+    border: 1px solid var(--decision-border);
+    border-radius: 50%;
+
+    font-size: 0.7rem;
+    font-weight: 800;
+}
+
+.admission-decision-hero__step-marker svg {
+    width: 14px;
+    height: 14px;
+}
+
+.admission-decision-hero__step.is-complete
+.admission-decision-hero__step-marker {
+    color: #fff;
+    background: var(--decision-primary);
+    border-color: var(--decision-primary);
+}
+
+.admission-decision-hero__step.is-current
+.admission-decision-hero__step-marker {
+    color: var(--decision-primary);
+    background: var(--decision-primary-soft);
+    border: 2px solid var(--decision-primary);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--decision-primary) 10%, transparent);
+}
+
+.admission-decision-hero__step.is-current
+.admission-decision-hero__step-label {
+    color: var(--decision-primary);
+    font-weight: 800;
+}
+
+.admission-decision-hero__step.is-complete
+.admission-decision-hero__step-label {
+    color: var(--decision-heading);
+}
+
+.admission-decision-hero__step-label {
+    color: var(--decision-muted);
+    font-size: 0.71rem;
+    font-weight: 650;
+    white-space: nowrap;
+}
+
+.admission-decision-hero__step-line {
+    flex: 1 1 auto;
+    min-width: 18px;
+    height: 2px;
+    margin: 0 12px;
+    background: var(--decision-border);
+    border-radius: 99px;
+}
+
+.admission-decision-hero__step-line.is-complete {
+    background: var(--decision-primary);
+}
+
+
+/* --------------------------------------------------------------------------
+   Workflow notices
+-------------------------------------------------------------------------- */
+
+.admission-decision-hero__notice {
+    display: flex;
+    align-items: flex-start;
+    gap: 9px;
+
+    margin-top: 18px;
+    padding: 11px 13px;
+
+    border: 1px solid var(--decision-border);
+    border-radius: 10px;
+
+    font-size: 0.74rem;
+    font-weight: 600;
+    line-height: 1.6;
+}
+
+.admission-decision-hero__notice svg {
+    flex: 0 0 auto;
+    width: 17px;
+    height: 17px;
+    margin-top: 1px;
+}
+
+.admission-decision-hero__notice--pending,
+.admission-decision-hero__notice--awaiting {
+    color: var(--decision-warning);
+    background: color-mix(in srgb, var(--decision-warning) 9%, var(--decision-surface));
+    border-color: color-mix(in srgb, var(--decision-warning) 23%, var(--decision-border));
+}
+
+.admission-decision-hero__notice--admitted {
+    color: var(--decision-success);
+    background: color-mix(in srgb, var(--decision-success) 9%, var(--decision-surface));
+    border-color: color-mix(in srgb, var(--decision-success) 23%, var(--decision-border));
+}
+
+.admission-decision-hero__notice--not-admitted {
+    color: var(--decision-danger);
+    background: color-mix(in srgb, var(--decision-danger) 9%, var(--decision-surface));
+    border-color: color-mix(in srgb, var(--decision-danger) 23%, var(--decision-border));
+}
+
+.admission-decision-hero__notice--waitlisted {
+    color: var(--decision-info);
+    background: color-mix(in srgb, var(--decision-info) 9%, var(--decision-surface));
+    border-color: color-mix(in srgb, var(--decision-info) 23%, var(--decision-border));
+}
+
+.admission-decision-hero__notice--deferred {
+    color: var(--decision-accent);
+    background: color-mix(in srgb, var(--decision-accent) 10%, var(--decision-surface));
+    border-color: color-mix(in srgb, var(--decision-accent) 23%, var(--decision-border));
+}
+
+
+/* --------------------------------------------------------------------------
+   Decision officers
+-------------------------------------------------------------------------- */
+
+.admission-decision-hero__officers {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0;
+
+    padding: 18px 30px;
+
+    border-top: 1px solid var(--decision-border);
+    background: var(--decision-surface);
+}
+
+.admission-decision-hero__officer {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    min-width: 0;
+    padding: 4px 18px;
+}
+
+.admission-decision-hero__officer:first-child {
+    padding-left: 0;
+    border-right: 1px solid var(--decision-border);
+}
+
+.admission-decision-hero__officer:last-child {
+    padding-right: 0;
+}
+
+.admission-decision-hero__officer-icon {
+    display: grid;
+    flex: 0 0 36px;
+    width: 36px;
+    height: 36px;
+    place-items: center;
+
+    color: var(--decision-primary);
+    background: var(--decision-primary-soft);
+    border-radius: 10px;
+}
+
+.admission-decision-hero__officer-icon svg {
+    width: 17px;
+    height: 17px;
+}
+
+.admission-decision-hero__officer > div {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    min-width: 0;
+}
+
+.admission-decision-hero__officer-label {
+    color: var(--decision-muted);
+    font-size: 0.59rem;
+    font-weight: 800;
+    letter-spacing: 0.07em;
+    line-height: 1.4;
+}
+
+.admission-decision-hero__officer strong {
+    color: var(--decision-heading);
+    font-size: 0.78rem;
+    font-weight: 750;
+    overflow-wrap: anywhere;
+}
+
+
+/* --------------------------------------------------------------------------
+   Empty state
+-------------------------------------------------------------------------- */
+
+.admission-decision-hero__empty {
+    padding: 25px;
+    border: 1px solid var(--decision-border, #E6DFD7);
+    border-radius: 14px;
+    background: var(--decision-surface, #fff);
+    color: var(--decision-muted, #756C70);
+    text-align: center;
+}
+
+
+/* --------------------------------------------------------------------------
+   Dark mode
+-------------------------------------------------------------------------- */
+
+.dark .admission-decision-hero {
+    box-shadow:
+        0 3px 10px rgb(0 0 0 / 18%),
+        0 15px 35px rgb(0 0 0 / 12%);
+}
+
+.dark .admission-decision-hero__main {
+    background:
+        linear-gradient(
+            115deg,
+            color-mix(in srgb, var(--decision-primary) 23%, var(--decision-surface)),
+            var(--decision-surface) 75%
+        );
+}
+
+.dark .admission-decision-hero__progress {
+    background:
+        color-mix(
+            in srgb,
+            var(--decision-primary) 5%,
+            var(--decision-surface)
+        );
+}
+
+
+/* --------------------------------------------------------------------------
+   Tablet
+-------------------------------------------------------------------------- */
+
+@media (max-width: 1024px) {
+    .admission-decision-hero__main {
+        padding: 23px;
+    }
+
+    .admission-decision-hero__metadata {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .admission-decision-hero__meta-item {
+        padding: 17px 16px;
+    }
+
+    .admission-decision-hero__meta-item:nth-child(3n) {
+        border-right: 0;
+    }
+
+    .admission-decision-hero__meta-item:nth-child(3n + 1),
+    .admission-decision-hero__meta-item:nth-child(3n + 2),
+    .admission-decision-hero__meta-item:nth-child(3n) {
+        border-bottom: 1px solid var(--decision-border);
+    }
+
+    .admission-decision-hero__meta-item:nth-last-child(-n + 2) {
+        border-bottom: 0;
+    }
+
+    .admission-decision-hero__progress {
+        padding: 20px 23px;
+    }
+
+    .admission-decision-hero__officers {
+        padding-right: 23px;
+        padding-left: 23px;
+    }
+}
+
+
+/* --------------------------------------------------------------------------
+   Mobile
+-------------------------------------------------------------------------- */
+
+@media (max-width: 768px) {
+    .admission-decision-hero {
+        border-radius: 14px;
+    }
+
+    .admission-decision-hero__main {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 19px;
+        padding: 20px;
+    }
+
+    .admission-decision-hero__identity {
+        width: 100%;
+        gap: 14px;
+    }
+
+    .admission-decision-hero__avatar {
+        flex-basis: 54px;
+        width: 54px;
+        height: 54px;
+        border-radius: 15px;
+        font-size: 1.05rem;
+    }
+
+    .admission-decision-hero__status-area {
+        align-items: flex-start;
+        gap: 7px;
+    }
+
+    .admission-decision-hero__status-label {
+        text-align: left;
+    }
+
+    .admission-decision-hero__secondary-label {
+        justify-content: flex-start;
+    }
+
+    .admission-decision-hero__metadata {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .admission-decision-hero__meta-item {
+        padding: 14px 19px;
+        border-right: 1px solid var(--decision-border);
+        border-bottom: 1px solid var(--decision-border);
+    }
+
+    .admission-decision-hero__meta-item:nth-child(2n) {
+        border-right: 0;
+    }
+
+    .admission-decision-hero__meta-item:nth-last-child(-n + 1) {
+        border-bottom: 0;
+    }
+
+    .admission-decision-hero__progress {
+        padding: 19px;
+    }
+
+    .admission-decision-hero__officers {
+        padding: 17px 19px;
+    }
+}
+
+
+/* --------------------------------------------------------------------------
+   Small mobile
+-------------------------------------------------------------------------- */
+
+@media (max-width: 480px) {
+    .admission-decision-hero__identity {
+        align-items: flex-start;
+    }
+
+    .admission-decision-hero__applicant-name {
+        font-size: 1.12rem;
+    }
+
+    .admission-decision-hero__contact {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 7px;
+    }
+
+    .admission-decision-hero__metadata {
+        grid-template-columns: 1fr;
+    }
+
+    .admission-decision-hero__meta-item,
+    .admission-decision-hero__meta-item:nth-child(2n) {
+        padding: 14px 19px;
+        border-right: 0;
+        border-bottom: 1px solid var(--decision-border);
+    }
+
+    .admission-decision-hero__meta-item:last-child {
+        border-bottom: 0;
+    }
+
+    .admission-decision-hero__progress-heading {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 7px;
+    }
+
+    .admission-decision-hero__steps {
+        align-items: flex-start;
+    }
+
+    .admission-decision-hero__step {
+        flex-direction: column;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .admission-decision-hero__step-label {
+        max-width: 125px;
+        font-size: 0.62rem;
+        text-align: center;
+        white-space: normal;
+    }
+
+    .admission-decision-hero__step-line {
+        min-width: 12px;
+        margin: 14px 5px 0;
+    }
+
+    .admission-decision-hero__officers {
+        grid-template-columns: 1fr;
+        gap: 13px;
+    }
+
+    .admission-decision-hero__officer,
+    .admission-decision-hero__officer:first-child,
+    .admission-decision-hero__officer:last-child {
+        padding: 0;
+        border-right: 0;
+    }
+}
+
+
+/* --------------------------------------------------------------------------
+   Reduced motion
+-------------------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+    .admission-decision-hero,
+    .admission-decision-hero * {
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+    }
+}

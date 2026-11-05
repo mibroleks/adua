@@ -11,14 +11,15 @@
  * Owns the relationship graph for:
  * - Applicant (User)
  * - Programme
+ * - Referral Partner
  * - Dynamic field values
  * - Documents
  * - Payments
  * - Admission decision
  * - Status history
  *
- * Status: 🚦 Integration / Hardening
- * Version: 2.6 (application_fee stored in kobo as integer + display helpers)
+ * Status: Integration / Hardening
+ * Version: 2.8 (single-owner lifecycle history recording)
  */
 
 namespace App\Models;
@@ -34,6 +35,7 @@ class Application extends Model
     protected $fillable = [
         'application_number',
         'user_id',
+        'referral_partner_id',
         'programme_id',
         'application_fee',     // stored in kobo
         'application_status',
@@ -59,8 +61,8 @@ class Application extends Model
     public const STATUS_CORRECTION_REQUIRED  = 'CORRECTION_REQUIRED';
 
     public const PAYMENT_PENDING             = 'PENDING';
-    public const PAYMENT_SUCCESS             = 'SUCCESS';
-    public const PAYMENT_FAILED              = 'FAILED';
+    public const PAYMENT_SUCCESS              = 'SUCCESS';
+    public const PAYMENT_FAILED               = 'FAILED';
 
     public const APPLICATION_STATUSES = [
         self::STATUS_DRAFT,
@@ -90,6 +92,11 @@ class Application extends Model
     public function programme(): BelongsTo
     {
         return $this->belongsTo(Programme::class);
+    }
+
+    public function referralPartner(): BelongsTo
+    {
+        return $this->belongsTo(ReferralPartner::class, 'referral_partner_id');
     }
 
     public function fieldValues(): HasMany
@@ -129,38 +136,65 @@ class Application extends Model
         return $this->hasOne(AdmissionDecision::class);
     }
 
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Route Model Binding
+    |--------------------------------------------------------------------------
+    */
+
+    /**
+     * Resolve applicant-facing application routes by application number.
+     */
+    public function getRouteKeyName(): string
+    {
+        return 'application_number';
+    }
+
+
+
+
     /*
     |--------------------------------------------------------------------------
     | Status Helpers
     |--------------------------------------------------------------------------
     */
-    public function setApplicationStatus(string $newStatus, ?int $officerId = null): void
-    {
+
+    /**
+     * Update the application status.
+     *
+     * Lifecycle history is deliberately NOT recorded here.
+     * AdmissionService is the single owner responsible for recording
+     * application lifecycle transitions and their audit information.
+     *
+     * The optional officerId parameter is retained for backward
+     * compatibility with existing callers.
+     */
+    public function setApplicationStatus(
+        string $newStatus,
+        ?int $officerId = null
+    ): void {
         if (! in_array($newStatus, self::APPLICATION_STATUSES, true)) {
-            throw new InvalidArgumentException("Invalid application status: {$newStatus}");
+            throw new InvalidArgumentException(
+                "Invalid application status: {$newStatus}"
+            );
         }
 
-        $oldStatus = $this->application_status;
-
-        if ($oldStatus === $newStatus) {
+        if ($this->application_status === $newStatus) {
             return;
         }
 
         $this->application_status = $newStatus;
         $this->save();
-
-        $this->statusHistories()->create([
-            'old_status' => $oldStatus,
-            'new_status' => $newStatus,
-            'changed_by' => $officerId,
-            'changed_at' => now(),
-        ]);
     }
 
     public function setPaymentStatus(string $newStatus): void
     {
         if (! in_array($newStatus, self::PAYMENT_STATUSES, true)) {
-            throw new InvalidArgumentException("Invalid payment status: {$newStatus}");
+            throw new InvalidArgumentException(
+                "Invalid payment status: {$newStatus}"
+            );
         }
 
         $this->payment_status = $newStatus;
@@ -177,7 +211,7 @@ class Application extends Model
         $this->loadMissing('programme');
 
         if ($this->programme) {
-            $this->application_fee = $this->programme->application_fee; // already in kobo
+            $this->application_fee = $this->programme->application_fee;
             $this->save();
         }
     }
@@ -218,7 +252,9 @@ class Application extends Model
             self::STATUS_APPROVED            => 'Approved',
             self::STATUS_REJECTED            => 'Rejected',
             self::STATUS_CORRECTION_REQUIRED => 'Correction Required',
-            default                          => ucfirst(strtolower($this->application_status ?? 'Unknown')),
+            default => ucfirst(
+                strtolower($this->application_status ?? 'Unknown')
+            ),
         };
     }
 
@@ -228,7 +264,9 @@ class Application extends Model
             self::PAYMENT_PENDING => 'Payment Pending',
             self::PAYMENT_SUCCESS => 'Payment Complete',
             self::PAYMENT_FAILED  => 'Payment Failed',
-            default               => ucfirst(strtolower($this->payment_status ?? 'Unpaid')),
+            default => ucfirst(
+                strtolower($this->payment_status ?? 'Unpaid')
+            ),
         };
     }
 
@@ -243,6 +281,7 @@ class Application extends Model
             'user',
             'programme.faculty',
             'programme.department',
+            'referralPartner',
             'fieldValues.formField',
             'documents.documentType',
             'payments',

@@ -7,13 +7,27 @@ Company: Ygrace Tech
 Author: Ibrahim Olalekan
 
 Purpose:
-Provides Filament admin interface for managing applications.
-Applications are created via applicant portal, so officers can
-list and view them, and manage decisions/documents. Manual create/edit
-may be restricted depending on policy.
+Provides the Filament interface for managing admission applications.
 
-Status: ✅ Production Ready (namespace corrected)
-Version: 1.8 (Filament v3 compatible, with relation manager registered)
+Applications are created through the applicant portal. Officers can
+list, view, and manage applications, including their documents and
+admission decisions, subject to the applicable policies.
+
+Responsibilities:
+- Register the Application model with Filament.
+- Configure the application form and infolist.
+- Use the shared ApplicationsTable configuration.
+- Register application relation managers.
+- Register application resource pages.
+
+Integration:
+- Supports referral partner attribution.
+- Supports the ApplicationOverview KPI widget through the
+  shared resource table configuration.
+- Keeps referral attribution as informational marketing metadata.
+
+Status: Updated for the Filament 5 application architecture.
+Version: 1.9
 */
 
 namespace App\Filament\Resources;
@@ -22,49 +36,81 @@ use App\Filament\Resources\ApplicationResource\Pages\CreateApplication;
 use App\Filament\Resources\ApplicationResource\Pages\EditApplication;
 use App\Filament\Resources\ApplicationResource\Pages\ListApplications;
 use App\Filament\Resources\ApplicationResource\Pages\ViewApplication;
+use App\Filament\Resources\ApplicationResource\RelationManagers\DocumentsRelationManager;
 use App\Filament\Resources\ApplicationResource\Schemas\ApplicationForm;
 use App\Filament\Resources\ApplicationResource\Schemas\ApplicationInfolist;
 use App\Filament\Resources\ApplicationResource\Tables\ApplicationsTable;
-use App\Filament\Resources\ApplicationResource\RelationManagers\DocumentsRelationManager;
 use App\Models\Application;
 use BackedEnum;
-use UnitEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use UnitEnum;
 
 class ApplicationResource extends Resource
 {
     protected static ?string $model = Application::class;
 
-    // Navigation settings
-    public static BackedEnum|string|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    /*
+    |--------------------------------------------------------------------------
+    | Navigation
+    |--------------------------------------------------------------------------
+    */
+
+    public static BackedEnum|string|null $navigationIcon =
+        Heroicon::OutlinedRectangleStack;
+
     public static UnitEnum|string|null $navigationGroup = 'Admissions';
+
     public static ?string $navigationLabel = 'Applications';
 
-    // Title attribute for display
     protected static ?string $recordTitleAttribute = 'application_number';
 
-    // ✅ Form definition (if officers can edit certain fields)
+    /*
+    |--------------------------------------------------------------------------
+    | Form
+    |--------------------------------------------------------------------------
+    */
+
     public static function form(Schema $schema): Schema
     {
         return ApplicationForm::configure($schema);
     }
 
-    // ✅ Infolist definition (structured view)
+    /*
+    |--------------------------------------------------------------------------
+    | Infolist
+    |--------------------------------------------------------------------------
+    */
+
     public static function infolist(Schema $schema): Schema
     {
         return ApplicationInfolist::configure($schema);
     }
 
-    // ✅ Table definition (list view)
+    /*
+    |--------------------------------------------------------------------------
+    | Table
+    |--------------------------------------------------------------------------
+    |
+    | Keep this connected to the shared ApplicationsTable configuration.
+    | The referral-source column, filters, and table behaviour are defined
+    | centrally rather than duplicated in this resource.
+    |
+    */
+
     public static function table(Table $table): Table
     {
         return ApplicationsTable::configure($table);
     }
 
-    // ✅ Register relation managers (Documents tab)
+    /*
+    |--------------------------------------------------------------------------
+    | Relation Managers
+    |--------------------------------------------------------------------------
+    */
+
     public static function getRelations(): array
     {
         return [
@@ -72,14 +118,22 @@ class ApplicationResource extends Resource
         ];
     }
 
-    // ✅ Pages (List + View always; Create/Edit optional depending on policy)
+    /*
+    |--------------------------------------------------------------------------
+    | Resource Pages
+    |--------------------------------------------------------------------------
+    */
+
     public static function getPages(): array
     {
         return [
-            'index'  => ListApplications::route('/'),
-            'view'   => ViewApplication::route('/{record}'),
+            'index' => ListApplications::route('/'),
+
+            'view' => ViewApplication::route('/{record}'),
+
             'create' => CreateApplication::route('/create'),
-            'edit'   => EditApplication::route('/{record}/edit'),
+
+            'edit' => EditApplication::route('/{record}/edit'),
         ];
     }
 }

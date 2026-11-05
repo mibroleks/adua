@@ -1,0 +1,2696 @@
+
+/*
+|--------------------------------------------------------------------------
+| Ygrace Tech — Officer Admissions Dashboard
+|--------------------------------------------------------------------------
+| File: resources/css/filament/officer/admission-dashboard.css
+| Purpose: Premium, institution-aware admissions dashboard presentation.
+|
+| Design principles:
+| - Uses ThemeService-driven institutional design tokens.
+| - Supports institutional colour presets without brand hardcoding.
+| - Adapts to Filament light and dark modes.
+| - Maintains accessible contrast and clear status communication.
+| - Separates application processing from institutional admission outcomes.
+| - Responsive across desktop, tablet and mobile screens.
+|--------------------------------------------------------------------------
+*/
+
+/* ==========================================================================
+   1. DASHBOARD FOUNDATION AND THEME TOKENS
+========================================================================== */
+
+.admission-dashboard {
+    --admission-primary: var(--theme-primary, var(--primary-600, #315b91));
+    --admission-primary-hover: var(--theme-primary-dark, var(--primary-700, #244774));
+    --admission-accent: var(--theme-accent, var(--primary-400, #b58a4a));
+
+    --admission-page: var(
+        --theme-page,
+        var(--theme-background, var(--gray-50, #f7f8fa))
+    );
+
+    --admission-surface: var(
+        --theme-card-bg,
+        var(--theme-surface, var(--gray-0, #ffffff))
+    );
+
+    --admission-surface-soft: var(
+        --theme-surface-muted,
+        var(--gray-50, #f7f8fa)
+    );
+
+    --admission-ink: var(--theme-heading, var(--gray-950, #182230));
+    --admission-body: var(--theme-body, var(--gray-700, #465365));
+    --admission-muted: var(--theme-muted, var(--gray-500, #788494));
+
+    --admission-border: var(
+        --theme-card-border,
+        var(--theme-border, var(--gray-200, #e5e9ef))
+    );
+
+    --admission-primary-soft: color-mix(
+        in srgb,
+        var(--admission-primary) 10%,
+        var(--admission-surface)
+    );
+
+    --admission-primary-subtle: color-mix(
+        in srgb,
+        var(--admission-primary) 5%,
+        var(--admission-surface)
+    );
+
+    --admission-success: var(--theme-success, #25845d);
+    --admission-warning: var(--theme-warning, #b7791f);
+    --admission-danger: var(--theme-danger, #c04e55);
+    --admission-info: var(--theme-info, #3478b9);
+
+    --admission-orange: #c47739;
+    --admission-purple: #8665bd;
+
+    --admission-radius: 16px;
+    --admission-radius-large: 21px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 27px;
+    width: 100%;
+    min-width: 0;
+    color: var(--admission-body);
+    font-family: inherit;
+    color-scheme: light;
+}
+
+.admission-dashboard *,
+.admission-dashboard *::before,
+.admission-dashboard *::after {
+    box-sizing: border-box;
+}
+
+.admission-dashboard article,
+.admission-dashboard section {
+    min-width: 0;
+}
+
+/* ==========================================================================
+   2. DARK MODE
+========================================================================== */
+
+.dark .admission-dashboard {
+    --admission-page: var(--theme-page, #10151e);
+    --admission-surface: var(--theme-card-bg, var(--theme-surface, #171e29));
+    --admission-surface-soft: var(--theme-surface-muted, #202a38);
+
+    --admission-ink: var(--theme-heading, #f0f3f8);
+    --admission-body: var(--theme-body, #d0d7e2);
+    --admission-muted: var(--theme-muted, #9ba8b8);
+
+    --admission-border: var(
+        --theme-card-border,
+        var(--theme-border, #303b4a)
+    );
+
+    --admission-primary-soft: color-mix(
+        in srgb,
+        var(--admission-primary) 19%,
+        var(--admission-surface)
+    );
+
+    --admission-primary-subtle: color-mix(
+        in srgb,
+        var(--admission-primary) 10%,
+        var(--admission-surface)
+    );
+
+    color-scheme: dark;
+}
+
+/* ==========================================================================
+   3. INSTITUTIONAL WELCOME HERO
+========================================================================== */
+
+.admission-dashboard__hero {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 32px;
+    min-height: 205px;
+    padding: 37px 40px;
+    overflow: hidden;
+    isolation: isolate;
+    border: 1px solid color-mix(
+        in srgb,
+        var(--admission-primary) 30%,
+        transparent
+    );
+    border-radius: var(--admission-radius-large);
+    background:
+        radial-gradient(
+            circle at 88% 14%,
+            rgb(255 255 255 / 15%),
+            transparent 27%
+        ),
+        radial-gradient(
+            circle at 5% 110%,
+            color-mix(in srgb, var(--admission-accent) 25%, transparent),
+            transparent 37%
+        ),
+        linear-gradient(
+            115deg,
+            color-mix(in srgb, var(--admission-primary) 88%, #111827),
+            var(--admission-primary) 65%,
+            color-mix(in srgb, var(--admission-primary) 76%, #ffffff)
+        );
+    color: #ffffff;
+    box-shadow:
+        0 14px 35px color-mix(
+            in srgb,
+            var(--admission-primary) 14%,
+            transparent
+        ),
+        inset 0 1px 0 rgb(255 255 255 / 10%);
+}
+
+.admission-dashboard__hero::before,
+.admission-dashboard__hero::after {
+    position: absolute;
+    z-index: -1;
+    border: 1px solid rgb(255 255 255 / 10%);
+    border-radius: 50%;
+    content: "";
+    pointer-events: none;
+}
+
+.admission-dashboard__hero::before {
+    top: -155px;
+    right: 7%;
+    width: 350px;
+    height: 350px;
+}
+
+.admission-dashboard__hero::after {
+    right: 22%;
+    bottom: -205px;
+    width: 360px;
+    height: 360px;
+}
+
+.admission-dashboard__hero-content {
+    position: relative;
+    z-index: 1;
+    max-width: 680px;
+}
+
+.admission-dashboard__eyebrow,
+.admission-dashboard__section-kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 1.45px;
+    line-height: 1.5;
+}
+
+.admission-dashboard__eyebrow {
+    color: rgb(255 255 255 / 79%);
+}
+
+.admission-dashboard__eyebrow-dot {
+    width: 7px;
+    height: 7px;
+    flex: 0 0 7px;
+    border-radius: 50%;
+    background: #8ce0b9;
+    box-shadow: 0 0 0 4px rgb(140 224 185 / 15%);
+}
+
+.admission-dashboard__hero h1 {
+    margin: 17px 0 10px;
+    color: #ffffff;
+    font-size: clamp(30px, 3vw, 40px);
+    font-weight: 760;
+    letter-spacing: -1.15px;
+    line-height: 1.15;
+}
+
+.admission-dashboard__hero-content > p {
+    max-width: 590px;
+    margin: 0;
+    color: rgb(255 255 255 / 79%);
+    font-size: 14px;
+    line-height: 1.85;
+}
+
+.admission-dashboard__hero-meta {
+    position: relative;
+    z-index: 1;
+    flex: 0 0 auto;
+    min-width: 210px;
+    padding: 21px 24px;
+    border: 1px solid rgb(255 255 255 / 19%);
+    border-radius: 15px;
+    background: rgb(255 255 255 / 10%);
+    box-shadow: inset 0 1px 0 rgb(255 255 255 / 8%);
+    backdrop-filter: blur(12px);
+}
+
+.admission-dashboard__hero-meta-label {
+    color: rgb(255 255 255 / 72%);
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: 1.25px;
+}
+
+.admission-dashboard__hero-meta-value {
+    margin-top: 9px;
+    color: #ffffff;
+    font-size: 23px;
+    font-weight: 760;
+    letter-spacing: -0.4px;
+}
+
+.admission-dashboard__hero-meta-caption {
+    margin-top: 6px;
+    color: rgb(255 255 255 / 69%);
+    font-size: 12px;
+}
+
+/* ==========================================================================
+   4. SECTION HEADINGS
+========================================================================== */
+
+.admission-dashboard__section {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    min-width: 0;
+}
+
+.admission-dashboard__section-heading,
+.admission-dashboard__panel-heading {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 18px;
+    margin-bottom: 19px;
+}
+
+.admission-dashboard__section-kicker {
+    color: var(--admission-primary);
+}
+
+.admission-dashboard__section-heading h2,
+.admission-dashboard__panel-heading h2 {
+    margin: 7px 0 5px;
+    color: var(--admission-ink);
+    font-size: 20px;
+    font-weight: 760;
+    letter-spacing: -0.4px;
+    line-height: 1.35;
+}
+
+.admission-dashboard__section-heading p,
+.admission-dashboard__panel-heading p {
+    margin: 0;
+    color: var(--admission-muted);
+    font-size: 13px;
+    line-height: 1.65;
+}
+
+/* ==========================================================================
+   5. DASHBOARD FILTERS
+========================================================================== */
+
+.admission-dashboard__filters {
+    padding: 26px;
+    border: 1px solid var(--admission-border);
+    border-radius: var(--admission-radius);
+    background: var(--admission-surface);
+    box-shadow:
+        0 4px 16px rgb(15 23 42 / 3%),
+        0 1px 2px rgb(15 23 42 / 2%);
+}
+
+.dark .admission-dashboard__filters {
+    box-shadow: 0 5px 20px rgb(0 0 0 / 13%);
+}
+
+.admission-dashboard__filters .admission-dashboard__section-heading {
+    margin-bottom: 21px;
+}
+
+.admission-dashboard__filter-form {
+    width: 100%;
+}
+
+.admission-dashboard__filter-grid {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 16px;
+}
+
+.admission-dashboard__filter-field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-width: 0;
+}
+
+.admission-dashboard__filter-field label {
+    color: var(--admission-body);
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.admission-dashboard__filter-field select,
+.admission-dashboard__filter-field input {
+    width: 100%;
+    min-width: 0;
+    min-height: 46px;
+    padding: 0 12px;
+    border: 1px solid var(--admission-border);
+    border-radius: 9px;
+    outline: none;
+    background: var(--admission-surface-soft);
+    color: var(--admission-ink);
+    font-family: inherit;
+    font-size: 14px;
+    transition:
+        border-color 160ms ease,
+        box-shadow 160ms ease,
+        background-color 160ms ease;
+}
+
+.admission-dashboard__filter-field select:hover,
+.admission-dashboard__filter-field input:hover {
+    border-color: color-mix(
+        in srgb,
+        var(--admission-primary) 35%,
+        var(--admission-border)
+    );
+}
+
+.admission-dashboard__filter-field select:focus,
+.admission-dashboard__filter-field input:focus {
+    border-color: var(--admission-primary);
+    background: var(--admission-surface);
+    box-shadow: 0 0 0 3px color-mix(
+        in srgb,
+        var(--admission-primary) 13%,
+        transparent
+    );
+}
+
+.admission-dashboard__filter-field select option {
+    background: var(--admission-surface);
+    color: var(--admission-ink);
+}
+
+.admission-dashboard__filter-hint {
+    color: var(--admission-muted);
+    font-size: 10px;
+    line-height: 1.5;
+}
+
+.admission-dashboard__filter-field--outcome select {
+    border-color: color-mix(
+        in srgb,
+        var(--admission-primary) 35%,
+        var(--admission-border)
+    );
+    background: var(--admission-primary-subtle);
+}
+
+.admission-dashboard__filter-field--outcome label {
+    color: var(--admission-primary);
+}
+
+.admission-dashboard__filter-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+    padding-top: 18px;
+    border-top: 1px solid var(--admission-border);
+}
+
+.admission-dashboard__filter-actions button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 43px;
+    padding: 0 19px;
+    border-radius: 9px;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 750;
+    cursor: pointer;
+    transition:
+        transform 160ms ease,
+        background-color 160ms ease,
+        border-color 160ms ease,
+        box-shadow 160ms ease;
+}
+
+.admission-dashboard__filter-actions button:hover:not(:disabled) {
+    transform: translateY(-1px);
+}
+
+.admission-dashboard__filter-actions button:disabled {
+    cursor: wait;
+    opacity: 0.6;
+}
+
+.admission-dashboard__reset-button {
+    border: 1px solid var(--admission-border);
+    background: var(--admission-surface);
+    color: var(--admission-body);
+}
+
+.admission-dashboard__reset-button:hover:not(:disabled) {
+    border-color: color-mix(
+        in srgb,
+        var(--admission-primary) 35%,
+        var(--admission-border)
+    );
+    background: var(--admission-primary-subtle);
+}
+
+.admission-dashboard__apply-button {
+    border: 1px solid var(--admission-primary);
+    background: var(--admission-primary);
+    color: #ffffff;
+    box-shadow: 0 4px 11px color-mix(
+        in srgb,
+        var(--admission-primary) 20%,
+        transparent
+    );
+}
+
+.admission-dashboard__apply-button:hover:not(:disabled) {
+    border-color: var(--admission-primary-hover);
+    background: var(--admission-primary-hover);
+}
+
+/* ==========================================================================
+   6. APPLICATION KPI CARDS
+========================================================================== */
+
+.admission-dashboard__kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 15px;
+}
+
+.admission-dashboard__kpi-card {
+    position: relative;
+    min-width: 0;
+    padding: 20px;
+    overflow: hidden;
+    border: 1px solid var(--admission-border);
+    border-radius: 15px;
+    background: var(--admission-surface);
+    box-shadow:
+        0 3px 13px rgb(15 23 42 / 3%),
+        0 1px 2px rgb(15 23 42 / 2%);
+    transition:
+        transform 180ms ease,
+        box-shadow 180ms ease,
+        border-color 180ms ease;
+}
+
+.admission-dashboard__kpi-card::after {
+    position: absolute;
+    right: -23px;
+    bottom: -31px;
+    width: 82px;
+    height: 82px;
+    border: 1px solid color-mix(
+        in srgb,
+        var(--admission-primary) 9%,
+        transparent
+    );
+    border-radius: 50%;
+    content: "";
+    pointer-events: none;
+}
+
+.admission-dashboard__kpi-card:hover {
+    transform: translateY(-3px);
+    border-color: color-mix(
+        in srgb,
+        var(--admission-primary) 27%,
+        var(--admission-border)
+    );
+    box-shadow: 0 10px 25px rgb(15 23 42 / 7%);
+}
+
+.dark .admission-dashboard__kpi-card:hover {
+    box-shadow: 0 10px 25px rgb(0 0 0 / 18%);
+}
+
+.admission-dashboard__kpi-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.admission-dashboard__kpi-label {
+    color: var(--admission-muted);
+    font-size: 13px;
+    font-weight: 650;
+    line-height: 1.5;
+}
+
+.admission-dashboard__kpi-icon {
+    display: grid;
+    flex: 0 0 35px;
+    width: 35px;
+    height: 35px;
+    place-items: center;
+    border: 1px solid transparent;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 800;
+}
+
+.admission-dashboard__kpi-icon--navy {
+    background: var(--admission-primary-soft);
+    color: var(--admission-primary);
+}
+
+.admission-dashboard__kpi-icon--blue {
+    background: color-mix(in srgb, var(--admission-info) 12%, var(--admission-surface));
+    color: var(--admission-info);
+}
+
+.admission-dashboard__kpi-icon--amber {
+    background: color-mix(in srgb, var(--admission-warning) 13%, var(--admission-surface));
+    color: var(--admission-warning);
+}
+
+.admission-dashboard__kpi-icon--orange {
+    background: color-mix(in srgb, var(--admission-orange) 13%, var(--admission-surface));
+    color: var(--admission-orange);
+}
+
+.admission-dashboard__kpi-icon--green {
+    background: color-mix(in srgb, var(--admission-success) 12%, var(--admission-surface));
+    color: var(--admission-success);
+}
+
+.admission-dashboard__kpi-icon--red {
+    background: color-mix(in srgb, var(--admission-danger) 12%, var(--admission-surface));
+    color: var(--admission-danger);
+}
+
+.admission-dashboard__kpi-icon--slate {
+    background: color-mix(in srgb, var(--admission-muted) 13%, var(--admission-surface));
+    color: var(--admission-muted);
+}
+
+.admission-dashboard__kpi-icon--purple {
+    background: color-mix(in srgb, var(--admission-purple) 13%, var(--admission-surface));
+    color: var(--admission-purple);
+}
+
+.admission-dashboard__kpi-value {
+    position: relative;
+    z-index: 1;
+    margin-top: 18px;
+    color: var(--admission-ink);
+    font-size: clamp(28px, 2.3vw, 35px);
+    font-weight: 800;
+    letter-spacing: -1.1px;
+    line-height: 1.05;
+    font-variant-numeric: tabular-nums;
+}
+
+.admission-dashboard__kpi-footer {
+    margin-top: 10px;
+    color: var(--admission-muted);
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+/* ==========================================================================
+   7. PAYMENT SUMMARY STRIP
+========================================================================== */
+
+.admission-dashboard__payment-strip {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    align-items: center;
+    gap: 18px;
+    padding: 19px 22px;
+    border: 1px solid var(--admission-border);
+    border-radius: 13px;
+    background: var(--admission-surface);
+}
+
+.admission-dashboard__payment-item {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 10px;
+    min-width: 0;
+    color: var(--admission-muted);
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1.5;
+}
+
+.admission-dashboard__payment-item strong {
+    flex: 0 0 auto;
+    margin-left: 0;
+    color: var(--admission-ink);
+    font-size: 16px;
+    font-weight: 800;
+    line-height: 1.3;
+    font-variant-numeric: tabular-nums;
+}
+
+.admission-dashboard__payment-dot,
+.admission-dashboard__status-dot {
+    flex: 0 0 8px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+}
+
+.admission-dashboard__payment-dot.pending {
+    background: var(--admission-warning);
+}
+
+.admission-dashboard__payment-dot.successful {
+    background: var(--admission-success);
+}
+
+.admission-dashboard__payment-dot.failed {
+    background: var(--admission-danger);
+}
+
+/* ==========================================================================
+   8. GENERAL ANALYTICS PANELS
+========================================================================== */
+
+.admission-dashboard__analytics-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+    gap: 18px;
+    min-width: 0;
+}
+
+.admission-dashboard__panel {
+    min-width: 0;
+    padding: 25px;
+    border: 1px solid var(--admission-border);
+    border-radius: var(--admission-radius);
+    background: var(--admission-surface);
+    box-shadow:
+        0 4px 16px rgb(15 23 42 / 3%),
+        0 1px 2px rgb(15 23 42 / 2%);
+}
+
+.dark .admission-dashboard__panel {
+    box-shadow: 0 5px 20px rgb(0 0 0 / 12%);
+}
+
+.admission-dashboard__panel-heading {
+    margin-bottom: 23px;
+}
+
+.admission-dashboard__panel-total {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 4px;
+    flex: 0 0 auto;
+}
+
+.admission-dashboard__panel-total strong {
+    color: var(--admission-ink);
+    font-size: 26px;
+    font-weight: 800;
+    letter-spacing: -0.6px;
+    font-variant-numeric: tabular-nums;
+}
+
+.admission-dashboard__panel-total span {
+    color: var(--admission-muted);
+    font-size: 12px;
+}
+
+/* ==========================================================================
+   9. APPLICATION TRENDS
+========================================================================== */
+
+.admission-dashboard__trend-chart {
+    width: 100%;
+    min-width: 0;
+    padding-top: 7px;
+}
+
+.admission-dashboard__trend-bars {
+    display: flex;
+    align-items: stretch;
+    justify-content: space-around;
+    gap: 9px;
+    min-height: 205px;
+    padding: 12px 3px 0;
+    border-bottom: 1px solid var(--admission-border);
+}
+
+.admission-dashboard__trend-column {
+    display: flex;
+    flex: 1 1 0;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    min-width: 0;
+}
+
+.admission-dashboard__trend-value {
+    min-height: 19px;
+    color: var(--admission-body);
+    font-size: 12px;
+    font-weight: 750;
+    font-variant-numeric: tabular-nums;
+}
+
+.admission-dashboard__trend-track {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    width: min(100%, 38px);
+    height: 145px;
+    overflow: hidden;
+    border: 1px solid color-mix(
+        in srgb,
+        var(--admission-border) 65%,
+        transparent
+    );
+    border-bottom: 0;
+    border-radius: 7px 7px 0 0;
+    background: var(--admission-surface-soft);
+}
+
+.admission-dashboard__trend-bar {
+    width: 100%;
+    min-height: 3px;
+    border-radius: 6px 6px 0 0;
+    background: linear-gradient(
+        180deg,
+        color-mix(in srgb, var(--admission-primary) 65%, white),
+        var(--admission-primary)
+    );
+    transition: height 300ms ease;
+}
+
+.admission-dashboard__trend-label {
+    display: block;
+    width: 100%;
+    margin-top: 9px;
+    overflow: hidden;
+    color: var(--admission-muted);
+    font-size: 11px;
+    text-align: center;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* ==========================================================================
+   10. APPLICATION STATUS DISTRIBUTION
+========================================================================== */
+
+.admission-dashboard__distribution-item,
+.admission-dashboard__ranking-item {
+    margin-bottom: 19px;
+}
+
+.admission-dashboard__distribution-item:last-child,
+.admission-dashboard__ranking-item:last-child {
+    margin-bottom: 0;
+}
+
+.admission-dashboard__distribution-meta,
+.admission-dashboard__ranking-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 9px;
+}
+
+.admission-dashboard__distribution-meta > span {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    color: var(--admission-body);
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: capitalize;
+}
+
+.admission-dashboard__distribution-meta strong,
+.admission-dashboard__ranking-meta > strong {
+    flex: 0 0 auto;
+    color: var(--admission-ink);
+    font-size: 14px;
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+}
+
+.admission-dashboard__status-dot.draft {
+    background: var(--admission-muted);
+}
+
+.admission-dashboard__status-dot.submitted {
+    background: var(--admission-info);
+}
+
+.admission-dashboard__status-dot.review {
+    background: var(--admission-warning);
+}
+
+.admission-dashboard__status-dot.correction {
+    background: var(--admission-orange);
+}
+
+.admission-dashboard__status-dot.approved {
+    background: var(--admission-success);
+}
+
+.admission-dashboard__status-dot.rejected {
+    background: var(--admission-danger);
+}
+
+.admission-dashboard__status-dot.default {
+    background: var(--admission-muted);
+}
+
+.admission-dashboard__progress-track {
+    width: 100%;
+    height: 7px;
+    overflow: hidden;
+    border-radius: 20px;
+    background: color-mix(
+        in srgb,
+        var(--admission-muted) 13%,
+        var(--admission-surface)
+    );
+}
+
+.admission-dashboard__progress-fill {
+    height: 100%;
+    min-width: 2px;
+    border-radius: inherit;
+    transition: width 300ms ease;
+}
+
+.admission-dashboard__progress-fill.draft {
+    background: var(--admission-muted);
+}
+
+.admission-dashboard__progress-fill.submitted {
+    background: var(--admission-info);
+}
+
+.admission-dashboard__progress-fill.review {
+    background: var(--admission-warning);
+}
+
+.admission-dashboard__progress-fill.correction {
+    background: var(--admission-orange);
+}
+
+.admission-dashboard__progress-fill.approved {
+    background: var(--admission-success);
+}
+
+.admission-dashboard__progress-fill.rejected {
+    background: var(--admission-danger);
+}
+
+.admission-dashboard__progress-fill.default {
+    background: var(--admission-muted);
+}
+
+.admission-dashboard__progress-fill.programme {
+    background: linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--admission-primary) 55%, white),
+        var(--admission-primary)
+    );
+}
+
+.admission-dashboard__progress-fill.referral {
+    background: linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--admission-success) 55%, white),
+        var(--admission-success)
+    );
+}
+
+.admission-dashboard__ranking-name {
+    color: var(--admission-body);
+    font-size: 13px;
+    font-weight: 650;
+    line-height: 1.55;
+}
+
+.admission-dashboard__ranking-caption {
+    display: block;
+    margin-top: 3px;
+    color: var(--admission-muted);
+    font-size: 11px;
+    text-transform: capitalize;
+}
+
+/* ==========================================================================
+   11. APPLICATION REFERRAL PERFORMANCE
+========================================================================== */
+
+.admission-dashboard__referral-item {
+    padding-bottom: 17px;
+    border-bottom: 1px solid var(--admission-border);
+}
+
+.admission-dashboard__referral-item:last-child {
+    padding-bottom: 0;
+    border-bottom: 0;
+}
+
+.admission-dashboard__referral-metrics {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+    margin-top: 14px;
+}
+
+.admission-dashboard__referral-metric {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 9px;
+    min-width: 0;
+    padding: 9px 11px;
+    border: 1px solid var(--admission-border);
+    border-radius: 8px;
+    background: var(--admission-surface-soft);
+}
+
+.admission-dashboard__referral-metric span {
+    min-width: 0;
+    color: var(--admission-muted);
+    font-size: 10px;
+    line-height: 1.5;
+}
+
+.admission-dashboard__referral-metric strong {
+    flex: 0 0 auto;
+    color: var(--admission-ink);
+    font-size: 12px;
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+}
+
+/* ==========================================================================
+   12. INSTITUTIONAL ADMISSION OUTCOME SECTION
+========================================================================== */
+
+.admission-dashboard__outcomes {
+    gap: 19px;
+}
+
+.admission-dashboard__outcomes-heading {
+    align-items: center;
+    margin-bottom: 0;
+}
+
+.admission-dashboard__outcomes-filter-indicator {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 5px;
+    flex: 0 0 auto;
+    min-width: 145px;
+    padding: 12px 15px;
+    border: 1px solid color-mix(
+        in srgb,
+        var(--admission-primary) 20%,
+        var(--admission-border)
+    );
+    border-radius: 11px;
+    background: var(--admission-primary-subtle);
+}
+
+.admission-dashboard__outcomes-filter-indicator span {
+    color: var(--admission-muted);
+    font-size: 9px;
+    font-weight: 750;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+}
+
+.admission-dashboard__outcomes-filter-indicator strong {
+    color: var(--admission-primary);
+    font-size: 12px;
+    font-weight: 800;
+    text-transform: capitalize;
+}
+
+/* ==========================================================================
+   13. INSTITUTIONAL ADMISSION OUTCOME KPI CARDS
+========================================================================== */
+
+.admission-dashboard__outcome-kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 14px;
+}
+
+.admission-dashboard__outcome-kpi-card {
+    position: relative;
+    min-width: 0;
+    padding: 19px;
+    overflow: hidden;
+    border: 1px solid var(--admission-border);
+    border-radius: 15px;
+    background: var(--admission-surface);
+    box-shadow:
+        0 3px 13px rgb(15 23 42 / 3%),
+        0 1px 2px rgb(15 23 42 / 2%);
+    transition:
+        transform 180ms ease,
+        border-color 180ms ease,
+        box-shadow 180ms ease;
+}
+
+.admission-dashboard__outcome-kpi-card::after {
+    position: absolute;
+    right: -24px;
+    bottom: -32px;
+    width: 82px;
+    height: 82px;
+    border: 1px solid color-mix(
+        in srgb,
+        var(--outcome-color, var(--admission-primary)) 12%,
+        transparent
+    );
+    border-radius: 50%;
+    content: "";
+    pointer-events: none;
+}
+
+.admission-dashboard__outcome-kpi-card:hover {
+    transform: translateY(-3px);
+    border-color: color-mix(
+        in srgb,
+        var(--outcome-color, var(--admission-primary)) 30%,
+        var(--admission-border)
+    );
+    box-shadow: 0 9px 23px rgb(15 23 42 / 6%);
+}
+
+.admission-dashboard__outcome-kpi-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.admission-dashboard__outcome-kpi-label {
+    color: var(--admission-muted);
+    font-size: 12px;
+    font-weight: 650;
+    line-height: 1.5;
+}
+
+.admission-dashboard__outcome-kpi-icon {
+    display: grid;
+    flex: 0 0 35px;
+    width: 35px;
+    height: 35px;
+    place-items: center;
+    border: 1px solid color-mix(
+        in srgb,
+        var(--outcome-color, var(--admission-primary)) 16%,
+        transparent
+    );
+    border-radius: 10px;
+    background: color-mix(
+        in srgb,
+        var(--outcome-color, var(--admission-primary)) 11%,
+        var(--admission-surface)
+    );
+    color: var(--outcome-color, var(--admission-primary));
+    font-size: 13px;
+    font-weight: 800;
+}
+
+.admission-dashboard__outcome-kpi-value {
+    position: relative;
+    z-index: 1;
+    margin-top: 17px;
+    color: var(--admission-ink);
+    font-size: clamp(27px, 2.2vw, 34px);
+    font-weight: 800;
+    letter-spacing: -1px;
+    line-height: 1.1;
+    font-variant-numeric: tabular-nums;
+}
+
+.admission-dashboard__outcome-kpi-footer {
+    margin-top: 9px;
+    color: var(--admission-muted);
+    font-size: 11px;
+    line-height: 1.5;
+}
+
+/* Outcome KPI colour variants */
+
+.admission-dashboard__outcome-kpi-card:has(.admission-dashboard__outcome-kpi-icon--navy) {
+    --outcome-color: var(--admission-primary);
+}
+
+.admission-dashboard__outcome-kpi-card:has(.admission-dashboard__outcome-kpi-icon--blue) {
+    --outcome-color: var(--admission-info);
+}
+
+.admission-dashboard__outcome-kpi-card:has(.admission-dashboard__outcome-kpi-icon--green) {
+    --outcome-color: var(--admission-success);
+}
+
+.admission-dashboard__outcome-kpi-card:has(.admission-dashboard__outcome-kpi-icon--red) {
+    --outcome-color: var(--admission-danger);
+}
+
+.admission-dashboard__outcome-kpi-card:has(.admission-dashboard__outcome-kpi-icon--amber) {
+    --outcome-color: var(--admission-warning);
+}
+
+.admission-dashboard__outcome-kpi-card:has(.admission-dashboard__outcome-kpi-icon--purple) {
+    --outcome-color: var(--admission-purple);
+}
+
+.admission-dashboard__outcome-kpi-card:has(.admission-dashboard__outcome-kpi-icon--slate) {
+    --outcome-color: var(--admission-muted);
+}
+
+.admission-dashboard__outcome-kpi-icon--navy {
+    color: var(--admission-primary);
+}
+
+.admission-dashboard__outcome-kpi-icon--blue {
+    color: var(--admission-info);
+}
+
+.admission-dashboard__outcome-kpi-icon--green {
+    color: var(--admission-success);
+}
+
+.admission-dashboard__outcome-kpi-icon--red {
+    color: var(--admission-danger);
+}
+
+.admission-dashboard__outcome-kpi-icon--amber {
+    color: var(--admission-warning);
+}
+
+.admission-dashboard__outcome-kpi-icon--purple {
+    color: var(--admission-purple);
+}
+
+.admission-dashboard__outcome-kpi-icon--slate {
+    color: var(--admission-muted);
+}
+
+/* ==========================================================================
+   14. ADMISSION OUTCOME ANALYTICS PANELS
+========================================================================== */
+
+.admission-dashboard__outcome-analytics-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: stretch;
+    gap: 18px;
+    min-width: 0;
+}
+
+.admission-dashboard__outcome-panel {
+    height: 100%;
+    min-width: 0;
+}
+
+.admission-dashboard__outcome-panel .admission-dashboard__panel-heading {
+    margin-bottom: 23px;
+}
+
+/* ==========================================================================
+   15. ADMISSION OUTCOME DISTRIBUTION
+========================================================================== */
+
+.admission-dashboard__outcome-distribution-item {
+    margin-bottom: 20px;
+}
+
+.admission-dashboard__outcome-distribution-item:last-child {
+    margin-bottom: 0;
+}
+
+.admission-dashboard__outcome-distribution-item .admission-dashboard__distribution-meta {
+    margin-bottom: 9px;
+}
+
+.admission-dashboard__outcome-distribution-item .admission-dashboard__distribution-meta > span {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    color: var(--admission-body);
+    font-size: 13px;
+    font-weight: 650;
+    text-transform: capitalize;
+}
+
+.admission-dashboard__outcome-distribution-item .admission-dashboard__distribution-meta strong {
+    color: var(--admission-ink);
+    font-size: 14px;
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+}
+
+.admission-dashboard__outcome-status-dot {
+    display: inline-block;
+    flex: 0 0 9px;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+}
+
+.admission-dashboard__outcome-status-dot.pending {
+    background: var(--admission-muted);
+}
+
+.admission-dashboard__outcome-status-dot.admitted {
+    background: var(--admission-success);
+}
+
+.admission-dashboard__outcome-status-dot.not-admitted {
+    background: var(--admission-danger);
+}
+
+.admission-dashboard__outcome-status-dot.waitlisted {
+    background: var(--admission-warning);
+}
+
+.admission-dashboard__outcome-status-dot.deferred {
+    background: var(--admission-info);
+}
+
+.admission-dashboard__progress-fill.admission-outcome-pending {
+    background: var(--admission-muted);
+}
+
+.admission-dashboard__progress-fill.admission-outcome-admitted {
+    background: var(--admission-success);
+}
+
+.admission-dashboard__progress-fill.admission-outcome-not-admitted {
+    background: var(--admission-danger);
+}
+
+.admission-dashboard__progress-fill.admission-outcome-waitlisted {
+    background: var(--admission-warning);
+}
+
+.admission-dashboard__progress-fill.admission-outcome-deferred {
+    background: var(--admission-info);
+}
+
+.admission-dashboard__progress-fill.admission-outcome-default {
+    background: var(--admission-muted);
+}
+
+/* ==========================================================================
+   16. ADMISSION REFERRAL PERFORMANCE
+========================================================================== */
+
+.admission-dashboard__outcome-referral-item {
+    min-width: 0;
+    margin-bottom: 20px;
+    padding-bottom: 18px;
+    border-bottom: 1px solid var(--admission-border);
+}
+
+.admission-dashboard__outcome-referral-item:last-child {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: 0;
+}
+
+.admission-dashboard__outcome-referral-item .admission-dashboard__ranking-meta {
+    margin-bottom: 10px;
+}
+
+.admission-dashboard__outcome-referral-item .admission-dashboard__ranking-meta > div {
+    min-width: 0;
+}
+
+.admission-dashboard__outcome-referral-item .admission-dashboard__ranking-name {
+    overflow-wrap: anywhere;
+}
+
+.admission-dashboard__outcome-referral-item .admission-dashboard__ranking-meta > strong {
+    color: var(--admission-ink);
+    font-size: 14px;
+    font-weight: 800;
+}
+
+.admission-dashboard__progress-fill.admission-outcome-referral {
+    background: linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--admission-success) 55%, white),
+        var(--admission-success)
+    );
+}
+
+.admission-dashboard__outcome-referral-metrics {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 9px;
+    margin-top: 14px;
+}
+
+.admission-dashboard__outcome-referral-metrics > div {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 9px;
+    min-width: 0;
+    padding: 10px 11px;
+    border: 1px solid var(--admission-border);
+    border-radius: 8px;
+    background: var(--admission-surface-soft);
+}
+
+.admission-dashboard__outcome-referral-metrics span {
+    min-width: 0;
+    color: var(--admission-muted);
+    font-size: 10px;
+    line-height: 1.5;
+}
+
+.admission-dashboard__outcome-referral-metrics strong {
+    flex: 0 0 auto;
+    color: var(--admission-ink);
+    font-size: 12px;
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+}
+
+/* Highlight genuine admission conversion */
+
+.admission-dashboard__outcome-referral-metrics > div:last-child {
+    border-color: color-mix(
+        in srgb,
+        var(--admission-success) 23%,
+        var(--admission-border)
+    );
+    background: color-mix(
+        in srgb,
+        var(--admission-success) 6%,
+        var(--admission-surface)
+    );
+}
+
+.admission-dashboard__outcome-referral-metrics > div:last-child strong {
+    color: var(--admission-success);
+}
+
+/* ==========================================================================
+   17. ADMISSIONS ACTION CENTRE
+========================================================================== */
+
+.admission-dashboard__action-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+}
+
+.admission-dashboard__action-card {
+    min-width: 0;
+    overflow: hidden;
+    border: 1px solid var(--admission-border);
+    border-radius: 15px;
+    background: var(--admission-surface);
+    transition:
+        border-color 160ms ease,
+        box-shadow 160ms ease;
+}
+
+.admission-dashboard__action-card:hover {
+    border-color: color-mix(
+        in srgb,
+        var(--admission-primary) 25%,
+        var(--admission-border)
+    );
+    box-shadow: 0 6px 17px rgb(15 23 42 / 4%);
+}
+
+.admission-dashboard__action-card-heading {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 19px;
+    border-bottom: 1px solid var(--admission-border);
+    background: var(--admission-surface-soft);
+}
+
+.admission-dashboard__action-card-heading h3 {
+    margin: 0;
+    color: var(--admission-ink);
+    font-size: 15px;
+    font-weight: 750;
+    line-height: 1.45;
+}
+
+.admission-dashboard__action-card-heading p {
+    margin: 6px 0 0;
+    color: var(--admission-muted);
+    font-size: 12px;
+    line-height: 1.65;
+}
+
+.admission-dashboard__action-count {
+    display: grid;
+    flex: 0 0 35px;
+    width: 35px;
+    height: 35px;
+    place-items: center;
+    border: 1px solid transparent;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+}
+
+.admission-dashboard__action-card--blue .admission-dashboard__action-count {
+    background: color-mix(in srgb, var(--admission-info) 12%, var(--admission-surface));
+    color: var(--admission-info);
+}
+
+.admission-dashboard__action-card--amber .admission-dashboard__action-count {
+    background: color-mix(in srgb, var(--admission-warning) 13%, var(--admission-surface));
+    color: var(--admission-warning);
+}
+
+.admission-dashboard__action-card--orange .admission-dashboard__action-count {
+    background: color-mix(in srgb, var(--admission-orange) 13%, var(--admission-surface));
+    color: var(--admission-orange);
+}
+
+.admission-dashboard__action-list {
+    padding: 4px 18px;
+}
+
+.admission-dashboard__action-item {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--admission-border);
+}
+
+.admission-dashboard__action-item:last-child {
+    border-bottom: 0;
+}
+
+.admission-dashboard__action-item > div {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.admission-dashboard__action-item strong {
+    color: var(--admission-ink);
+    font-size: 12px;
+    font-weight: 750;
+}
+
+.admission-dashboard__action-item > div > span {
+    max-width: 52%;
+    overflow: hidden;
+    color: var(--admission-muted);
+    font-size: 12px;
+    text-align: right;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.admission-dashboard__action-programme {
+    color: var(--admission-muted);
+    font-size: 11px;
+    line-height: 1.5;
+}
+
+.admission-dashboard__action-empty {
+    padding: 21px 5px;
+    color: var(--admission-muted);
+    font-size: 12px;
+    line-height: 1.6;
+    text-align: center;
+}
+
+/* ==========================================================================
+   18. RECENT ACTIVITY — SHARED APPLICATION STYLING
+========================================================================== */
+
+.admission-dashboard__activity-panel {
+    padding-bottom: 10px;
+}
+
+.admission-dashboard__activity-list {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.admission-dashboard__activity-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 17px 0;
+    border-top: 1px solid var(--admission-border);
+}
+
+.admission-dashboard__activity-marker {
+    flex: 0 0 9px;
+    width: 9px;
+    height: 9px;
+    margin-top: 5px;
+    border: 2px solid var(--admission-surface);
+    border-radius: 50%;
+    box-shadow: 0 0 0 1px var(--admission-border);
+    background: var(--admission-muted);
+}
+
+.admission-dashboard__activity-marker.draft {
+    background: var(--admission-muted);
+}
+
+.admission-dashboard__activity-marker.submitted {
+    background: var(--admission-info);
+}
+
+.admission-dashboard__activity-marker.review {
+    background: var(--admission-warning);
+}
+
+.admission-dashboard__activity-marker.correction {
+    background: var(--admission-orange);
+}
+
+.admission-dashboard__activity-marker.approved {
+    background: var(--admission-success);
+}
+
+.admission-dashboard__activity-marker.rejected {
+    background: var(--admission-danger);
+}
+
+.admission-dashboard__activity-content {
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+.admission-dashboard__activity-top {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.admission-dashboard__activity-top strong {
+    color: var(--admission-ink);
+    font-size: 13px;
+    font-weight: 750;
+}
+
+.admission-dashboard__activity-reference {
+    padding: 4px 7px;
+    border: 1px solid var(--admission-border);
+    border-radius: 5px;
+    background: var(--admission-surface-soft);
+    color: var(--admission-muted);
+    font-size: 11px;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+}
+
+.admission-dashboard__activity-content > p {
+    margin: 6px 0;
+    color: var(--admission-body);
+    font-size: 12px;
+    line-height: 1.7;
+}
+
+.admission-dashboard__activity-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 15px;
+    color: var(--admission-muted);
+    font-size: 11px;
+}
+
+.admission-dashboard__status-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+    padding: 5px 9px;
+    border: 1px solid transparent;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 750;
+    text-transform: capitalize;
+}
+
+.admission-dashboard__status-badge.draft {
+    border-color: color-mix(in srgb, var(--admission-muted) 17%, transparent);
+    background: color-mix(in srgb, var(--admission-muted) 12%, var(--admission-surface));
+    color: var(--admission-muted);
+}
+
+.admission-dashboard__status-badge.submitted {
+    border-color: color-mix(in srgb, var(--admission-info) 17%, transparent);
+    background: color-mix(in srgb, var(--admission-info) 12%, var(--admission-surface));
+    color: var(--admission-info);
+}
+
+.admission-dashboard__status-badge.review {
+    border-color: color-mix(in srgb, var(--admission-warning) 17%, transparent);
+    background: color-mix(in srgb, var(--admission-warning) 12%, var(--admission-surface));
+    color: var(--admission-warning);
+}
+
+.admission-dashboard__status-badge.correction {
+    border-color: color-mix(in srgb, var(--admission-orange) 17%, transparent);
+    background: color-mix(in srgb, var(--admission-orange) 12%, var(--admission-surface));
+    color: var(--admission-orange);
+}
+
+.admission-dashboard__status-badge.approved {
+    border-color: color-mix(in srgb, var(--admission-success) 17%, transparent);
+    background: color-mix(in srgb, var(--admission-success) 12%, var(--admission-surface));
+    color: var(--admission-success);
+}
+
+.admission-dashboard__status-badge.rejected {
+    border-color: color-mix(in srgb, var(--admission-danger) 17%, transparent);
+    background: color-mix(in srgb, var(--admission-danger) 12%, var(--admission-surface));
+    color: var(--admission-danger);
+}
+
+.admission-dashboard__status-badge.default {
+    border-color: var(--admission-border);
+    background: var(--admission-surface-soft);
+    color: var(--admission-muted);
+}
+
+/* ==========================================================================
+   19. INSTITUTIONAL ADMISSION OUTCOME ACTIVITY
+========================================================================== */
+
+.admission-dashboard__outcome-activity-panel {
+    border-color: color-mix(
+        in srgb,
+        var(--admission-primary) 19%,
+        var(--admission-border)
+    );
+}
+
+.admission-dashboard__outcome-activity-item {
+    gap: 14px;
+}
+
+.admission-dashboard__outcome-activity-item .admission-dashboard__activity-content {
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+/* Outcome-specific activity markers */
+
+.admission-dashboard__activity-marker.admission-outcome-marker-pending {
+    background: var(--admission-muted);
+}
+
+.admission-dashboard__activity-marker.admission-outcome-marker-admitted {
+    background: var(--admission-success);
+}
+
+.admission-dashboard__activity-marker.admission-outcome-marker-not-admitted {
+    background: var(--admission-danger);
+}
+
+.admission-dashboard__activity-marker.admission-outcome-marker-waitlisted {
+    background: var(--admission-warning);
+}
+
+.admission-dashboard__activity-marker.admission-outcome-marker-deferred {
+    background: var(--admission-info);
+}
+
+.admission-dashboard__activity-marker.admission-outcome-marker-default {
+    background: var(--admission-muted);
+}
+
+/* Outcome-specific activity badges */
+
+.admission-dashboard__status-badge.admission-outcome-badge-pending {
+    border-color: color-mix(in srgb, var(--admission-muted) 20%, transparent);
+    background: color-mix(in srgb, var(--admission-muted) 11%, var(--admission-surface));
+    color: var(--admission-muted);
+}
+
+.admission-dashboard__status-badge.admission-outcome-badge-admitted {
+    border-color: color-mix(in srgb, var(--admission-success) 20%, transparent);
+    background: color-mix(in srgb, var(--admission-success) 11%, var(--admission-surface));
+    color: var(--admission-success);
+}
+
+.admission-dashboard__status-badge.admission-outcome-badge-not-admitted {
+    border-color: color-mix(in srgb, var(--admission-danger) 20%, transparent);
+    background: color-mix(in srgb, var(--admission-danger) 11%, var(--admission-surface));
+    color: var(--admission-danger);
+}
+
+.admission-dashboard__status-badge.admission-outcome-badge-waitlisted {
+    border-color: color-mix(in srgb, var(--admission-warning) 20%, transparent);
+    background: color-mix(in srgb, var(--admission-warning) 11%, var(--admission-surface));
+    color: var(--admission-warning);
+}
+
+.admission-dashboard__status-badge.admission-outcome-badge-deferred {
+    border-color: color-mix(in srgb, var(--admission-info) 20%, transparent);
+    background: color-mix(in srgb, var(--admission-info) 11%, var(--admission-surface));
+    color: var(--admission-info);
+}
+
+.admission-dashboard__status-badge.admission-outcome-badge-default {
+    border-color: var(--admission-border);
+    background: var(--admission-surface-soft);
+    color: var(--admission-muted);
+}
+
+/* ==========================================================================
+   20. EMPTY STATES
+========================================================================== */
+
+.admission-dashboard__empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 145px;
+    padding: 26px 15px;
+    color: var(--admission-muted);
+    text-align: center;
+}
+
+.admission-dashboard__empty-state strong {
+    margin-top: 9px;
+    color: var(--admission-ink);
+    font-size: 13px;
+    font-weight: 750;
+}
+
+.admission-dashboard__empty-state p {
+    max-width: 340px;
+    margin: 6px 0 0;
+    color: var(--admission-muted);
+    font-size: 12px;
+    line-height: 1.7;
+}
+
+.admission-dashboard__empty-symbol {
+    display: grid;
+    width: 37px;
+    height: 37px;
+    place-items: center;
+    border: 1px solid color-mix(
+        in srgb,
+        var(--admission-primary) 15%,
+        var(--admission-border)
+    );
+    border-radius: 11px;
+    background: var(--admission-primary-soft);
+    color: var(--admission-primary);
+    font-size: 20px;
+}
+
+/* ==========================================================================
+   21. ACCESSIBILITY AND MOTION
+========================================================================== */
+
+.admission-dashboard button:focus-visible,
+.admission-dashboard select:focus-visible,
+.admission-dashboard input:focus-visible {
+    outline: 2px solid var(--admission-primary);
+    outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .admission-dashboard *,
+    .admission-dashboard *::before,
+    .admission-dashboard *::after {
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+    }
+}
+
+/* ==========================================================================
+   22. RESPONSIVE — TABLET AND SMALL DESKTOP
+========================================================================== */
+
+@media (max-width: 1200px) {
+    .admission-dashboard__filter-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .admission-dashboard__kpi-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .admission-dashboard__outcome-kpi-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 900px) {
+    .admission-dashboard__analytics-grid,
+    .admission-dashboard__outcome-analytics-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .admission-dashboard__action-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .admission-dashboard__hero {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .admission-dashboard__hero-meta {
+        width: 100%;
+        min-width: 0;
+    }
+
+    .admission-dashboard__outcomes-heading {
+        align-items: flex-start;
+    }
+}
+
+/* ==========================================================================
+   23. RESPONSIVE — MOBILE
+========================================================================== */
+
+@media (max-width: 640px) {
+    .admission-dashboard {
+        gap: 20px;
+    }
+
+    .admission-dashboard__hero {
+        min-height: 0;
+        padding: 26px 22px;
+        border-radius: 16px;
+    }
+
+    .admission-dashboard__hero h1 {
+        font-size: 27px;
+    }
+
+    .admission-dashboard__hero-content > p {
+        font-size: 13px;
+    }
+
+    .admission-dashboard__filters,
+    .admission-dashboard__panel {
+        padding: 18px;
+        border-radius: 14px;
+    }
+
+    .admission-dashboard__filter-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 14px 11px;
+    }
+
+    .admission-dashboard__filter-field label {
+        font-size: 12px;
+    }
+
+    .admission-dashboard__filter-field select,
+    .admission-dashboard__filter-field input {
+        min-height: 43px;
+        font-size: 12px;
+    }
+
+    .admission-dashboard__filter-actions {
+        align-items: stretch;
+    }
+
+    .admission-dashboard__filter-actions button {
+        flex: 1 1 0;
+        padding: 0 10px;
+        font-size: 12px;
+    }
+
+    .admission-dashboard__kpi-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+    }
+
+    .admission-dashboard__kpi-card {
+        padding: 16px 14px;
+    }
+
+    .admission-dashboard__kpi-label {
+        font-size: 11px;
+    }
+
+    .admission-dashboard__kpi-value {
+        font-size: 27px;
+    }
+
+    .admission-dashboard__kpi-footer {
+        font-size: 10px;
+    }
+
+    .admission-dashboard__payment-strip {
+        grid-template-columns: 1fr;
+        gap: 14px;
+        padding: 17px;
+    }
+
+    .admission-dashboard__payment-item {
+        justify-content: flex-start;
+        gap: 10px;
+        font-size: 13px;
+    }
+
+    .admission-dashboard__payment-item strong {
+        margin-left: 0;
+        font-size: 16px;
+    }
+
+    .admission-dashboard__section-heading,
+    .admission-dashboard__panel-heading {
+        gap: 10px;
+    }
+
+    .admission-dashboard__section-heading h2,
+    .admission-dashboard__panel-heading h2 {
+        font-size: 18px;
+    }
+
+    .admission-dashboard__section-heading p,
+    .admission-dashboard__panel-heading p {
+        font-size: 12px;
+    }
+
+    .admission-dashboard__trend-bars {
+        gap: 4px;
+    }
+
+    .admission-dashboard__trend-track {
+        width: min(100%, 25px);
+    }
+
+    .admission-dashboard__trend-label {
+        font-size: 10px;
+    }
+
+    .admission-dashboard__distribution-meta > span {
+        font-size: 12px;
+    }
+
+    .admission-dashboard__distribution-meta strong,
+    .admission-dashboard__ranking-meta > strong {
+        font-size: 13px;
+    }
+
+    .admission-dashboard__ranking-name {
+        font-size: 12px;
+    }
+
+    .admission-dashboard__ranking-caption {
+        font-size: 10px;
+    }
+
+    .admission-dashboard__referral-metrics {
+        grid-template-columns: 1fr;
+        gap: 8px;
+    }
+
+    .admission-dashboard__referral-metric {
+        padding: 10px 11px;
+    }
+
+    .admission-dashboard__action-card-heading {
+        padding: 16px;
+    }
+
+    .admission-dashboard__action-card-heading h3 {
+        font-size: 14px;
+    }
+
+    .admission-dashboard__action-card-heading p {
+        font-size: 11px;
+    }
+
+    .admission-dashboard__action-item {
+        gap: 7px;
+    }
+
+    .admission-dashboard__action-item strong,
+    .admission-dashboard__action-item > div > span {
+        font-size: 11px;
+    }
+
+    .admission-dashboard__action-programme {
+        font-size: 10px;
+    }
+
+    .admission-dashboard__activity-item {
+        gap: 10px;
+    }
+
+    .admission-dashboard__activity-top strong {
+        font-size: 12px;
+    }
+
+    .admission-dashboard__activity-reference {
+        font-size: 10px;
+    }
+
+    .admission-dashboard__activity-content > p {
+        font-size: 11px;
+    }
+
+    .admission-dashboard__activity-meta {
+        font-size: 10px;
+    }
+
+    .admission-dashboard__status-badge {
+        max-width: 105px;
+        font-size: 10px;
+        white-space: normal;
+        text-align: center;
+    }
+
+    /* Institutional outcome section */
+
+    .admission-dashboard__outcomes {
+        gap: 15px;
+    }
+
+    .admission-dashboard__outcomes-heading {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .admission-dashboard__outcomes-filter-indicator {
+        align-items: flex-start;
+        width: 100%;
+        min-width: 0;
+        padding: 10px 12px;
+    }
+
+    .admission-dashboard__outcome-kpi-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+    }
+
+    .admission-dashboard__outcome-kpi-card {
+        padding: 15px;
+    }
+
+    .admission-dashboard__outcome-kpi-label {
+        font-size: 11px;
+    }
+
+    .admission-dashboard__outcome-kpi-icon {
+        flex-basis: 31px;
+        width: 31px;
+        height: 31px;
+    }
+
+    .admission-dashboard__outcome-kpi-value {
+        font-size: 27px;
+    }
+
+    .admission-dashboard__outcome-kpi-footer {
+        font-size: 10px;
+    }
+
+    .admission-dashboard__outcome-analytics-grid {
+        grid-template-columns: 1fr;
+        gap: 14px;
+    }
+
+    .admission-dashboard__outcome-panel {
+        padding: 18px;
+    }
+
+    .admission-dashboard__outcome-distribution-item .admission-dashboard__distribution-meta > span {
+        font-size: 12px;
+    }
+
+    .admission-dashboard__outcome-referral-metrics {
+        grid-template-columns: 1fr;
+        gap: 8px;
+    }
+
+    .admission-dashboard__outcome-referral-metrics > div {
+        padding: 10px 11px;
+    }
+
+    .admission-dashboard__outcome-referral-metrics span {
+        font-size: 11px;
+    }
+
+    .admission-dashboard__outcome-referral-metrics strong {
+        font-size: 13px;
+    }
+
+    .admission-dashboard__outcome-activity-item {
+        gap: 10px;
+    }
+}
+
+/* ==========================================================================
+   24. RESPONSIVE — VERY SMALL SCREENS
+========================================================================== */
+
+@media (max-width: 380px) {
+    .admission-dashboard__filter-grid,
+    .admission-dashboard__kpi-grid,
+    .admission-dashboard__outcome-kpi-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .admission-dashboard__section-heading,
+    .admission-dashboard__panel-heading {
+        gap: 10px;
+    }
+
+    .admission-dashboard__panel-total strong {
+        font-size: 21px;
+    }
+
+    .admission-dashboard__outcome-kpi-card {
+        padding: 16px;
+    }
+
+    .admission-dashboard__outcome-referral-metrics > div {
+        align-items: center;
+    }
+}
+
+
+
+
+
+
+
+
+
+/* ==========================================================================
+   25. ADMISSIONS WORKSPACE NAVIGATION
+========================================================================== */
+
+.admission-dashboard__workspace-nav {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+    padding: 7px;
+    border: 1px solid var(--admission-border);
+    border-radius: 15px;
+    background: var(--admission-surface);
+    box-shadow:
+        0 4px 16px rgb(15 23 42 / 3%),
+        0 1px 2px rgb(15 23 42 / 2%);
+}
+
+.dark .admission-dashboard__workspace-nav {
+    box-shadow: 0 5px 20px rgb(0 0 0 / 13%);
+}
+
+.admission-dashboard__workspace-tab {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 13px;
+    min-width: 0;
+    min-height: 76px;
+    padding: 13px 20px;
+    overflow: hidden;
+    border: 1px solid transparent;
+    border-radius: 11px;
+    background: transparent;
+    color: var(--admission-muted);
+    font-family: inherit;
+    text-align: left;
+    cursor: pointer;
+    transition:
+        color 180ms ease,
+        background-color 180ms ease,
+        border-color 180ms ease,
+        box-shadow 180ms ease,
+        transform 180ms ease;
+}
+
+.admission-dashboard__workspace-tab:hover {
+    background: var(--admission-primary-subtle);
+    color: var(--admission-primary);
+}
+
+.admission-dashboard__workspace-tab:active {
+    transform: scale(0.995);
+}
+
+.admission-dashboard__workspace-tab.is-active {
+    border-color: color-mix(
+        in srgb,
+        var(--admission-primary) 24%,
+        var(--admission-border)
+    );
+    background: var(--admission-primary-soft);
+    color: var(--admission-primary);
+    box-shadow:
+        0 3px 10px color-mix(
+            in srgb,
+            var(--admission-primary) 7%,
+            transparent
+        ),
+        inset 0 1px 0 rgb(255 255 255 / 30%);
+}
+
+.admission-dashboard__workspace-tab-icon {
+    display: grid;
+    flex: 0 0 42px;
+    width: 42px;
+    height: 42px;
+    place-items: center;
+    border: 1px solid var(--admission-border);
+    border-radius: 12px;
+    background: var(--admission-surface);
+    color: var(--admission-muted);
+    transition:
+        color 180ms ease,
+        background-color 180ms ease,
+        border-color 180ms ease;
+}
+
+.admission-dashboard__workspace-tab-icon svg {
+    width: 21px;
+    height: 21px;
+}
+
+.admission-dashboard__workspace-tab.is-active
+.admission-dashboard__workspace-tab-icon {
+    border-color: color-mix(
+        in srgb,
+        var(--admission-primary) 24%,
+        transparent
+    );
+    background: var(--admission-primary);
+    color: #ffffff;
+}
+
+.admission-dashboard__workspace-tab-content {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+}
+
+.admission-dashboard__workspace-tab-content strong {
+    color: inherit;
+    font-size: 14px;
+    font-weight: 800;
+    line-height: 1.4;
+}
+
+.admission-dashboard__workspace-tab-content span {
+    color: var(--admission-muted);
+    font-size: 11px;
+    font-weight: 500;
+    line-height: 1.5;
+}
+
+.admission-dashboard__workspace-tab.is-active
+.admission-dashboard__workspace-tab-content span {
+    color: var(--admission-body);
+}
+
+.admission-dashboard__workspace-tab-indicator {
+    position: absolute;
+    right: 18px;
+    bottom: 0;
+    left: 18px;
+    height: 3px;
+    transform: scaleX(0);
+    transform-origin: center;
+    border-radius: 5px 5px 0 0;
+    background: var(--admission-primary);
+    transition: transform 180ms ease;
+}
+
+.admission-dashboard__workspace-tab.is-active
+.admission-dashboard__workspace-tab-indicator {
+    transform: scaleX(1);
+}
+
+/* ==========================================================================
+   26. WORKSPACE LAYOUT AND CONTEXT
+========================================================================== */
+
+.admission-dashboard__workspace {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    min-width: 0;
+    animation: admission-workspace-enter 220ms ease both;
+}
+
+.admission-dashboard__workspace-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 20px;
+    min-width: 0;
+    padding: 2px 1px 0;
+}
+
+.admission-dashboard__workspace-header > div:first-child {
+    min-width: 0;
+}
+
+.admission-dashboard__workspace-header h2 {
+    margin: 7px 0 6px;
+    color: var(--admission-ink);
+    font-size: 21px;
+    font-weight: 800;
+    letter-spacing: -0.55px;
+    line-height: 1.35;
+}
+
+.admission-dashboard__workspace-header p {
+    max-width: 650px;
+    margin: 0;
+    color: var(--admission-muted);
+    font-size: 13px;
+    line-height: 1.75;
+}
+
+.admission-dashboard__workspace-context {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    flex: 0 0 auto;
+    padding: 10px 13px;
+    border: 1px solid var(--admission-border);
+    border-radius: 9px;
+    background: var(--admission-surface);
+    color: var(--admission-body);
+    font-size: 11px;
+    font-weight: 750;
+    line-height: 1.4;
+}
+
+.admission-dashboard__workspace-context-dot {
+    width: 7px;
+    height: 7px;
+    flex: 0 0 7px;
+    border-radius: 50%;
+    background: var(--admission-info);
+    box-shadow: 0 0 0 3px color-mix(
+        in srgb,
+        var(--admission-info) 13%,
+        transparent
+    );
+}
+
+.admission-dashboard__workspace-context--outcomes {
+    border-color: color-mix(
+        in srgb,
+        var(--admission-success) 23%,
+        var(--admission-border)
+    );
+    background: color-mix(
+        in srgb,
+        var(--admission-success) 5%,
+        var(--admission-surface)
+    );
+}
+
+.admission-dashboard__workspace-context--outcomes
+.admission-dashboard__workspace-context-dot {
+    background: var(--admission-success);
+    box-shadow: 0 0 0 3px color-mix(
+        in srgb,
+        var(--admission-success) 13%,
+        transparent
+    );
+}
+
+/* ==========================================================================
+   27. WORKSPACE FILTER PRESENTATION
+========================================================================== */
+
+.admission-dashboard__outcome-filters {
+    border-color: color-mix(
+        in srgb,
+        var(--admission-success) 19%,
+        var(--admission-border)
+    );
+}
+
+.admission-dashboard__outcome-filters
+.admission-dashboard__section-kicker {
+    color: var(--admission-success);
+}
+
+.admission-dashboard__outcome-filters
+.admission-dashboard__filter-field--outcome select {
+    border-color: color-mix(
+        in srgb,
+        var(--admission-success) 28%,
+        var(--admission-border)
+    );
+    background: color-mix(
+        in srgb,
+        var(--admission-success) 5%,
+        var(--admission-surface)
+    );
+}
+
+.admission-dashboard__outcome-filters
+.admission-dashboard__filter-field--outcome label {
+    color: var(--admission-success);
+}
+
+/* ==========================================================================
+   28. WORKSPACE-SPECIFIC LAYOUT REFINEMENTS
+========================================================================== */
+
+.admission-dashboard__outcomes-workspace {
+    --workspace-accent: var(--admission-success);
+}
+
+.admission-dashboard__outcomes-workspace
+.admission-dashboard__section-kicker {
+    color: var(--workspace-accent);
+}
+
+.admission-dashboard__outcomes-workspace
+.admission-dashboard__outcome-panel {
+    border-color: color-mix(
+        in srgb,
+        var(--workspace-accent) 13%,
+        var(--admission-border)
+    );
+}
+
+/* Prevent workspace content from overflowing its container. */
+
+.admission-dashboard__workspace > *,
+.admission-dashboard__workspace .admission-dashboard__section,
+.admission-dashboard__workspace .admission-dashboard__panel,
+.admission-dashboard__workspace .admission-dashboard__filters {
+    min-width: 0;
+}
+
+/* ==========================================================================
+   29. WORKSPACE TRANSITION
+========================================================================== */
+
+@keyframes admission-workspace-enter {
+    from {
+        opacity: 0;
+        transform: translateY(5px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ==========================================================================
+   30. WORKSPACE NAVIGATION — TABLET
+========================================================================== */
+
+@media (max-width: 900px) {
+    .admission-dashboard__workspace {
+        gap: 21px;
+    }
+
+    .admission-dashboard__workspace-header {
+        align-items: flex-start;
+    }
+
+    .admission-dashboard__workspace-tab {
+        min-height: 70px;
+        padding: 12px 15px;
+    }
+}
+
+/* ==========================================================================
+   31. WORKSPACE NAVIGATION — MOBILE
+========================================================================== */
+
+@media (max-width: 640px) {
+    .admission-dashboard__workspace-nav {
+        gap: 6px;
+        padding: 5px;
+        border-radius: 12px;
+    }
+
+    .admission-dashboard__workspace-tab {
+        align-items: flex-start;
+        justify-content: flex-start;
+        gap: 9px;
+        min-height: 75px;
+        padding: 11px 9px;
+        border-radius: 9px;
+    }
+
+    .admission-dashboard__workspace-tab-icon {
+        flex-basis: 32px;
+        width: 32px;
+        height: 32px;
+        border-radius: 9px;
+    }
+
+    .admission-dashboard__workspace-tab-icon svg {
+        width: 17px;
+        height: 17px;
+    }
+
+    .admission-dashboard__workspace-tab-content {
+        gap: 3px;
+    }
+
+    .admission-dashboard__workspace-tab-content strong {
+        font-size: 11px;
+        line-height: 1.4;
+    }
+
+    .admission-dashboard__workspace-tab-content span {
+        font-size: 9px;
+        line-height: 1.4;
+    }
+
+    .admission-dashboard__workspace-tab-indicator {
+        right: 10px;
+        left: 10px;
+    }
+
+    .admission-dashboard__workspace {
+        gap: 18px;
+    }
+
+    .admission-dashboard__workspace-header {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .admission-dashboard__workspace-header h2 {
+        font-size: 19px;
+    }
+
+    .admission-dashboard__workspace-header p {
+        font-size: 12px;
+    }
+
+    .admission-dashboard__workspace-context {
+        align-self: flex-start;
+        padding: 8px 11px;
+        font-size: 10px;
+    }
+}
+
+/* ==========================================================================
+   32. WORKSPACE NAVIGATION — VERY SMALL SCREENS
+========================================================================== */
+
+@media (max-width: 380px) {
+    .admission-dashboard__workspace-tab {
+        gap: 7px;
+        padding: 10px 7px;
+    }
+
+    .admission-dashboard__workspace-tab-icon {
+        flex-basis: 29px;
+        width: 29px;
+        height: 29px;
+    }
+
+    .admission-dashboard__workspace-tab-content strong {
+        font-size: 10px;
+    }
+
+    .admission-dashboard__workspace-tab-content span {
+        font-size: 8px;
+    }
+}
+
+/* ==========================================================================
+   33. WORKSPACE ACCESSIBILITY
+========================================================================== */
+
+.admission-dashboard__workspace-tab:focus-visible {
+    outline: 2px solid var(--admission-primary);
+    outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .admission-dashboard__workspace {
+        animation: none;
+    }
+}

@@ -10,9 +10,11 @@
 |
 | Purpose:
 | Authenticated applicant/student navigation.
+| My Application opens the complete application list.
+| My Admission Offers opens the applicant's issued official offers.
 |
-| Status: ✅ Production Ready
-| Version: 2.0
+| Status: Production Ready
+| Version: 2.1
 |--------------------------------------------------------------------------
 --}}
 
@@ -64,16 +66,29 @@
                 </li>
             @endif
 
-            {{-- My Application --}}
+            {{-- My Application: complete application list and individual dossiers --}}
             <li>
                 <a
-                    href="{{ route('applications.my') }}"
-                    class="portal-sidebar__link @if(request()->routeIs('applications.my')) portal-sidebar__link--active @endif"
-                    @if(request()->routeIs('applications.my'))
+                    href="{{ route('applications.index') }}"
+                    class="portal-sidebar__link @if(request()->routeIs('applications.index', 'applications.show')) portal-sidebar__link--active @endif"
+                    @if(request()->routeIs('applications.index', 'applications.show'))
                         aria-current="page"
                     @endif
                 >
                     My Application
+                </a>
+            </li>
+
+            {{-- My Admission Offers --}}
+            <li>
+                <a
+                    href="{{ route('admission.offers.index') }}"
+                    class="portal-sidebar__link @if(request()->routeIs('admission.offers.index', 'admission.offer')) portal-sidebar__link--active @endif"
+                    @if(request()->routeIs('admission.offers.index', 'admission.offer'))
+                        aria-current="page"
+                    @endif
+                >
+                    My Admission Offers
                 </a>
             </li>
 

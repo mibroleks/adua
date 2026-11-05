@@ -17,10 +17,13 @@
         |--------------------------------------------------------------------------
         | Application Dossier — Print/PDF
         |--------------------------------------------------------------------------
-        | This stylesheet is intentionally self-contained.
-        | It is designed for browser printing and PDF generation.
+        | Self-contained institutional print stylesheet.
+        | Designed for browser printing and PDF generation.
         |
-        | Do not depend on the portal's screen theme for print output.
+        | Version 1.1:
+        | - Increased typography for improved readability.
+        | - Added referral attribution to the dossier.
+        | - Updated summary layout for five information items.
         |--------------------------------------------------------------------------
         */
 
@@ -30,13 +33,13 @@
 
             @bottom-left {
                 content: "Application Dossier";
-                font-size: 8px;
+                font-size: 9px;
                 color: #6b7280;
             }
 
             @bottom-right {
                 content: "Page " counter(page) " of " counter(pages);
-                font-size: 8px;
+                font-size: 9px;
                 color: #6b7280;
             }
         }
@@ -76,8 +79,8 @@
                 Helvetica,
                 sans-serif;
 
-            font-size: 10.5pt;
-            line-height: 1.55;
+            font-size: 12pt;
+            line-height: 1.65;
             color: var(--print-text);
             background: #ffffff;
         }
@@ -99,7 +102,7 @@
             gap: 12px;
 
             margin: 0 0 20px;
-            padding: 12px 14px;
+            padding: 14px 16px;
 
             border: 1px solid var(--print-border);
             border-radius: 6px;
@@ -109,7 +112,7 @@
 
         .print-actions__hint {
             color: var(--print-muted);
-            font-size: 12px;
+            font-size: 14px;
         }
 
         .print-actions__buttons {
@@ -122,12 +125,12 @@
             border: 1px solid var(--print-border);
             border-radius: 5px;
 
-            padding: 8px 13px;
+            padding: 10px 15px;
 
             background: #ffffff;
             color: var(--print-heading);
 
-            font-size: 12px;
+            font-size: 14px;
             font-weight: 600;
 
             cursor: pointer;
@@ -148,7 +151,7 @@
             display: table;
             width: 100%;
 
-            padding-bottom: 15px;
+            padding-bottom: 17px;
             border-bottom: 2px solid var(--print-primary);
         }
 
@@ -178,14 +181,14 @@
         }
 
         .institution-brand__logo {
-            width: 64px;
+            width: 70px;
             padding-right: 14px;
         }
 
         .institution-brand__logo img {
             display: block;
-            width: 54px;
-            height: 54px;
+            width: 60px;
+            height: 60px;
             object-fit: contain;
         }
 
@@ -199,20 +202,20 @@
                 "Times New Roman",
                 serif;
 
-            font-size: 18px;
-            line-height: 1.2;
+            font-size: 21px;
+            line-height: 1.3;
             font-weight: 700;
             letter-spacing: .01em;
         }
 
         .institution-address {
-            margin: 4px 0 0;
+            margin: 5px 0 0;
 
             max-width: 480px;
 
             color: var(--print-muted);
-            font-size: 9px;
-            line-height: 1.45;
+            font-size: 11px;
+            line-height: 1.5;
         }
 
         .document-label {
@@ -220,18 +223,18 @@
 
             color: var(--print-muted);
 
-            font-size: 8px;
+            font-size: 10px;
             font-weight: 700;
             letter-spacing: .16em;
             text-transform: uppercase;
         }
 
         .document-title {
-            margin: 4px 0 0;
+            margin: 5px 0 0;
 
             color: var(--print-primary);
 
-            font-size: 13px;
+            font-size: 15px;
             font-weight: 800;
             letter-spacing: .04em;
             text-transform: uppercase;
@@ -245,8 +248,8 @@
             display: table;
             width: 100%;
 
-            margin: 18px 0 20px;
-            padding-bottom: 14px;
+            margin: 20px 0 22px;
+            padding-bottom: 16px;
 
             border-bottom: 1px solid var(--print-border);
         }
@@ -276,26 +279,26 @@
                 "Times New Roman",
                 serif;
 
-            font-size: 21px;
-            line-height: 1.2;
+            font-size: 25px;
+            line-height: 1.25;
             font-weight: 700;
         }
 
         .dossier-subtitle {
-            margin: 5px 0 0;
+            margin: 6px 0 0;
 
             color: var(--print-muted);
-            font-size: 9px;
+            font-size: 12px;
         }
 
         .application-number-label {
             display: block;
 
-            margin-bottom: 3px;
+            margin-bottom: 4px;
 
             color: var(--print-muted);
 
-            font-size: 7.5px;
+            font-size: 10px;
             font-weight: 700;
             letter-spacing: .12em;
             text-transform: uppercase;
@@ -306,7 +309,7 @@
 
             color: var(--print-primary);
 
-            font-size: 11px;
+            font-size: 13px;
             font-weight: 800;
             letter-spacing: .04em;
         }
@@ -319,19 +322,22 @@
             display: table;
             width: 100%;
 
-            margin-bottom: 22px;
+            margin-bottom: 24px;
 
             border: 1px solid var(--print-border);
+            table-layout: fixed;
         }
 
         .summary-item {
             display: table-cell;
-            width: 25%;
+            width: 20%;
 
-            padding: 10px 12px;
+            padding: 11px 9px;
 
             border-right: 1px solid var(--print-border);
             vertical-align: top;
+
+            overflow-wrap: anywhere;
         }
 
         .summary-item:last-child {
@@ -341,13 +347,14 @@
         .summary-label {
             display: block;
 
-            margin-bottom: 3px;
+            margin-bottom: 5px;
 
             color: var(--print-muted);
 
-            font-size: 7.5px;
+            font-size: 9px;
+            line-height: 1.4;
             font-weight: 700;
-            letter-spacing: .09em;
+            letter-spacing: .07em;
             text-transform: uppercase;
         }
 
@@ -356,8 +363,11 @@
 
             color: var(--print-heading);
 
-            font-size: 9.5px;
+            font-size: 11px;
+            line-height: 1.5;
             font-weight: 700;
+
+            overflow-wrap: anywhere;
         }
 
         /* ------------------------------------------------------------------
@@ -365,15 +375,15 @@
         ------------------------------------------------------------------ */
 
         .section {
-            margin: 0 0 22px;
+            margin: 0 0 24px;
         }
 
         .section-header {
             display: table;
             width: 100%;
 
-            margin-bottom: 8px;
-            padding-bottom: 6px;
+            margin-bottom: 10px;
+            padding-bottom: 7px;
 
             border-bottom: 1.5px solid var(--print-primary);
         }
@@ -389,7 +399,7 @@
 
             color: var(--print-primary-dark);
 
-            font-size: 11px;
+            font-size: 13px;
             font-weight: 800;
             letter-spacing: .03em;
             text-transform: uppercase;
@@ -400,7 +410,7 @@
 
             color: var(--print-accent);
 
-            font-size: 8px;
+            font-size: 10px;
             font-weight: 800;
             text-align: right;
         }
@@ -415,19 +425,20 @@
             border-collapse: collapse;
             border-spacing: 0;
 
-            font-size: 9.5px;
+            font-size: 12px;
         }
 
         .data-table th,
         .data-table td {
-            padding: 7px 9px;
+            padding: 9px 11px;
 
             border: 1px solid var(--print-border-light);
 
             text-align: left;
             vertical-align: top;
 
-            line-height: 1.45;
+            line-height: 1.55;
+            overflow-wrap: anywhere;
         }
 
         .data-table th {
@@ -435,7 +446,7 @@
 
             background: var(--print-soft);
 
-            color: #4b5563;
+            color: #374151;
 
             font-weight: 700;
         }
@@ -453,7 +464,7 @@
 
             border-color: var(--print-primary);
 
-            font-size: 8px;
+            font-size: 10px;
             letter-spacing: .04em;
             text-transform: uppercase;
         }
@@ -479,7 +490,7 @@
         .status {
             display: inline-block;
 
-            padding: 3px 7px;
+            padding: 4px 9px;
 
             border: 1px solid var(--print-border);
             border-radius: 999px;
@@ -487,7 +498,7 @@
             color: var(--print-heading);
             background: #f8fafc;
 
-            font-size: 7.5px;
+            font-size: 9px;
             font-weight: 800;
             letter-spacing: .04em;
             text-transform: uppercase;
@@ -516,15 +527,15 @@
         ------------------------------------------------------------------ */
 
         .document-footer {
-            margin-top: 28px;
-            padding-top: 10px;
+            margin-top: 30px;
+            padding-top: 12px;
 
             border-top: 1px solid var(--print-border);
 
             color: var(--print-muted);
 
-            font-size: 8px;
-            line-height: 1.5;
+            font-size: 10px;
+            line-height: 1.6;
         }
 
         .document-footer__row {
@@ -581,11 +592,6 @@
                 max-width: none;
             }
 
-            /*
-             * Preserve institutional colours in browser print/PDF.
-             * Users should enable "Background graphics" in Chrome/Edge
-             * when printing if the browser does not preserve backgrounds.
-             */
             * {
                 -webkit-print-color-adjust: exact !important;
                 print-color-adjust: exact !important;
@@ -599,6 +605,11 @@
             .section {
                 break-inside: avoid;
             }
+
+            .summary-strip {
+                break-inside: avoid;
+                page-break-inside: avoid;
+            }
         }
 
         @media screen {
@@ -608,13 +619,13 @@
             }
 
             .print-page {
-                max-width: 1000px;
+                max-width: 1100px;
                 margin: 28px auto;
                 padding: 0 24px 40px;
             }
 
             .print-document {
-                padding: 30px;
+                padding: 36px;
                 background: #ffffff;
                 box-shadow: 0 12px 40px rgba(0, 0, 0, .08);
             }
@@ -645,9 +656,7 @@
             .institution-header__document,
             .dossier-intro,
             .dossier-intro__title,
-            .dossier-intro__number,
-            .summary-strip,
-            .summary-item {
+            .dossier-intro__number {
                 display: block;
                 width: 100%;
             }
@@ -658,13 +667,30 @@
                 text-align: left;
             }
 
+            .summary-strip {
+                display: block;
+                width: 100%;
+            }
+
             .summary-item {
+                display: block;
+                width: 100%;
+
                 border-right: 0;
                 border-bottom: 1px solid var(--print-border);
             }
 
             .summary-item:last-child {
                 border-bottom: 0;
+            }
+
+            .data-table {
+                font-size: 11px;
+            }
+
+            .data-table th,
+            .data-table td {
+                padding: 8px;
             }
         }
     </style>
@@ -673,6 +699,12 @@
 <body>
 
 @php
+    /*
+    |--------------------------------------------------------------------------
+    | Institutional Branding
+    |--------------------------------------------------------------------------
+    */
+
     $theme = app(\App\Services\ThemeService::class);
 
     $institutionName =
@@ -686,6 +718,12 @@
 
     $logoUrl = $theme->logoUrl();
 
+    /*
+    |--------------------------------------------------------------------------
+    | Application Status
+    |--------------------------------------------------------------------------
+    */
+
     $applicationStatus =
         $application->application_status
         ?? '—';
@@ -694,12 +732,47 @@
         $application->payment_status
         ?? '—';
 
+    /*
+    |--------------------------------------------------------------------------
+    | Referral Attribution
+    |--------------------------------------------------------------------------
+    |
+    | Use the referral partner already associated with the application.
+    | Do not recalculate attribution from the applicant account.
+    |
+    */
+
+    $referralPartner = $application->referralPartner;
+
+    $referralPartnerName = $referralPartner
+        ? (
+            data_get($referralPartner, 'name')
+            ?: 'Referral Partner #' . $application->referral_partner_id
+        )
+        : 'Direct Application';
+
+    $referralDescription = $referralPartner
+        ? 'Referred application'
+        : 'No referral partner recorded';
+
+    /*
+    |--------------------------------------------------------------------------
+    | Admission Decision
+    |--------------------------------------------------------------------------
+    */
+
     $decision =
         $application->decision?->decision;
 
     $decisionLabel = $decision
         ? ucwords(str_replace('_', ' ', $decision))
         : 'Not yet decided';
+
+    /*
+    |--------------------------------------------------------------------------
+    | Status Badge Styling
+    |--------------------------------------------------------------------------
+    */
 
     $statusClass = match (strtoupper((string) $applicationStatus)) {
         'APPROVED', 'SUCCESS', 'PAID', 'COMPLETED' => 'status status--success',
@@ -885,6 +958,18 @@
 
             </div>
 
+            <div class="summary-item">
+
+                <span class="summary-label">
+                    Referral Partner
+                </span>
+
+                <span class="summary-value">
+                    {{ $referralPartnerName }}
+                </span>
+
+            </div>
+
         </div>
 
 
@@ -927,9 +1012,22 @@
                     </tr>
 
                     <tr>
-                        <th>Application Fee</th>
+                        <th>Admission forms / administration charges and logistics</th>
                         <td>
                             {{ $application->formatted_application_fee ?? '—' }}
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <th>Referral Partner</th>
+                        <td>
+                            <strong>{{ $referralPartnerName }}</strong>
+
+                            <br>
+
+                            <span style="color: #6b7280; font-size: 11px;">
+                                {{ $referralDescription }}
+                            </span>
                         </td>
                     </tr>
 
@@ -1057,7 +1155,7 @@
 
 
         {{-- ============================================================
-             Documents
+             04 — Documents
         ============================================================= --}}
         <section class="section">
 
@@ -1123,7 +1221,7 @@
 
 
         {{-- ============================================================
-             Payment
+             05 — Payment
         ============================================================= --}}
         @if($application->payment)
 
@@ -1199,7 +1297,7 @@
 
 
         {{-- ============================================================
-             Admission Decision
+             06 — Admission Decision
         ============================================================= --}}
         @if($application->decision)
 
@@ -1267,7 +1365,7 @@
 
 
         {{-- ============================================================
-             Status History
+             07 — Status History
         ============================================================= --}}
         <section class="section">
 
@@ -1392,4 +1490,3 @@
 
 </body>
 </html>
-```

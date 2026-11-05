@@ -7,18 +7,29 @@ Company: Ygrace Tech
 Author: Ibrahim Olalekan
 
 Purpose:
-Defines the Filament table schema for listing application records.
+Defines the premium, read-oriented Filament table schema for
+listing and reviewing admission applications.
 
-The table is intentionally read-oriented:
-- Officers can search and filter applications.
-- Officers can open the complete application record.
-- Application lifecycle status is taken from application_status.
-- Payment status is displayed independently from application status.
-- Submitted date uses submitted_at.
-- Record actions use the Filament v5 action API.
+The table supports:
+- Application and applicant search.
+- Recruitment partner attribution visibility.
+- Direct / Organic application identification.
+- Application lifecycle status monitoring.
+- Independent payment status monitoring.
+- Programme and application fee visibility.
+- Submission date filtering.
+- Admission decision visibility.
+- Read-only access to the complete application record.
 
-Status: ✅ Production Ready
-Version: 3.2 (fee accessor + latest decision)
+Referral Attribution:
+- Displays the registered referral partner attached to the application.
+- Displays Direct / Organic when no referral partner is recorded.
+- Supports filtering by individual referral partners.
+- Supports filtering direct / organic applications separately.
+- Does not affect admission eligibility, fees, payments, or decisions.
+
+Status: Implementation
+Version: 3.4 (premium admissions register + referral attribution refinement)
 Filament: 5.x
 */
 
@@ -26,12 +37,14 @@ namespace App\Filament\Resources\ApplicationResource\Tables;
 
 use App\Filament\Resources\ApplicationResource;
 use App\Models\Application;
+use App\Models\ReferralPartner;
+use Filament\Actions\Action;
 use Filament\Forms\Components\DatePicker;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\Filter;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
-use Filament\Actions\Action;
+use Illuminate\Database\Eloquent\Builder;
 
 class ApplicationsTable
 {
@@ -47,20 +60,48 @@ class ApplicationsTable
                     ->sortable()
                     ->copyable()
                     ->copyMessage('Application number copied')
-                    ->weight('bold'),
+                    ->weight('bold')
+                    ->color('primary')
+                    ->description('Application reference'),
 
                 // Applicant
                 TextColumn::make('user.name')
                     ->label('Applicant')
                     ->searchable()
-                    ->sortable(),
+                    ->sortable()
+                    ->weight('semibold')
+                    ->description('Registered applicant'),
+
+                // Referral Source
+                TextColumn::make('referralPartner.name')
+                    ->label('Referral Source')
+                    ->badge()
+                    ->searchable()
+                    ->sortable()
+                    ->default('Direct / Organic')
+                    ->color(fn (?string $state): string =>
+                        filled($state) && $state !== 'Direct / Organic'
+                            ? 'success'
+                            : 'gray'
+                    )
+                    ->icon(fn (?string $state): string =>
+                        filled($state) && $state !== 'Direct / Organic'
+                            ? 'heroicon-o-user-group'
+                            : 'heroicon-o-globe-alt'
+                    )
+                    ->tooltip(fn (?string $state): string =>
+                        filled($state) && $state !== 'Direct / Organic'
+                            ? 'Recorded recruitment partner attribution'
+                            : 'No referral partner was recorded for this application'
+                    ),
 
                 // Programme
                 TextColumn::make('programme.name')
                     ->label('Programme')
                     ->searchable()
                     ->sortable()
-                    ->wrap(),
+                    ->wrap()
+                    ->limit(40),
 
                 // Application Status
                 TextColumn::make('application_status')
@@ -68,22 +109,30 @@ class ApplicationsTable
                     ->badge()
                     ->sortable()
                     ->formatStateUsing(fn (?string $state): string => match ($state) {
-                        'DRAFT'              => 'Draft',
-                        'SUBMITTED'          => 'Submitted',
-                        'UNDER_REVIEW'       => 'Under Review',
-                        'APPROVED'           => 'Approved',
-                        'REJECTED'           => 'Rejected',
-                        'CORRECTION_REQUIRED'=> 'Correction Required',
-                        default              => $state ?? '—',
+                        'DRAFT'               => 'Draft',
+                        'SUBMITTED'           => 'Submitted',
+                        'UNDER_REVIEW'        => 'Under Review',
+                        'APPROVED'            => 'Approved',
+                        'REJECTED'            => 'Rejected',
+                        'CORRECTION_REQUIRED' => 'Correction Required',
+                        default               => $state ?? '—',
                     })
                     ->color(fn (?string $state): string => match ($state) {
-                        'DRAFT'              => 'gray',
-                        'SUBMITTED'          => 'info',
-                        'UNDER_REVIEW'       => 'warning',
-                        'APPROVED'           => 'success',
-                        'REJECTED'           => 'danger',
-                        'CORRECTION_REQUIRED'=> 'info',
-                        default              => 'gray',
+                        'DRAFT'               => 'gray',
+                        'SUBMITTED'           => 'info',
+                        'UNDER_REVIEW'        => 'warning',
+                        'APPROVED'            => 'success',
+                        'REJECTED'            => 'danger',
+                        'CORRECTION_REQUIRED' => 'info',
+                        default               => 'gray',
+                    })
+                    ->icon(fn (?string $state): ?string => match ($state) {
+                        'SUBMITTED' => 'heroicon-o-paper-airplane',
+                        'UNDER_REVIEW' => 'heroicon-o-clock',
+                        'APPROVED' => 'heroicon-o-check-circle',
+                        'REJECTED' => 'heroicon-o-x-circle',
+                        'CORRECTION_REQUIRED' => 'heroicon-o-exclamation-circle',
+                        default => null,
                     }),
 
                 // Payment Status
@@ -102,22 +151,34 @@ class ApplicationsTable
                         'SUCCESS' => 'success',
                         'FAILED'  => 'danger',
                         default   => 'gray',
+                    })
+                    ->icon(fn (?string $state): ?string => match ($state) {
+                        'SUCCESS' => 'heroicon-o-check-circle',
+                        'PENDING' => 'heroicon-o-clock',
+                        'FAILED' => 'heroicon-o-x-circle',
+                        default => null,
                     }),
 
-                // ✅ Application Fee (use accessor)
+                // Application Fee
                 TextColumn::make('formatted_application_fee')
-                    ->label('Fee')
+                    ->label('Application Fee')
                     ->money('NGN', true)
-                    ->sortable(),
+                    ->sortable()
+                    ->alignEnd(),
 
                 // Submitted At
                 TextColumn::make('submitted_at')
                     ->label('Submitted')
-                    ->dateTime('d M Y, H:i')
+                    ->dateTime('d M Y')
                     ->sortable()
+                    ->description(fn (Application $record): ?string =>
+                        $record->submitted_at
+                            ? $record->submitted_at->format('h:i A')
+                            : 'Awaiting submission'
+                    )
                     ->placeholder('Not submitted'),
 
-                // ✅ Decision (latest)
+                // Latest Decision
                 TextColumn::make('decision.decision')
                     ->label('Decision')
                     ->badge()
@@ -131,48 +192,95 @@ class ApplicationsTable
                         'REJECTED' => 'danger',
                         default    => 'gray',
                     })
+                    ->icon(fn (?string $state): ?string => match ($state) {
+                        'APPROVED' => 'heroicon-o-check-circle',
+                        'REJECTED' => 'heroicon-o-x-circle',
+                        default => 'heroicon-o-minus-circle',
+                    })
                     ->placeholder('Pending'),
             ])
 
             ->filters([
+
+                // Application Status Filter
                 SelectFilter::make('application_status')
                     ->label('Application Status')
                     ->options([
-                        'DRAFT'        => 'Draft',
-                        'SUBMITTED'    => 'Submitted',
-                        'UNDER_REVIEW' => 'Under Review',
-                        'APPROVED'     => 'Approved',
-                        'REJECTED'     => 'Rejected',
+                        'DRAFT'               => 'Draft',
+                        'SUBMITTED'           => 'Submitted',
+                        'UNDER_REVIEW'        => 'Under Review',
+                        'APPROVED'            => 'Approved',
+                        'REJECTED'            => 'Rejected',
                         'CORRECTION_REQUIRED' => 'Correction Required',
-                    ]),
+                    ])
+                    ->native(false),
 
+                // Payment Status Filter
                 SelectFilter::make('payment_status')
                     ->label('Payment Status')
                     ->options([
                         'PENDING' => 'Pending',
                         'SUCCESS' => 'Paid',
                         'FAILED'  => 'Failed',
-                    ]),
+                    ])
+                    ->native(false),
 
+                // Referral Partner Filter
+                SelectFilter::make('referral_partner_id')
+                    ->label('Referral Partner')
+                    ->placeholder('All referral partners')
+                    ->options(fn (): array => ReferralPartner::query()
+                        ->orderBy('name')
+                        ->pluck('name', 'id')
+                        ->all()
+                    )
+                    ->searchable()
+                    ->preload()
+                    ->native(false),
+
+                // Direct / Organic Applications Filter
+                Filter::make('direct_applications')
+                    ->label('Direct / Organic Applications')
+                    ->toggle()
+                    ->query(fn (Builder $query): Builder =>
+                        $query->whereNull('referral_partner_id')
+                    ),
+
+                // Submission Date Filter
                 Filter::make('submitted_at')
                     ->label('Submission Date')
                     ->form([
-                        DatePicker::make('from')->label('From'),
-                        DatePicker::make('until')->label('Until'),
+                        DatePicker::make('from')
+                            ->label('From')
+                            ->native(false),
+
+                        DatePicker::make('until')
+                            ->label('Until')
+                            ->native(false),
                     ])
-                    ->query(fn ($query, array $data) =>
-                        $query
-                            ->when($data['from'], fn ($q) => $q->whereDate('submitted_at', '>=', $data['from']))
-                            ->when($data['until'], fn ($q) => $q->whereDate('submitted_at', '<=', $data['until']))
+                    ->query(fn (Builder $query, array $data): Builder => $query
+                        ->when(
+                            filled($data['from'] ?? null),
+                            fn (Builder $query): Builder =>
+                                $query->whereDate('submitted_at', '>=', $data['from'])
+                        )
+                        ->when(
+                            filled($data['until'] ?? null),
+                            fn (Builder $query): Builder =>
+                                $query->whereDate('submitted_at', '<=', $data['until'])
+                        )
                     ),
             ])
 
             ->recordActions([
                 Action::make('view')
-                    ->label('View')
+                    ->label('View Application')
                     ->icon('heroicon-o-eye')
+                    ->color('primary')
                     ->url(fn (Application $record): string =>
-                        ApplicationResource::getUrl('view', ['record' => $record])
+                        ApplicationResource::getUrl('view', [
+                            'record' => $record,
+                        ])
                     ),
             ])
 

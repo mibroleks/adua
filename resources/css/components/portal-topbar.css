@@ -280,3 +280,107 @@
         animation-duration: 0.001ms !important;
     }
 }
+
+
+
+
+/*
+|--------------------------------------------------------------------------
+| PERSONAL THEME SELECTOR
+|--------------------------------------------------------------------------
+*/
+
+.portal-topbar__theme-switch {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.2rem;
+    flex-shrink: 0;
+    padding: 0.2rem;
+    border: 1px solid var(--theme-border);
+    border-radius: 0.8rem;
+    background: var(--theme-surface);
+}
+
+.portal-topbar__theme-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+    min-width: 2.45rem;
+    min-height: 2.15rem;
+    padding: 0.35rem 0.55rem;
+    border: 1px solid transparent;
+    border-radius: 0.55rem;
+    background: transparent;
+    color: var(--theme-muted);
+    font-family: inherit;
+    font-size: 0.7rem;
+    font-weight: 700;
+    line-height: 1;
+    cursor: pointer;
+    transition:
+        background var(--portal-transition),
+        color var(--portal-transition),
+        border-color var(--portal-transition),
+        transform var(--portal-transition);
+}
+
+.portal-topbar__theme-button:hover {
+    background: var(--theme-primary-soft);
+    color: var(--theme-primary);
+}
+
+.portal-topbar__theme-button.is-active {
+    border-color: var(--theme-border-strong);
+    background: var(--theme-primary-soft);
+    color: var(--theme-primary);
+    box-shadow: 0 1px 3px color-mix(
+        in srgb,
+        var(--theme-heading) 8%,
+        transparent
+    );
+}
+
+.portal-topbar__theme-button:active {
+    transform: scale(0.96);
+}
+
+.portal-topbar__theme-button:disabled {
+    opacity: 0.55;
+    cursor: wait;
+}
+
+.portal-topbar__theme-button:focus-visible {
+    outline: 3px solid color-mix(
+        in srgb,
+        var(--theme-focus) 45%,
+        transparent
+    );
+    outline-offset: 3px;
+}
+
+/* Compact controls on smaller screens */
+@media (max-width: 640px) {
+    .portal-topbar__theme-switch {
+        gap: 0.1rem;
+        padding: 0.15rem;
+    }
+
+    .portal-topbar__theme-button {
+        width: 2.2rem;
+        min-width: 2.2rem;
+        min-height: 2.2rem;
+        padding: 0;
+        font-size: 1rem;
+    }
+
+    .portal-topbar__theme-label {
+        display: none;
+    }
+}
+
+@media (max-width: 420px) {
+    .portal-topbar__actions {
+        gap: 0.4rem;
+    }
+}

@@ -1,0 +1,49 @@
+/*
+|--------------------------------------------------------------------------
+| Ygrace Tech — Officer Panel Theme
+|--------------------------------------------------------------------------
+| File Path: resources/css/filament/officer/theme.css
+| Company: Ygrace Tech
+| Author: Ibrahim Olalekan
+|
+| Purpose:
+| Central stylesheet entrypoint for the Officer Panel.
+|
+| Theme architecture:
+| - Filament's base theme
+| - Canonical Ygrace semantic design tokens
+| - Application and dossier presentation
+|
+| Dynamic institutional theme variables are loaded separately
+| through the Laravel /theme.css endpoint.
+|
+| Do not hardcode an institution's identity or colour palette here.
+|--------------------------------------------------------------------------
+*/
+
+/* Filament base theme */
+@import '../../../../vendor/filament/filament/resources/css/theme.css';
+
+/* Canonical semantic theme tokens */
+@import '../../tokens.css';
+
+/* Application overview and application dossier */
+@import './applications.css';
+
+@import './login.css';
+
+@import './admission-decision-infolist.css';
+
+
+@import './admission-dashboard.css';
+
+@import './admission-decision-hero-widget.css';
+
+
+@import './admission-decisions.css';
+
+
+
+/* Filament component and Blade view discovery */
+@source '../../../../app/Filament/**/*';
+@source '../../../../resources/views/filament/**/*';

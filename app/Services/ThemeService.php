@@ -9,27 +9,26 @@
 | Author: Ibrahim Olalekan
 |
 | Purpose:
-| Provides centralized access to university branding and theme tokens.
-| Used by both the student portal (CSS variables) and officer panel (Filament theme).
-| Reads values from the settings table via the Setting model and resolves presets from config/theme.php.
+| Provides centralized access to institutional branding and theme tokens.
+| Used by the student portal (CSS variables) and officer panel.
 |
 | Architecture:
-| - Settings table stores identity + appearance values.
+| - Settings table stores institutional identity + appearance values.
 | - ThemeService exposes typed getters for brand + component tokens.
-| - Supports presets (Heritage, Forest, Sapphire, Atlantic, Royal, Terracotta, Obsidian) and modes (light/dark/system).
-| - Prevents hardcoding of institutional identity and colors.
-| - Allows optional overrides for advanced customization.
-| - Overrides are stored as JSON in `appearance.theme_overrides`.
-| - Officers can disable overrides via `overrides_enabled`.
+| - Supports presets and light/dark modes.
+| - Supports individual student portal theme preferences.
+| - Personal preferences never modify institutional settings.
+| - Overrides are stored as JSON in appearance.theme_overrides.
 |
-| Status: ✅ Production Ready
-| Version: 5.3 (safe defaults via hardened Setting::get, preset + mode aware, JSON overrides respected)
+| Status: Production Ready
+| Version: 5.4 (personal portal theme preference support)
 |--------------------------------------------------------------------------
 */
 
 namespace App\Services;
 
 use App\Models\Setting;
+use App\Models\User;
 
 class ThemeService
 {
@@ -38,6 +37,7 @@ class ThemeService
     | Identity
     |--------------------------------------------------------------------------
     */
+
     public function institutionName(): string
     {
         return Setting::get('institution.name', 'University');
@@ -61,35 +61,60 @@ class ThemeService
     public function logoUrl(): ?string
     {
         $path = $this->logo();
+
         return $path ? asset('storage/' . $path) : null;
     }
 
     public function faviconUrl(): ?string
     {
         $path = $this->favicon();
+
         return $path ? asset('storage/' . $path) : null;
     }
 
     /*
     |--------------------------------------------------------------------------
-    | Preset + Mode
+    | Preset + Institutional Mode
     |--------------------------------------------------------------------------
     */
+
     public function preset(): string
     {
-        return Setting::get('appearance.theme_preset', config('theme.default'));
+        return Setting::get(
+            'appearance.theme_preset',
+            config('theme.default')
+        );
     }
 
+    /**
+     * Return the institution's configured theme mode.
+     *
+     * This remains independent of personal user preferences.
+     */
     public function mode(): string
     {
         $mode = Setting::get('appearance.theme_mode', 'light');
 
-        // Normalize "system" → default to light for now
-        if ($mode === 'system') {
-            $mode = 'light';
+        if (! in_array($mode, ['light', 'dark'], true)) {
+            return 'light';
         }
 
         return $mode;
+    }
+
+    /**
+     * Resolve the effective mode for the authenticated portal user.
+     *
+     * Students may override the institutional default.
+     * Officers and guests retain the institutional mode.
+     */
+    public function portalMode(?User $user = null): string
+    {
+        if ($user && $user->isStudent()) {
+            return $user->preferredThemeMode() ?? $this->mode();
+        }
+
+        return $this->mode();
     }
 
     /*
@@ -97,21 +122,39 @@ class ThemeService
     | Tokens
     |--------------------------------------------------------------------------
     */
-    public function tokens(): array
+
+    /**
+     * Resolve theme tokens for a specific mode.
+     *
+     * When no mode is supplied, use the institutional mode.
+     */
+    public function tokens(?string $mode = null): array
     {
         $presetKey = $this->preset();
-        $mode = $this->mode();
 
-        $preset = config("theme.presets.{$presetKey}", config('theme.presets.' . config('theme.default')));
-        $tokens = $preset[$mode] ?? $preset['light'];
+        $mode = in_array($mode, ['light', 'dark'], true)
+            ? $mode
+            : $this->mode();
 
-        // Apply overrides if enabled
+        $defaultPreset = config('theme.default');
+
+        $preset = config(
+            "theme.presets.{$presetKey}",
+            config("theme.presets.{$defaultPreset}")
+        );
+
+        $tokens = $preset[$mode] ?? $preset['light'] ?? [];
+
         return $this->applyOverrides($tokens);
     }
 
+    /**
+     * Apply configured institutional colour overrides.
+     */
     private function applyOverrides(array $tokens): array
     {
         $enabled = Setting::get('appearance.overrides_enabled', true);
+
         if (! $enabled) {
             return $tokens;
         }
@@ -127,7 +170,10 @@ class ThemeService
         }
 
         foreach ($overrides as $key => $value) {
-            if (array_key_exists($key, $tokens) && $this->isValidColor($value)) {
+            if (
+                array_key_exists($key, $tokens)
+                && $this->isValidColor($value)
+            ) {
                 $tokens[$key] = $value;
             }
         }
@@ -137,7 +183,8 @@ class ThemeService
 
     private function isValidColor(?string $value): bool
     {
-        return $value && preg_match('/^#[0-9A-Fa-f]{6}$/', $value);
+        return $value !== null
+            && preg_match('/^#[0-9A-Fa-f]{6}$/', $value) === 1;
     }
 
     public function fontFamily(): string
@@ -150,19 +197,28 @@ class ThemeService
 
     /*
     |--------------------------------------------------------------------------
-    | Reset overrides
+    | Reset Overrides
     |--------------------------------------------------------------------------
     */
+
     public function resetToPreset(): void
     {
         Setting::updateOrCreate(
             ['key' => 'appearance.theme_overrides'],
-            ['value' => '{}', 'type' => 'json', 'group' => 'appearance']
+            [
+                'value' => '{}',
+                'type' => 'json',
+                'group' => 'appearance',
+            ]
         );
 
         Setting::updateOrCreate(
             ['key' => 'appearance.overrides_enabled'],
-            ['value' => 'false', 'type' => 'boolean', 'group' => 'appearance']
+            [
+                'value' => 'false',
+                'type' => 'boolean',
+                'group' => 'appearance',
+            ]
         );
     }
 
@@ -171,23 +227,20 @@ class ThemeService
     | Export
     |--------------------------------------------------------------------------
     */
-    public function toCssVariables(): string
+
+    public function toCssVariables(?string $mode = null): string
     {
-        $tokens = $this->tokens();
+        $tokens = $this->tokens($mode);
 
         $css = ":root {\n";
+
         foreach ($tokens as $key => $value) {
-            // Normalize underscores to hyphens for CSS variable names
             $normalizedKey = str_replace('_', '-', $key);
 
-            // Raw value variable
             $css .= "    --theme-{$normalizedKey}-value: {$value};\n";
-
-            // Canonical semantic variable pointing to raw value
             $css .= "    --theme-{$normalizedKey}: var(--theme-{$normalizedKey}-value);\n";
         }
 
-        // Font family
         $css .= "    --theme-font-family-value: {$this->fontFamily()};\n";
         $css .= "    --theme-font-family: var(--theme-font-family-value);\n";
 
@@ -196,16 +249,20 @@ class ThemeService
         return $css;
     }
 
-    public function toArray(): array
+    public function toArray(?string $mode = null): array
     {
-        $tokens = $this->tokens();
+        $effectiveMode = in_array($mode, ['light', 'dark'], true)
+            ? $mode
+            : $this->mode();
+
+        $tokens = $this->tokens($effectiveMode);
 
         return array_merge($tokens, [
-            'preset'    => $this->preset(),
-            'mode'      => $this->mode(),
-            'font'      => $this->fontFamily(),
-            'logo'      => $this->logoUrl(),
-            'favicon'   => $this->faviconUrl(),
+            'preset' => $this->preset(),
+            'mode' => $effectiveMode,
+            'font' => $this->fontFamily(),
+            'logo' => $this->logoUrl(),
+            'favicon' => $this->faviconUrl(),
         ]);
     }
 }

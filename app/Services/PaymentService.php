@@ -13,6 +13,7 @@
  * - initialize and resume application-fee payment attempts
  * - verify Paystack transactions before recovering checkout
  * - validate actual and requested payment amounts, currency and reference
+ * - account for explicitly reported Paystack transaction fees during verification
  * - preserve unresolved payment attempts for reconciliation
  * - prevent duplicate concurrent application-fee attempts
  * - create a fresh reference only after the previous attempt is terminal
@@ -21,7 +22,7 @@
  * - dispatch applicant notifications after successful confirmation
  *
  * Status: Integration / Hardening
- * Version: 2.8 (Verified Amounts, Atomic Recovery and Safe Confirmation)
+ * Version: 2.9 (Fee-Aware Verification, Atomic Recovery and Safe Confirmation)
  */
 
 namespace App\Services;
@@ -508,9 +509,15 @@ class PaymentService
      *
      * A successful payment must match:
      * - the local reference
-     * - the intended amount
-     * - the actual amount charged
+     * - the requested amount
+     * - the actual amount charged, including only a verified gateway fee
      * - the local currency
+     *
+     * Paystack may report the customer charge as the requested amount
+     * plus its transaction fee when fee passing is enabled.
+     *
+     * The local Payment::amount remains the institution's intended amount.
+     * Gateway fees are retained separately in the verification metadata.
      *
      * Only explicit Paystack failed/abandoned states mark an unresolved
      * attempt as FAILED. Other states remain unresolved.
@@ -607,14 +614,51 @@ class PaymentService
             ? (int) $data['amount']
             : null;
 
+        /*
+         * Paystack reports fees in the currency's smallest denomination.
+         *
+         * Do not assume a missing, null, or non-numeric fee is zero.
+         * An unexplained difference must remain unverified.
+         */
+        $gatewayFees = isset($data['fees'])
+            && is_numeric($data['fees'])
+                ? (int) $data['fees']
+                : null;
+
         $referenceMatches = is_string($gatewayReference)
             && hash_equals($payment->reference, $gatewayReference);
 
+        /*
+         * The amount requested from Paystack must always match the
+         * amount stored locally for this payment.
+         */
         $requestedAmountMatches = $requestedAmount !== null
             && $requestedAmount === (int) $payment->amount;
 
-        $actualAmountMatches = $actualAmount !== null
-            && $actualAmount === (int) $payment->amount;
+        /*
+         * The actual amount must be explained by Paystack's verified
+         * transaction response.
+         *
+         * Accepted:
+         * - Actual amount equals requested amount.
+         * - Actual amount equals requested amount plus reported fees.
+         *
+         * Rejected:
+         * - Any other amount difference.
+         * - Missing fees when the actual amount exceeds the requested amount.
+         */
+        $actualAmountMatches = $requestedAmount !== null
+            && $actualAmount !== null
+            && (
+                $actualAmount === $requestedAmount
+                || (
+                    $gatewayFees !== null
+                    && $gatewayFees >= 0
+                    && $actualAmount === (
+                        $requestedAmount + $gatewayFees
+                    )
+                )
+            );
 
         $currencyMatches = is_string($currency)
             && strtoupper($currency) === strtoupper($payment->currency);
@@ -640,6 +684,7 @@ class PaymentService
                         'local_amount' => (int) $payment->amount,
                         'gateway_requested_amount' => $requestedAmount,
                         'gateway_actual_amount' => $actualAmount,
+                        'gateway_fees' => $gatewayFees,
                         'local_currency' => $payment->currency,
                         'gateway_currency' => $currency,
                     ]
@@ -786,7 +831,7 @@ class PaymentService
                     'reference' => $payment->reference,
                     'requested_amount' => $requestedAmount,
                     'customer_paid' => $actualAmount,
-                    'gateway_fee' => $data['fees'] ?? null,
+                    'gateway_fee' => $gatewayFees,
                 ]);
             }
 

@@ -66,3 +66,23 @@ body.mobile-menu-open .portal-mobile-nav {
         display: none !important;
     }
 }
+
+
+
+/* Unread notification badge */
+.portal-mobile-nav__badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 1.35rem;
+    height: 1.35rem;
+    margin-left: 0.5rem;
+    padding: 0 0.35rem;
+    border-radius: 999px;
+    background: var(--theme-primary, #73152A);
+    color: #fff;
+    font-size: 0.7rem;
+    font-weight: 700;
+    line-height: 1;
+    vertical-align: middle;
+}

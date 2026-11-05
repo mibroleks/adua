@@ -1,0 +1,267 @@
+/*
+|--------------------------------------------------------------------------
+| Admission Decision Infolist
+|--------------------------------------------------------------------------
+|
+| Company: Ygrace Tech
+| Author: Ibrahim Olalekan
+|
+| Purpose:
+| Premium read-only presentation for admission decision records.
+|
+| Version: 1.0
+|
+| Scope:
+| Admission Decision Infolist only.
+|
+*/
+
+.admission-decision-info__section {
+    --admission-info-border: var(--theme-border, var(--fi-border-color));
+    --admission-info-surface: var(--theme-card-bg, var(--fi-section-bg));
+    --admission-info-muted: var(--theme-muted, #64748b);
+    --admission-info-primary: var(--theme-primary, #334155);
+
+    overflow: hidden;
+    border: 1px solid var(--admission-info-border) !important;
+    border-radius: 18px !important;
+    background: var(--admission-info-surface) !important;
+    box-shadow: 0 3px 14px rgb(15 23 42 / 4%);
+}
+
+.admission-decision-info__section > .fi-section-header {
+    padding: 1.15rem 1.35rem !important;
+    border-bottom: 1px solid var(--admission-info-border);
+    background: transparent !important;
+}
+
+.admission-decision-info__section > .fi-section-header .fi-section-header-heading {
+    color: var(--admission-info-primary);
+    font-size: 0.98rem;
+    font-weight: 750;
+    letter-spacing: -0.015em;
+}
+
+.admission-decision-info__section > .fi-section-header .fi-section-header-description {
+    max-width: 780px;
+    margin-top: 0.3rem;
+    color: var(--admission-info-muted);
+    font-size: 0.78rem;
+    line-height: 1.6;
+}
+
+.admission-decision-info__section > .fi-section-content-ctn {
+    background: transparent !important;
+}
+
+.admission-decision-info__section > .fi-section-content-ctn > .fi-section-content {
+    padding: 1.35rem !important;
+}
+
+/*
+|--------------------------------------------------------------------------
+| Summary section
+|--------------------------------------------------------------------------
+*/
+
+.admission-decision-info__summary {
+    border-color: color-mix(
+        in srgb,
+        var(--theme-primary, #334155) 24%,
+        var(--admission-info-border)
+    ) !important;
+}
+
+.admission-decision-info__summary > .fi-section-header {
+    border-bottom: 0;
+    padding-bottom: 0.5rem !important;
+}
+
+.admission-decision-info__summary > .fi-section-content-ctn > .fi-section-content {
+    padding-top: 0.75rem !important;
+}
+
+.admission-decision-info__summary .fi-in-entry {
+    min-width: 0;
+    padding: 1rem;
+    border: 1px solid var(--admission-info-border);
+    border-radius: 13px;
+    background: var(--theme-surface, rgb(148 163 184 / 5%));
+}
+
+.admission-decision-info__summary .admission-decision-info__reference {
+    background: color-mix(
+        in srgb,
+        var(--theme-primary, #334155) 6%,
+        var(--admission-info-surface)
+    );
+}
+
+.admission-decision-info__summary .fi-in-entry-label {
+    color: var(--admission-info-muted);
+    font-size: 0.68rem;
+    font-weight: 750;
+    letter-spacing: 0.075em;
+    text-transform: uppercase;
+}
+
+.admission-decision-info__summary .fi-in-entry-content {
+    margin-top: 0.45rem;
+    font-size: 0.95rem;
+    font-weight: 700;
+}
+
+/*
+|--------------------------------------------------------------------------
+| Detail sections
+|--------------------------------------------------------------------------
+*/
+
+.admission-decision-info__processing,
+.admission-decision-info__admission {
+    transition:
+        border-color 160ms ease,
+        box-shadow 160ms ease;
+}
+
+.admission-decision-info__processing:hover,
+.admission-decision-info__admission:hover {
+    border-color: color-mix(
+        in srgb,
+        var(--theme-primary, #334155) 28%,
+        var(--admission-info-border)
+    ) !important;
+    box-shadow: 0 7px 22px rgb(15 23 42 / 5%);
+}
+
+.admission-decision-info__section:not(.admission-decision-info__summary) .fi-in-entry {
+    min-width: 0;
+    padding-block: 0.35rem;
+}
+
+.admission-decision-info__section:not(.admission-decision-info__summary) .fi-in-entry-label {
+    color: var(--admission-info-muted);
+    font-size: 0.7rem;
+    font-weight: 750;
+    letter-spacing: 0.055em;
+    text-transform: uppercase;
+}
+
+.admission-decision-info__section:not(.admission-decision-info__summary) .fi-in-entry-content {
+    margin-top: 0.4rem;
+    color: var(--theme-text, inherit);
+    font-size: 0.88rem;
+    line-height: 1.65;
+}
+
+/*
+|--------------------------------------------------------------------------
+| Remarks presentation
+|--------------------------------------------------------------------------
+*/
+
+.admission-decision-info__remarks {
+    margin-top: 0.35rem;
+    padding: 1rem 1.1rem !important;
+    border: 1px solid var(--admission-info-border);
+    border-left: 3px solid var(--theme-primary, #64748b);
+    border-radius: 10px;
+    background: var(--theme-surface, rgb(148 163 184 / 5%));
+}
+
+.admission-decision-info__remarks .fi-in-entry-label {
+    margin-bottom: 0.45rem;
+}
+
+.admission-decision-info__remarks .fi-in-entry-content {
+    color: var(--theme-text, inherit);
+    font-size: 0.86rem;
+    line-height: 1.75;
+}
+
+/*
+|--------------------------------------------------------------------------
+| Audit information
+|--------------------------------------------------------------------------
+*/
+
+.admission-decision-info__audit {
+    border-style: dashed !important;
+    box-shadow: none;
+}
+
+.admission-decision-info__audit > .fi-section-header {
+    padding-block: 0.9rem !important;
+}
+
+.admission-decision-info__audit .fi-in-entry-label {
+    font-size: 0.66rem;
+}
+
+.admission-decision-info__audit .fi-in-entry-content {
+    font-size: 0.8rem;
+}
+
+/*
+|--------------------------------------------------------------------------
+| Dark mode
+|--------------------------------------------------------------------------
+*/
+
+.dark .admission-decision-info__section {
+    box-shadow: 0 3px 16px rgb(0 0 0 / 12%);
+}
+
+.dark .admission-decision-info__summary .fi-in-entry {
+    background: color-mix(
+        in srgb,
+        var(--theme-surface, #1e293b) 82%,
+        transparent
+    );
+}
+
+.dark .admission-decision-info__remarks {
+    background: color-mix(
+        in srgb,
+        var(--theme-surface, #1e293b) 88%,
+        transparent
+    );
+}
+
+/*
+|--------------------------------------------------------------------------
+| Responsive layout
+|--------------------------------------------------------------------------
+*/
+
+@media (max-width: 1024px) {
+    .admission-decision-info__section > .fi-section-content-ctn > .fi-section-content {
+        padding: 1.1rem !important;
+    }
+
+    .admission-decision-info__summary .fi-in-entry {
+        padding: 0.85rem;
+    }
+}
+
+@media (max-width: 640px) {
+    .admission-decision-info__section {
+        border-radius: 14px !important;
+    }
+
+    .admission-decision-info__section > .fi-section-header {
+        padding: 1rem !important;
+    }
+
+    .admission-decision-info__section > .fi-section-content-ctn > .fi-section-content {
+        padding: 0.9rem !important;
+    }
+
+    .admission-decision-info__summary .fi-in-entry {
+        padding: 0.8rem;
+    }
+
+    .admission-decision-info__remarks {
+        padding: 0.85rem !important;
+    }
+}
