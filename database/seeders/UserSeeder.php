@@ -7,22 +7,26 @@ Company: Ygrace Tech
 Author: Ibrahim Olalekan
 
 Purpose:
-Seeds initial user accounts into the database.
-Provides a default admin user and optional test accounts
-for development and officer panel access.
+Safely seeds initial user accounts for development and testing.
+
+Production Safety:
+- Does not create, update, or delete accounts in production.
+- Never resets existing user passwords.
+- Never overwrites existing user names or roles.
+- Requires explicitly configured passwords before creating new accounts.
 
 Responsibilities:
-- Seed the default system administrator.
-- Seed the default test student.
-- Seed admission officer accounts.
-- Generate optional demo users for development.
+- Seed the default system administrator in development.
+- Seed the optional test student in development.
+- Seed admission officer accounts in development.
+- Preserve existing accounts and credentials.
 */
 
 namespace Database\Seeders;
 
+use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
-use App\Models\User;
 
 class UserSeeder extends Seeder
 {
@@ -31,47 +35,99 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        // Default system administrator
-        User::updateOrCreate(
-            ['email' => 'admin@adua.edu.ng'],
+        /*
+         * Production protection.
+         *
+         * This seeder must never provision default or demo accounts
+         * on a live institutional installation.
+         */
+        if (app()->environment('production')) {
+            $this->command?->warn(
+                'UserSeeder skipped: account seeding is disabled in production.'
+            );
+
+            return;
+        }
+
+        /*
+         * Development system administrator.
+         */
+        $this->seedUser(
+            email: 'admin@adua.edu.ng',
+            name: 'System Administrator',
+            role: 'officer',
+            password: env('SEED_ADMIN_PASSWORD')
+        );
+
+        /*
+         * Development test student.
+         */
+        $this->seedUser(
+            email: 'test@example.com',
+            name: 'Test User',
+            role: 'student',
+            password: env('SEED_TEST_PASSWORD')
+        );
+
+        /*
+         * Development admission officer 1.
+         */
+        $this->seedUser(
+            email: 'obilor.IT@adua.edu.ng',
+            name: 'Obilor (Admission Officer)',
+            role: 'officer',
+            password: env('SEED_OBILOR_PASSWORD')
+        );
+
+        /*
+         * Development admission officer 2.
+         */
+        $this->seedUser(
+            email: 'dikko.IT@adua.edu.ng',
+            name: 'Dikko (Admission Officer)',
+            role: 'officer',
+            password: env('SEED_DIKKO_PASSWORD')
+        );
+
+        /*
+         * Optional demo users can be generated separately
+         * when required for development.
+         */
+        // User::factory()->count(5)->create();
+    }
+
+    /**
+     * Create a development user only when the account does not exist.
+     *
+     * Existing accounts are never modified.
+     */
+    private function seedUser(
+        string $email,
+        string $name,
+        string $role,
+        ?string $password
+    ): void {
+        if (blank($password)) {
+            $this->command?->warn(
+                "Skipped {$email}: no seeding password configured."
+            );
+
+            return;
+        }
+
+        $user = User::firstOrCreate(
+            ['email' => $email],
             [
-                'name' => 'System Administrator',
-                'password' => Hash::make('password'), // Change in production!
-                'role' => 'officer',
+                'name' => $name,
+                'password' => Hash::make($password),
+                'role' => $role,
             ]
         );
 
-        // Default test student
-        User::updateOrCreate(
-            ['email' => 'test@example.com'],
-            [
-                'name' => 'Test User',
-                'password' => Hash::make('password'), // Change in production!
-                'role' => 'student',
-            ]
+        $this->command?->line(
+            $user->wasRecentlyCreated
+                ? "Created development account: {$email}"
+                : "Preserved existing account: {$email}"
         );
-
-        // Admission Officer 1
-        User::updateOrCreate(
-            ['email' => 'obilor.IT@adua.edu.ng'],
-            [
-                'name' => 'Obilor (Admission Officer)',
-                'password' => Hash::make('ADUA@2027'),
-                'role' => 'officer',
-            ]
-        );
-
-        // Admission Officer 2
-        User::updateOrCreate(
-            ['email' => 'dikko.IT@adua.edu.ng'],
-            [
-                'name' => 'Dikko (Admission Officer)',
-                'password' => Hash::make('ADUA@2027'),
-                'role' => 'officer',
-            ]
-        );
-
-        // Generate optional demo users for development
-       // User::factory()->count(5)->create();
     }
 }
