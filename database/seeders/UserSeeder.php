@@ -7,18 +7,25 @@ Company: Ygrace Tech
 Author: Ibrahim Olalekan
 
 Purpose:
-Safely seeds initial user accounts for development and testing.
+Safely seeds initial user accounts for development and controlled
+production officer provisioning.
 
 Production Safety:
-- Does not create, update, or delete accounts in production.
-- Never resets existing user passwords.
-- Never overwrites existing user names or roles.
-- Requires explicitly configured passwords before creating new accounts.
+- Production provisioning is disabled by default.
+- Production can provision admission officers only through
+  an explicit temporary opt-in.
+- Default administrator and test student are never seeded
+  in production.
+- Existing accounts are never overwritten.
+- Existing passwords, names and roles are preserved.
+- New production officer accounts require individual passwords
+  of at least 8 characters.
 
 Responsibilities:
 - Seed the default system administrator in development.
 - Seed the optional test student in development.
 - Seed admission officer accounts in development.
+- Allow controlled production creation of missing officers.
 - Preserve existing accounts and credentials.
 */
 
@@ -35,16 +42,8 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        /*
-         * Production protection.
-         *
-         * This seeder must never provision default or demo accounts
-         * on a live institutional installation.
-         */
         if (app()->environment('production')) {
-            $this->command?->warn(
-                'UserSeeder skipped: account seeding is disabled in production.'
-            );
+            $this->seedProductionOfficers();
 
             return;
         }
@@ -56,7 +55,7 @@ class UserSeeder extends Seeder
             email: 'admin@adua.edu.ng',
             name: 'System Administrator',
             role: 'officer',
-            password: env('SEED_ADMIN_PASSWORD')
+            password: $this->developmentPassword('SEED_ADMIN_PASSWORD')
         );
 
         /*
@@ -66,7 +65,7 @@ class UserSeeder extends Seeder
             email: 'test@example.com',
             name: 'Test User',
             role: 'student',
-            password: env('SEED_TEST_PASSWORD')
+            password: $this->developmentPassword('SEED_TEST_PASSWORD')
         );
 
         /*
@@ -76,7 +75,7 @@ class UserSeeder extends Seeder
             email: 'obilor.IT@adua.edu.ng',
             name: 'Obilor (Admission Officer)',
             role: 'officer',
-            password: env('SEED_OBILOR_PASSWORD')
+            password: $this->developmentPassword('SEED_OBILOR_PASSWORD')
         );
 
         /*
@@ -86,18 +85,54 @@ class UserSeeder extends Seeder
             email: 'dikko.IT@adua.edu.ng',
             name: 'Dikko (Admission Officer)',
             role: 'officer',
-            password: env('SEED_DIKKO_PASSWORD')
+            password: $this->developmentPassword('SEED_DIKKO_PASSWORD')
         );
 
         /*
-         * Optional demo users can be generated separately
-         * when required for development.
+         * Optional development demo users.
          */
         // User::factory()->count(5)->create();
     }
 
     /**
-     * Create a development user only when the account does not exist.
+     * Provision only the approved admission officers in production.
+     *
+     * This operation requires an explicit opt-in and individual
+     * passwords supplied through the process environment.
+     */
+    private function seedProductionOfficers(): void
+    {
+        if (!$this->productionFlagEnabled('SEED_PRODUCTION_OFFICERS')) {
+            $this->command?->warn(
+                'UserSeeder skipped: production officer provisioning '
+                . 'has not been explicitly enabled.'
+            );
+
+            return;
+        }
+
+        $this->command?->warn(
+            'Production officer provisioning is enabled. '
+            . 'Only the two designated officer accounts will be considered.'
+        );
+
+        $this->seedUser(
+            email: 'obilor.IT@adua.edu.ng',
+            name: 'Obilor (Admission Officer)',
+            role: 'officer',
+            password: $this->productionPassword('SEED_OBILOR_PASSWORD')
+        );
+
+        $this->seedUser(
+            email: 'dikko.IT@adua.edu.ng',
+            name: 'Dikko (Admission Officer)',
+            role: 'officer',
+            password: $this->productionPassword('SEED_DIKKO_PASSWORD')
+        );
+    }
+
+    /**
+     * Create an account only when it does not already exist.
      *
      * Existing accounts are never modified.
      */
@@ -109,7 +144,15 @@ class UserSeeder extends Seeder
     ): void {
         if (blank($password)) {
             $this->command?->warn(
-                "Skipped {$email}: no seeding password configured."
+                "Skipped {$email}: no valid seeding password supplied."
+            );
+
+            return;
+        }
+
+        if (strlen($password) < 8) {
+            $this->command?->warn(
+                "Skipped {$email}: password must contain at least 8 characters."
             );
 
             return;
@@ -126,8 +169,47 @@ class UserSeeder extends Seeder
 
         $this->command?->line(
             $user->wasRecentlyCreated
-                ? "Created development account: {$email}"
-                : "Preserved existing account: {$email}"
+                ? "Created account: {$email}"
+                : "Preserved existing account without changes: {$email}"
         );
+    }
+
+    /**
+     * Read development passwords from the Laravel environment.
+     */
+    private function developmentPassword(string $key): ?string
+    {
+        $value = env($key);
+
+        return is_string($value) && $value !== ''
+            ? $value
+            : null;
+    }
+
+    /**
+     * Read production passwords only from explicitly supplied
+     * process environment variables.
+     *
+     * This also works when Laravel configuration is cached,
+     * provided the variables are supplied to the Artisan process.
+     */
+    private function productionPassword(string $key): ?string
+    {
+        $value = getenv($key);
+
+        return is_string($value) && $value !== ''
+            ? $value
+            : null;
+    }
+
+    /**
+     * Check an explicit production opt-in flag.
+     */
+    private function productionFlagEnabled(string $key): bool
+    {
+        $value = getenv($key);
+
+        return is_string($value)
+            && in_array(strtolower(trim($value)), ['1', 'true', 'yes'], true);
     }
 }
