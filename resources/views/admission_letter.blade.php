@@ -1,4 +1,4 @@
-{{-- 
+{{--
 Component: Application Outcome Letter
 File Path: resources/views/admission_letter.blade.php
 Company: Ygrace Tech
@@ -6,21 +6,23 @@ Author: Ibrahim Olalekan
 
 Purpose:
 Generates an official application outcome letter for applicants whose
-application has been successful but who have not yet been formally admitted.
+applications have been successful and who have been recommended by the
+institution to JAMB for admission consideration.
 
 Important:
-This document is NOT an admission offer.
-It confirms that the applicant's application was successful and that
-formal admission remains subject to the University's final admission
-process, approval, and applicable conditions.
+This document is NOT a formal admission offer.
+It confirms that the applicant has been recommended by the institution
+to the Joint Admissions and Matriculation Board (JAMB) for consideration
+for admission. Final admission remains subject to the applicable JAMB
+admission processing and approval procedures.
 
-Status: ✅ Production Ready
-Version: 6.0 (Successful Application Outcome)
+Status: Production Ready
+Version: 7.0 (JAMB Admission Recommendation Notification)
 --}}
 
 @extends('layouts.app')
 
-@section('title', 'Application Outcome')
+@section('title', 'Admission Recommendation Notification')
 
 @section('content')
 
@@ -91,7 +93,7 @@ Version: 6.0 (Successful Application Outcome)
                 <span>OFFICIAL DOCUMENT</span>
 
                 <strong>
-                    APPLICATION OUTCOME
+                    ADMISSION RECOMMENDATION
                 </strong>
 
             </div>
@@ -149,15 +151,16 @@ Version: 6.0 (Successful Application Outcome)
              DOCUMENT TITLE
              ============================================================ --}}
         <h2 class="admission-letter__title">
-            Successful Application Outcome
+            Admission Recommendation Notification
         </h2>
 
 
         {{-- ============================================================
              SUCCESSFUL APPLICATION
-             
+
              IMPORTANT:
-             We deliberately DO NOT describe this as an admission offer.
+             This notification confirms recommendation to JAMB.
+             It must not be interpreted as a formal admission offer.
              ============================================================ --}}
         @if(
             $application->decision &&
@@ -170,12 +173,15 @@ Version: 6.0 (Successful Application Outcome)
 
 
             <p>
-                We are pleased to inform you that your application for
-                consideration for admission to
+                We are pleased to inform you that, following the assessment
+                of your application for admission to
                 <strong>
                     {{ setting('institution.name') ?? 'the University' }}
-                </strong>
-                has been <strong>successful</strong>.
+                </strong>,
+                you have been <strong>recommended by the University to the
+                Joint Admissions and Matriculation Board (JAMB) for
+                consideration for admission</strong> into your chosen
+                programme.
             </p>
 
 
@@ -185,7 +191,7 @@ Version: 6.0 (Successful Application Outcome)
             <div class="admission-letter__programme">
 
                 <span>
-                    Programme Applied For
+                    Programme Recommended
                 </span>
 
                 <strong>
@@ -216,10 +222,8 @@ Version: 6.0 (Successful Application Outcome)
 
             {{-- ========================================================
                  IMPORTANT STATUS CLARIFICATION
-                 
-                 This is the critical part.
-                 It prevents the document from being interpreted as
-                 an admission offer.
+
+                 This recommendation is not a formal admission offer.
                  ======================================================== --}}
             <div class="admission-letter__remarks">
 
@@ -228,12 +232,13 @@ Version: 6.0 (Successful Application Outcome)
                 </span>
 
                 <p>
-                    This notification confirms the successful outcome of
-                    your application assessment. It is <strong>not, by
-                    itself, a formal offer of admission</strong>.
-                    Formal admission remains subject to the University's
-                    final admission process, approval, and any applicable
-                    conditions or requirements.
+                    This notification confirms that the University has
+                    recommended you to JAMB for consideration for admission.
+                    It is <strong>not a formal offer of admission</strong>.
+                    Final admission remains subject to the applicable JAMB
+                    admission processing and approval procedures, including
+                    any required action through the JAMB Central Admissions
+                    Processing System (CAPS).
                 </p>
 
             </div>
@@ -263,30 +268,30 @@ Version: 6.0 (Successful Application Outcome)
                  NEXT STEPS
                  ======================================================== --}}
             <p>
-                Please continue to monitor your applicant portal and
-                official communication channels for further instructions
-                regarding the completion of the admission process.
+                Please continue to monitor your applicant portal and the
+                official JAMB CAPS platform for updates regarding your
+                admission recommendation and subsequent admission processing.
             </p>
 
 
             <p>
-                You may be required to provide additional documentation,
-                satisfy outstanding conditions, or complete other
-                procedures before a formal admission decision is issued.
+                You may be required to complete additional procedures,
+                provide supporting documentation, or satisfy applicable
+                admission requirements before your admission can be finalised.
             </p>
 
 
             <p>
                 We appreciate your interest in
                 <strong>{{ setting('institution.name') ?? 'the University' }}</strong>
-                and congratulate you on the successful outcome of your
-                application.
+                and congratulate you on reaching this important stage of
+                the admission process.
             </p>
 
 
         {{-- ============================================================
              OTHER DECISIONS
-             
+
              We intentionally do not automatically call every non-APPROVED
              decision "rejected". This prevents a pending/review state from
              being incorrectly presented as an unsuccessful application.
@@ -422,4 +427,3 @@ Version: 6.0 (Successful Application Outcome)
 </div>
 
 @endsection
-

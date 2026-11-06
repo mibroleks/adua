@@ -214,8 +214,8 @@
                         @endif
 
                         <div style="margin-top:20px; padding-top:14px; border-top:1px solid {{ $footerMuted }}; color:{{ $footerMuted }}; font-size:11px; line-height:1.7;">
-                            This is an official notification from {{ $institutionName }}.
-                            Please do not reply if this mailbox is not monitored.
+                            This is an official communication from {{ $institutionName }}.
+                            Please do not reply to this email unless the institution has indicated that replies are accepted.
                         </div>
 
                     </td>

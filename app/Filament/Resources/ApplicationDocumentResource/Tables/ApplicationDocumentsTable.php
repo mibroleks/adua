@@ -11,8 +11,8 @@ Defines the table schema for listing application documents in Filament.
 Shows applicant, programme, document type, status, upload details, and a secure preview/download link.
 Supports filters and bulk actions for officer review, including preview, verification, and rejection.
 
-Status: ✅ Filament v5 Compatible
-Version: 1.9 (preview passes extension + mime, reject uses rejection_reason)
+Status: Filament v5 Compatible
+Version: 1.10 (application-number route binding for document preview/download)
 */
 
 namespace App\Filament\Resources\ApplicationDocumentResource\Tables;
@@ -23,9 +23,9 @@ use Filament\Tables\Table;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\BadgeColumn;
 use Filament\Tables\Filters\SelectFilter;
-use Filament\Actions\BulkActionGroup;     // ✅ global namespace in v5
-use Filament\Actions\DeleteBulkAction;    // ✅ global namespace in v5
-use Filament\Actions\Action;              // ✅ global namespace in v5
+use Filament\Actions\BulkActionGroup;     // global namespace in v5
+use Filament\Actions\DeleteBulkAction;    // global namespace in v5
+use Filament\Actions\Action;              // global namespace in v5
 use Filament\Forms;
 
 class ApplicationDocumentsTable
@@ -67,7 +67,10 @@ class ApplicationDocumentsTable
                 // Secure download link via authorized route
                 TextColumn::make('download')
                     ->label('Download')
-                    ->url(fn ($record) => route('application.documents.view', [$record->application_id, $record->id]))
+                    ->url(fn ($record) => route(
+                        'application.documents.view',
+                        [$record->application, $record]
+                    ))
                     ->openUrlInNewTab()
                     ->visible(fn ($record) => !empty($record->path))
                     ->formatStateUsing(fn () => 'Open File'),
@@ -93,9 +96,12 @@ class ApplicationDocumentsTable
                     )
                     ->modalWidth('7xl')
                     ->modalContent(fn (ApplicationDocument $record) => view('admin.documents.preview', [
-                        'url' => route('application.documents.view', [$record->application_id, $record->id]),
-                        'extension' => strtolower(pathinfo($record->original_name, PATHINFO_EXTENSION)), // ✅ pass extension
-                        'mime' => $record->mime_type, // ✅ also pass mime
+                        'url' => route(
+                            'application.documents.view',
+                            [$record->application, $record]
+                        ),
+                        'extension' => strtolower(pathinfo($record->original_name, PATHINFO_EXTENSION)),
+                        'mime' => $record->mime_type,
                     ])),
 
                 // Verify action
