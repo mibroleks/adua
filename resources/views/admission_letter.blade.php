@@ -1,36 +1,27 @@
 {{--
-Component: Application Outcome Letter
-File Path: resources/views/admission_letter.blade.php
-Company: Ygrace Tech
-Author: Ibrahim Olalekan
-
-Purpose:
-Generates an official application outcome letter for applicants whose
-applications have been successful and who have been recommended by the
-institution to JAMB for admission consideration.
-
-Important:
-This document is NOT a formal admission offer.
-It confirms that the applicant has been recommended by the institution
-to the Joint Admissions and Matriculation Board (JAMB) for consideration
-for admission. Final admission remains subject to the applicable JAMB
-admission processing and approval procedures.
-
-Status: Production Ready
-Version: 7.0 (JAMB Admission Recommendation Notification)
+|--------------------------------------------------------------------------
+| Component: Application Outcome Letter
+| File Path: resources/views/admission_letter.blade.php
+| Company: Ygrace Tech
+| Author: Ibrahim Olalekan
+|
+| Purpose:
+| Displays application outcome notifications.
+| Approved applicants receive the specified ADUA notification.
+|
+| Version: 9.0 (Simplified Approval Notification)
+|--------------------------------------------------------------------------
 --}}
 
 @extends('layouts.app')
 
-@section('title', 'Admission Recommendation Notification')
+@section('title', 'Application Notification')
 
 @section('content')
 
 <div class="admission-letter-page">
 
-    {{-- ================================================================
-         ACTIONS
-         ================================================================ --}}
+    {{-- ACTIONS --}}
     <div class="admission-letter-actions">
 
         <a href="{{ route('dashboard') }}" class="admission-button admission-button--ghost">
@@ -47,15 +38,9 @@ Version: 7.0 (JAMB Admission Recommendation Notification)
 
     </div>
 
-
-    {{-- ================================================================
-         OFFICIAL DOCUMENT
-         ================================================================ --}}
     <main class="admission-letter">
 
-        {{-- ============================================================
-             INSTITUTION HEADER
-             ============================================================ --}}
+        {{-- INSTITUTION INFORMATION --}}
         <header class="admission-letter__header">
 
             <div class="admission-letter__identity">
@@ -77,40 +62,25 @@ Version: 7.0 (JAMB Admission Recommendation Notification)
                     </h1>
 
                     @if(setting('institution.address'))
+
                         <p>
                             {{ setting('institution.address') }}
                         </p>
+
                     @endif
 
                 </div>
 
             </div>
 
-
-            {{-- Document classification --}}
-            <div class="admission-letter__document-meta">
-
-                <span>OFFICIAL DOCUMENT</span>
-
-                <strong>
-                    ADMISSION RECOMMENDATION
-                </strong>
-
-            </div>
-
         </header>
 
-
-        {{-- Institutional rule --}}
         <div class="admission-letter__rule"></div>
 
-
-        {{-- ============================================================
-             DATE
-             ============================================================ --}}
+        {{-- DATE --}}
         <div class="admission-letter__date">
 
-            {{ 
+            {{
                 $application->decision?->decided_at?->format('d F Y')
                 ?? $application->issued_at?->format('d F Y')
                 ?? now()->format('d F Y')
@@ -118,10 +88,7 @@ Version: 7.0 (JAMB Admission Recommendation Notification)
 
         </div>
 
-
-        {{-- ============================================================
-             RECIPIENT
-             ============================================================ --}}
+        {{-- APPLICANT INFORMATION --}}
         <section class="admission-letter__recipient">
 
             <strong>
@@ -146,162 +113,76 @@ Version: 7.0 (JAMB Admission Recommendation Notification)
 
         </section>
 
-
-        {{-- ============================================================
-             DOCUMENT TITLE
-             ============================================================ --}}
-        <h2 class="admission-letter__title">
-            Admission Recommendation Notification
-        </h2>
-
-
-        {{-- ============================================================
-             SUCCESSFUL APPLICATION
-
-             IMPORTANT:
-             This notification confirms recommendation to JAMB.
-             It must not be interpreted as a formal admission offer.
-             ============================================================ --}}
+        {{-- APPROVED APPLICATION --}}
         @if(
             $application->decision &&
             strtoupper($application->decision->decision) === 'APPROVED'
         )
 
-            <p>
-                Dear <strong>{{ $application->user?->name ?? 'Applicant' }}</strong>,
-            </p>
+            <div class="admission-letter__message">
 
+                <p>
+                    <strong>Congratulations,</strong>
+                </p>
 
-            <p>
-                We are pleased to inform you that, following the assessment
-                of your application for admission to
-                <strong>
-                    {{ setting('institution.name') ?? 'the University' }}
-                </strong>,
-                you have been <strong>recommended by the University to the
-                Joint Admissions and Matriculation Board (JAMB) for
-                consideration for admission</strong> into your chosen
-                programme.
-            </p>
+                <p>
+                    I am pleased to inform you that your application has been
+                    approved, please proceed to change of institution TO
+                    <strong>ABDULFATTAH DUROJAIYE UNIVERSITY (ADUA)</strong>
+                    as your first choice on Jamb portal, once that is done,
+                    kindly contact the Admission office on
+                </p>
 
+                <p>
+                    <strong>09136064487 (MTN)</strong><br>
+                    <strong>08076801943 (Glo).</strong>
+                </p>
 
-            {{-- ========================================================
-                 PROGRAMME
-                 ======================================================== --}}
+                <p>
+                    Thank you.
+                </p>
+
+            </div>
+
+            {{-- APPLICATION INFORMATION --}}
             <div class="admission-letter__programme">
 
                 <span>
-                    Programme Recommended
+                    Application Information
                 </span>
 
-                <strong>
-                    {{ $application->programme?->name ?? 'Programme' }}
-                </strong>
+                <p>
+                    <strong>Application Number:</strong>
+                    {{ $application->application_number }}
+                </p>
+
+                <p>
+                    <strong>Applicant:</strong>
+                    {{ $application->user?->name ?? 'Applicant' }}
+                </p>
+
+                <p>
+                    <strong>Programme:</strong>
+                    {{ $application->programme?->name ?? 'Not specified' }}
+                </p>
 
                 @if($application->programme?->degree_type)
 
-                    <small>
+                    <p>
+                        <strong>Qualification:</strong>
                         {{ $application->programme->degree_type }}
-                    </small>
+                    </p>
 
                 @endif
 
             </div>
 
-
-            {{-- ========================================================
-                 APPLICATION NUMBER
-                 ======================================================== --}}
-            <p>
-                Your application number is
-                <strong>{{ $application->application_number }}</strong>.
-                Please retain this number for all future correspondence
-                concerning your application.
-            </p>
-
-
-            {{-- ========================================================
-                 IMPORTANT STATUS CLARIFICATION
-
-                 This recommendation is not a formal admission offer.
-                 ======================================================== --}}
-            <div class="admission-letter__remarks">
-
-                <span>
-                    Important Notice
-                </span>
-
-                <p>
-                    This notification confirms that the University has
-                    recommended you to JAMB for consideration for admission.
-                    It is <strong>not a formal offer of admission</strong>.
-                    Final admission remains subject to the applicable JAMB
-                    admission processing and approval procedures, including
-                    any required action through the JAMB Central Admissions
-                    Processing System (CAPS).
-                </p>
-
-            </div>
-
-
-            {{-- ========================================================
-                 DECISION REMARKS
-                 ======================================================== --}}
-            @if($application->decision->remarks)
-
-                <div class="admission-letter__remarks">
-
-                    <span>
-                        Admissions Office Remarks
-                    </span>
-
-                    <p>
-                        {{ $application->decision->remarks }}
-                    </p>
-
-                </div>
-
-            @endif
-
-
-            {{-- ========================================================
-                 NEXT STEPS
-                 ======================================================== --}}
-            <p>
-                Please continue to monitor your applicant portal and the
-                official JAMB CAPS platform for updates regarding your
-                admission recommendation and subsequent admission processing.
-            </p>
-
-
-            <p>
-                You may be required to complete additional procedures,
-                provide supporting documentation, or satisfy applicable
-                admission requirements before your admission can be finalised.
-            </p>
-
-
-            <p>
-                We appreciate your interest in
-                <strong>{{ setting('institution.name') ?? 'the University' }}</strong>
-                and congratulate you on reaching this important stage of
-                the admission process.
-            </p>
-
-
-        {{-- ============================================================
-             OTHER DECISIONS
-
-             We intentionally do not automatically call every non-APPROVED
-             decision "rejected". This prevents a pending/review state from
-             being incorrectly presented as an unsuccessful application.
-             ============================================================ --}}
+        {{-- OTHER APPLICATION DECISIONS --}}
         @else
 
             <p>
                 Dear <strong>{{ $application->user?->name ?? 'Applicant' }}</strong>,
             </p>
-
 
             @if(
                 $application->decision &&
@@ -314,14 +195,11 @@ Version: 7.0 (JAMB Admission Recommendation Notification)
                     was not successful for the current admission cycle.
                 </p>
 
-
                 @if($application->decision->remarks)
 
                     <div class="admission-letter__remarks">
 
-                        <span>
-                            Admissions Office Remarks
-                        </span>
+                        <span>Admissions Office Remarks</span>
 
                         <p>
                             {{ $application->decision->remarks }}
@@ -331,7 +209,6 @@ Version: 7.0 (JAMB Admission Recommendation Notification)
 
                 @endif
 
-
                 <p>
                     We appreciate your interest in
                     {{ setting('institution.name') ?? 'the University' }}
@@ -339,12 +216,7 @@ Version: 7.0 (JAMB Admission Recommendation Notification)
                     pursuits.
                 </p>
 
-
             @else
-
-                {{-- ====================================================
-                     PENDING / UNDECIDED SAFETY STATE
-                     ==================================================== --}}
 
                 <p>
                     Your application
@@ -352,12 +224,9 @@ Version: 7.0 (JAMB Admission Recommendation Notification)
                     is currently being processed by the Admissions Office.
                 </p>
 
-
                 <div class="admission-letter__remarks">
 
-                    <span>
-                        Current Status
-                    </span>
+                    <span>Current Status</span>
 
                     <p>
                         No final admission outcome has been issued for this
@@ -368,52 +237,30 @@ Version: 7.0 (JAMB Admission Recommendation Notification)
 
                 </div>
 
-
-                <p>
-                    We appreciate your interest in
-                    {{ setting('institution.name') ?? 'the University' }}
-                    and thank you for your patience throughout the
-                    admissions process.
-                </p>
-
             @endif
+
+            {{-- SIGNATURE FOR NON-APPROVED OUTCOMES --}}
+            <footer class="admission-letter__footer">
+
+                <p>Yours sincerely,</p>
+
+                <div class="admission-letter__signature-space"></div>
+
+                <strong>
+                    {{ optional($application->decision?->officer)->name ?? 'Admissions Officer' }}
+                </strong>
+
+                <span>Admissions Office</span>
+
+            </footer>
 
         @endif
 
-
-        {{-- ============================================================
-             SIGNATURE
-             ============================================================ --}}
-        <footer class="admission-letter__footer">
-
-            <p>
-                Yours sincerely,
-            </p>
-
-
-            <div class="admission-letter__signature-space"></div>
-
-
-            <strong>
-                {{ optional($application->decision?->officer)->name ?? 'Admissions Officer' }}
-            </strong>
-
-
-            <span>
-                Admissions Office
-            </span>
-
-        </footer>
-
-
-        {{-- ============================================================
-             DOCUMENT FOOTER
-             ============================================================ --}}
+        {{-- APPLICATION REFERENCE --}}
         <div class="admission-letter__footer-meta">
 
             <span>
-                Application No.
-                {{ $application->application_number }}
+                Application No. {{ $application->application_number }}
             </span>
 
             <span>
