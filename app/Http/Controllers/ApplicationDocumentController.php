@@ -14,18 +14,24 @@ use App\Services\AdmissionService;
 class ApplicationDocumentController extends Controller
 {
     /**
-     * List all documents for the authenticated applicant.
+     * List all documents across all applications
+     * belonging to the authenticated applicant.
      *
      * Route name: applications.documents
      * URL: /applications/documents
      */
     public function index(Request $request)
     {
-        $application = Application::with('documents.documentType')
+        $applications = Application::query()
+            ->with([
+                'documents.documentType',
+                'programme',
+            ])
             ->where('user_id', $request->user()->id)
-            ->first();
+            ->latest()
+            ->get();
 
-        return view('applications.documents', compact('application'));
+        return view('applications.documents', compact('applications'));
     }
 
     /**
@@ -44,7 +50,9 @@ class ApplicationDocumentController extends Controller
         if (! $request->hasFile('documents')) {
             return redirect()
                 ->route('application.status', $application)
-                ->withErrors(['documents' => 'No documents were uploaded.']);
+                ->withErrors([
+                    'documents' => 'No documents were uploaded.',
+                ]);
         }
 
         foreach ($request->file('documents') as $key => $file) {
@@ -52,17 +60,24 @@ class ApplicationDocumentController extends Controller
                 ->where('active', true)
                 ->where(function ($q) use ($application) {
                     $q->whereNull('programme_id')
-                      ->orWhere('programme_id', $application->programme_id);
+                        ->orWhere('programme_id', $application->programme_id);
                 })
                 ->first();
 
             if (! $docType) {
-                Log::warning("No ApplicationDocumentType found for key: {$key}");
+                Log::warning(
+                    "No ApplicationDocumentType found for key: {$key}"
+                );
+
                 continue;
             }
 
             if ($file && $file->isValid()) {
-                $path = $file->store('applications/' . $application->id, 'public');
+                $path = $file->store(
+                    'applications/' . $application->id,
+                    'public'
+                );
+
                 $document = ApplicationDocument::create([
                     'application_id'   => $application->id,
                     'document_type_id' => $docType->id,
@@ -75,7 +90,7 @@ class ApplicationDocumentController extends Controller
                     'uploaded_at'      => now(),
                 ]);
 
-                // Record initial upload history
+                // Record initial upload history.
                 \App\Models\ApplicationDocumentHistory::create([
                     'application_document_id' => $document->id,
                     'application_id'          => $application->id,
@@ -86,7 +101,9 @@ class ApplicationDocumentController extends Controller
                     'performed_at'            => now(),
                 ]);
 
-                Log::info("Uploaded document {$docType->key} for application {$application->id}");
+                Log::info(
+                    "Uploaded document {$docType->key} for application {$application->id}"
+                );
             }
         }
 
@@ -100,19 +117,25 @@ class ApplicationDocumentController extends Controller
      *
      * Route name: application.documents.replace
      */
-    public function replace(Request $request, Application $application, ApplicationDocument $document)
-    {
+    public function replace(
+        Request $request,
+        Application $application,
+        ApplicationDocument $document
+    ) {
         if ($document->application_id !== $application->id) {
             abort(404);
         }
 
-        Gate::authorize('replaceDocument', [$application, $document]);
+        Gate::authorize('replaceDocument', [
+            $application,
+            $document,
+        ]);
 
         $request->validate([
             'document' => [
                 'required',
                 'file',
-                'max:10240', // 10 MB
+                'max:10240',
                 'mimes:pdf,jpg,jpeg,png',
             ],
         ]);
@@ -123,11 +146,16 @@ class ApplicationDocumentController extends Controller
             $request->user()->id
         );
 
-        Log::info("Replaced document {$document->id} for application {$application->id}");
+        Log::info(
+            "Replaced document {$document->id} for application {$application->id}"
+        );
 
         return redirect()
             ->route('application.status', $application)
-            ->with('status', 'Replacement uploaded successfully. Your document is now awaiting verification.');
+            ->with(
+                'status',
+                'Replacement uploaded successfully. Your document is now awaiting verification.'
+            );
     }
 
     /**
@@ -135,14 +163,19 @@ class ApplicationDocumentController extends Controller
      *
      * Route name: application.documents.view
      */
-    public function view(Request $request, Application $application, ApplicationDocument $document)
-    {
+    public function view(
+        Request $request,
+        Application $application,
+        ApplicationDocument $document
+    ) {
         if ($document->application_id !== $application->id) {
             abort(404);
         }
 
-        // ✅ Use the correct policy method
-        Gate::authorize('viewDocument', [$application, $document]);
+        Gate::authorize('viewDocument', [
+            $application,
+            $document,
+        ]);
 
         $disk = $document->disk ?? 'public';
 
@@ -150,12 +183,16 @@ class ApplicationDocumentController extends Controller
             abort(404, 'File not found.');
         }
 
-        $mime = $document->mime_type ?? Storage::disk($disk)->mimeType($document->path);
+        $mime = $document->mime_type
+            ?? Storage::disk($disk)->mimeType($document->path);
 
-        // ✅ Stream file inline with proper headers
-        return response()->file(Storage::disk($disk)->path($document->path), [
-            'Content-Type' => $mime,
-            'Content-Disposition' => 'inline; filename="' . addslashes($document->original_name) . '"',
-        ]);
+        return response()->file(
+            Storage::disk($disk)->path($document->path),
+            [
+                'Content-Type' => $mime,
+                'Content-Disposition' => 'inline; filename="' .
+                    addslashes($document->original_name) . '"',
+            ]
+        );
     }
 }

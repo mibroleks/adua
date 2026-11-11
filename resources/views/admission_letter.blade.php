@@ -127,9 +127,9 @@
 
                 <p>
                     I am pleased to inform you that your application has been
-                    approved, please proceed to change of institution TO
+                    approved. Please proceed to change of institution TO
                     <strong>ABDULFATTAH DUROJAIYE UNIVERSITY (ADUA)</strong>
-                    as your first choice on Jamb portal, once that is done,
+                    as your first choice on Jamb portal. Once this is done,
                     kindly contact the Admission office on
                 </p>
 
